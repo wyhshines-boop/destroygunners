@@ -22,20 +22,18 @@ import logoImg from '../img/logo.webp';
 </header>
 
 <script>
-	function initHamburger() {
+	document.addEventListener('astro:page-load', () => {
 		const hamburger = document.getElementById('hamburger');
 		const navLinks = document.getElementById('nav-links');
 
-		if (!hamburger) return;
+		if (!hamburger || hamburger.dataset.init) return;
+		hamburger.dataset.init = 'true';
 
 		hamburger.addEventListener('click', () => {
 			hamburger.classList.toggle('active');
 			navLinks?.classList.toggle('open');
 		});
-	}
-
-	initHamburger();
-	document.addEventListener('astro:page-load', initHamburger);
+	});
 </script>
 
 <style>
