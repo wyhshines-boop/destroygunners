@@ -85,7 +85,8 @@ import buttonImg from "../img/button.webp";
 				<a
 					href="/downloads/DGunsZZ_3.0.0a.apk"
 					download
-					class="retro-btn"
+					class="retro-btn download-track"
+					data-method="direct"
 					style={`background-image: url('${buttonImg.src}');`}
 				>
 					<span class="btn-inner">Direct Download</span>
@@ -94,7 +95,8 @@ import buttonImg from "../img/button.webp";
 					href="https://drive.google.com/file/d/1KdW-uS2Omxlbf_SdiNN0IFlF_kXKaTGI/view?usp=sharing"
 					target="_blank"
 					rel="noopener"
-					class="retro-btn"
+					class="retro-btn download-track"
+					data-method="google_drive"
 					style={`background-image: url('${buttonImg.src}');`}
 				>
 					<span class="btn-inner">Google Drive</span>
@@ -103,7 +105,8 @@ import buttonImg from "../img/button.webp";
 					href="https://wwbdr.lanzout.com/iXWYj3l6yb2d"
 					target="_blank"
 					rel="noopener"
-					class="retro-btn"
+					class="retro-btn download-track"
+					data-method="lanzou_cloud"
 					style={`background-image: url('${buttonImg.src}');`}
 				>
 					<span class="btn-inner">Lanzou Cloud (pw: dewm)</span>
@@ -147,8 +150,28 @@ import buttonImg from "../img/button.webp";
 		});
 	}
 
+	function initDownloadTracking() {
+		document.querySelectorAll('.download-track').forEach(btn => {
+			if (btn.dataset.tracked) return;
+			btn.dataset.tracked = 'true';
+			btn.addEventListener('click', () => {
+				const method = btn.dataset.method;
+				if (typeof gtag === 'function') {
+					gtag('event', 'download', {
+						event_category: 'apk',
+						event_label: method,
+					});
+				}
+			});
+		});
+	}
+
 	initModal();
-	document.addEventListener("astro:page-load", initModal);
+	initDownloadTracking();
+	document.addEventListener("astro:page-load", () => {
+		initModal();
+		initDownloadTracking();
+	});
 </script>
 
 <style>
