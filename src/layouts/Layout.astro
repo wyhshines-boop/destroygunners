@@ -6,12 +6,14 @@ import bg3 from "../img/bg3.webp";
 import bg4 from "../img/bg4.webp";
 import bg5 from "../img/bg5.webp";
 import Header from "../components/Header.astro";
+import { getLangFromUrl } from "../i18n/translations";
 
+const lang = getLangFromUrl(Astro.url);
 const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -36,6 +38,17 @@ const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
 		</script>
 	</head>
 	<body>
+		<script is:inline>
+			(function() {
+				if (sessionStorage.getItem('lang-redirected')) return;
+				sessionStorage.setItem('lang-redirected', '1');
+				var isZh = navigator.language && navigator.language.startsWith('zh');
+				var onZh = location.pathname.startsWith('/zh');
+				if (isZh && !onZh) {
+					location.replace('/zh' + location.pathname);
+				}
+			})();
+		</script>
 		<Header />
 		<slot />
 		<script is:inline define:vars={{ bgSrcs }}>

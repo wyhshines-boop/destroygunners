@@ -1,0 +1,363 @@
+---
+import ContentBox from './ContentBox.astro';
+import borderImg from '../img/border.webp';
+import buttonImg from '../img/button.webp';
+import { type Lang, t } from '../i18n/translations';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const tr = t(lang);
+---
+
+<div class="container">
+	<main>
+		<ContentBox title={tr.notifications.title}>
+			<div class="notification-item">
+				<h3 class="cyan-text">{tr.notifications.version}</h3>
+				<ul>
+					{tr.notifications.versionItems.map(item => <li>{item}</li>)}
+				</ul>
+			</div>
+
+			<div class="notification-item">
+				<h3 class="cyan-text">{tr.notifications.patchTitle}</h3>
+				<ul>
+					{tr.notifications.patchItems.map(item => <li>{item}</li>)}
+				</ul>
+			</div>
+
+			<div class="notification-item">
+				<h3 class="cyan-text">{tr.notifications.bugsTitle}</h3>
+				<ul>
+					{tr.notifications.bugsItems.map(item => <li>{item}</li>)}
+				</ul>
+			</div>
+
+			<div class="notification-item">
+				<h3 class="cyan-text">{tr.notifications.compatTitle}</h3>
+				<ul>
+					{tr.notifications.compatItems.map(item => <li>{item}</li>)}
+				</ul>
+			</div>
+
+			<div class="download-btn-wrap">
+				<button
+					id="open-download"
+					class="retro-btn"
+					style={`background-image: url('${buttonImg.src}');`}
+				>
+					<span class="btn-inner">{tr.download.button}</span>
+				</button>
+			</div>
+		</ContentBox>
+
+		<ContentBox title={tr.about.title}>
+			<p>{tr.about.description}</p>
+			<p>{tr.about.contact} <a href="mailto:wyhshines@gmail.com">wyhshines@gmail.com</a></p>
+		</ContentBox>
+	</main>
+
+	<footer class="site-footer">
+		<p>{tr.footer}</p>
+	</footer>
+</div>
+
+<!-- Download Modal -->
+<div id="download-modal" class="modal-overlay">
+	<div class="modal-box" style={`--border-img: url('${borderImg.src}');`}>
+		<h2 class="modal-title">{tr.download.title}</h2>
+		<div class="modal-content">
+			<a
+				href="/downloads/DGunsZZ_3.0.0a.apk"
+				download
+				class="retro-btn download-track"
+				data-method="direct"
+				style={`background-image: url('${buttonImg.src}');`}
+			>
+				<span class="btn-inner">{tr.download.direct}</span>
+			</a>
+			<a
+				href="https://drive.google.com/file/d/1KdW-uS2Omxlbf_SdiNN0IFlF_kXKaTGI/view?usp=sharing"
+				target="_blank"
+				rel="noopener"
+				class="retro-btn download-track"
+				data-method="google_drive"
+				style={`background-image: url('${buttonImg.src}');`}
+			>
+				<span class="btn-inner">{tr.download.googleDrive}</span>
+			</a>
+			<a
+				href="https://wwbdr.lanzout.com/iXWYj3l6yb2d"
+				target="_blank"
+				rel="noopener"
+				class="retro-btn download-track"
+				data-method="lanzou_cloud"
+				style={`background-image: url('${buttonImg.src}');`}
+			>
+				<span class="btn-inner">{tr.download.lanzou}</span>
+			</a>
+		</div>
+		<button id="close-download" class="close-btn">&times;</button>
+	</div>
+</div>
+
+<script>
+	const sfxOpen = new Audio('/audio/button1.ogg');
+	const sfxClose = new Audio('/audio/button2.ogg');
+
+	function playSound(audio: HTMLAudioElement) {
+		audio.currentTime = 0;
+		audio.play().catch(() => {});
+	}
+
+	function initModal() {
+		const openBtn = document.getElementById("open-download");
+		const modal = document.getElementById("download-modal");
+		const closeBtn = document.getElementById("close-download");
+		const modalBox = modal?.querySelector(".modal-box");
+
+		if (!openBtn || !modal) return;
+
+		function closeModal() {
+			playSound(sfxClose);
+			modal!.classList.add("closing");
+			modal!.classList.remove("active");
+			modalBox?.addEventListener(
+				"transitionend",
+				() => {
+					modal!.classList.remove("closing");
+				},
+				{ once: true },
+			);
+		}
+
+		openBtn.addEventListener("click", () => {
+			playSound(sfxOpen);
+			modal.classList.remove("closing");
+			modal.classList.add("active");
+		});
+
+		closeBtn?.addEventListener("click", closeModal);
+
+		modal.addEventListener("click", (e) => {
+			if (e.target === modal) closeModal();
+		});
+	}
+
+	function initDownloadTracking() {
+		document.querySelectorAll('.download-track').forEach(btn => {
+			if ((btn as HTMLElement).dataset.tracked) return;
+			(btn as HTMLElement).dataset.tracked = 'true';
+			btn.addEventListener('click', () => {
+				playSound(sfxOpen);
+				const method = (btn as HTMLElement).dataset.method;
+				if (typeof gtag === 'function') {
+					gtag('event', 'download', {
+						event_category: 'apk',
+						event_label: method,
+					});
+				}
+			});
+		});
+	}
+
+	initModal();
+	initDownloadTracking();
+	document.addEventListener("astro:page-load", () => {
+		initModal();
+		initDownloadTracking();
+	});
+</script>
+
+<style>
+	.container {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 40px 20px;
+	}
+
+	.notification-item {
+		margin-bottom: 25px;
+	}
+
+	.notification-item:last-child {
+		margin-bottom: 0;
+	}
+
+	.cyan-text {
+		color: #00f0ff;
+		margin-top: 0;
+		margin-bottom: 10px;
+		font-size: 1.1rem;
+		font-weight: normal;
+	}
+
+	ul {
+		list-style-type: none;
+		padding-left: 25px;
+		margin: 0;
+	}
+
+	ul li {
+		margin-bottom: 5px;
+		color: #e0ffff;
+		position: relative;
+	}
+
+	ul li::before {
+		content: "▶";
+		position: absolute;
+		left: -15px;
+		color: #00f0ff;
+		font-size: 0.8rem;
+		top: 2px;
+	}
+
+	.download-btn-wrap {
+		margin-top: 20px;
+		margin-bottom: 15px;
+		max-width: 240px;
+	}
+
+	.site-footer {
+		text-align: center;
+		margin-top: 50px;
+		font-size: 0.8rem;
+		color: rgba(224, 255, 255, 0.5);
+	}
+
+	.retro-btn {
+		display: block;
+		width: 100%;
+		text-decoration: none;
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
+		transition: filter 0.2s;
+	}
+
+	.btn-inner {
+		display: block;
+		text-align: center;
+		padding: 12px 20px;
+		color: #30da96;
+		font-family: inherit;
+		font-size: 0.9rem;
+		font-weight: normal;
+		letter-spacing: 2px;
+		text-transform: capitalize;
+		transition: color 0.2s;
+	}
+
+	.retro-btn:hover {
+		filter: drop-shadow(0 0 5px rgba(0, 240, 255, 0.4));
+	}
+
+	.retro-btn:hover .btn-inner {
+		color: #ffffff;
+		text-shadow: 0 0 8px #00f0ff;
+	}
+
+	.modal-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 2000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0);
+		pointer-events: none;
+		transition: background 0.3s ease;
+	}
+
+	.modal-overlay.active {
+		background: rgba(0, 0, 0, 0.7);
+		pointer-events: auto;
+	}
+
+	.modal-box {
+		position: relative;
+		width: 90%;
+		max-width: 400px;
+		padding: 20px;
+		background: rgba(8, 28, 29, 0.95);
+		transform: translateX(100vw);
+		opacity: 0;
+		transition:
+			transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+			opacity 0.3s ease;
+		clip-path: polygon(
+			0 0,
+			calc(100% - 20px) 0,
+			100% 20px,
+			100% 100%,
+			20px 100%,
+			0 calc(100% - 20px)
+		);
+	}
+
+	.modal-box::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background-image: var(--border-img);
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		pointer-events: none;
+	}
+
+	.modal-overlay.active .modal-box {
+		transform: translateX(0);
+		opacity: 1;
+	}
+
+	.modal-overlay.closing .modal-box {
+		transform: translateX(100vw);
+		opacity: 0;
+		transition:
+			transform 0.35s cubic-bezier(0.64, 0, 0.78, 0),
+			opacity 0.3s ease;
+	}
+
+	.modal-title {
+		position: relative;
+		text-align: center;
+		color: #e0ffff;
+		font-weight: normal;
+		font-size: 1.2rem;
+		margin: 0 0 20px 0;
+		letter-spacing: 2px;
+	}
+
+	.modal-content {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		padding: 0 15px 10px;
+	}
+
+	.close-btn {
+		position: absolute;
+		top: 10px;
+		right: 15px;
+		background: none;
+		border: none;
+		color: #e0ffff;
+		font-size: 1.5rem;
+		cursor: pointer;
+		z-index: 1;
+		line-height: 1;
+		transition: color 0.2s;
+	}
+
+	.close-btn:hover {
+		color: #00f0ff;
+	}
+</style>

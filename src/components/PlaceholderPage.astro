@@ -1,0 +1,27 @@
+---
+import ContentBox from './ContentBox.astro';
+import { type Lang, t } from '../i18n/translations';
+
+interface Props {
+	lang: Lang;
+	title: string;
+}
+
+const { lang, title } = Astro.props;
+const tr = t(lang);
+---
+
+<div class="container">
+	<ContentBox title={title}>
+		<p>{tr.underConstruction}</p>
+		<p>{tr.contactPrompt} <a href="mailto:wyhshines@gmail.com">wyhshines@gmail.com</a></p>
+	</ContentBox>
+</div>
+
+<style>
+	.container {
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 40px 20px;
+	}
+</style>

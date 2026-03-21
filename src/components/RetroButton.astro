@@ -11,11 +11,24 @@ const { label, href } = Astro.props;
 
 <a
 	href={href}
-	class="retro-btn"
+	class="retro-btn retro-btn-sfx"
 	style={`background-image: url('${buttonImg.src}');`}
 >
 	<span class="btn-inner">{label}</span>
 </a>
+
+<script>
+	document.addEventListener('astro:page-load', () => {
+		document.querySelectorAll('.retro-btn-sfx').forEach(btn => {
+			if ((btn as HTMLElement).dataset.sfxInit) return;
+			(btn as HTMLElement).dataset.sfxInit = 'true';
+			btn.addEventListener('click', () => {
+				const sfx = new Audio('/audio/button1.ogg');
+				sfx.play().catch(() => {});
+			});
+		});
+	});
+</script>
 
 <style>
 	.retro-btn {

@@ -1,40 +1,127 @@
 ---
 import logoImg from '../img/logo.webp';
+import { getLangFromUrl, t, getLocalizedPath } from '../i18n/translations';
+
+const lang = getLangFromUrl(Astro.url);
+const tr = t(lang);
+const switchLang = lang === 'en' ? 'zh' : 'en';
+const switchLabel = lang === 'en' ? '中文' : 'EN';
+
+const currentPath = Astro.url.pathname;
+const basePath = lang === 'zh' ? currentPath.replace(/^\/zh/, '') || '/' : currentPath;
+const switchHref = getLocalizedPath(basePath, switchLang);
 ---
 <header class="global-navbar">
 	<div class="nav-container">
 		<div class="logo">
-			<a href="/"><img src={logoImg.src} alt="Destroy Gunners" class="logo-img" /></a>
+			<a href={getLocalizedPath('/', lang)}><img src={logoImg.src} alt="Destroy Gunners" class="logo-img" /></a>
 		</div>
-		<button class="hamburger" id="hamburger" aria-label="Menu">
-			<span></span>
-			<span></span>
-			<span></span>
-		</button>
 		<nav class="nav-links" id="nav-links">
-			<a href="/">HOME</a>
-			<a href="/games">GAMES</a>
-			<a href="/story">STORY</a>
-			<a href="/mechas">MECHA</a>
-			<a href="/enemies">ENEMY</a>
-			<a href="/assets">ASSETS</a>
+			<a href={getLocalizedPath('/', lang)}>{tr.nav.home}</a>
+			<a href={getLocalizedPath('/games', lang)}>{tr.nav.games}</a>
+			<a href={getLocalizedPath('/story', lang)}>{tr.nav.story}</a>
+			<a href={getLocalizedPath('/mechas', lang)}>{tr.nav.mecha}</a>
+			<a href={getLocalizedPath('/enemies', lang)}>{tr.nav.enemy}</a>
+			<a href={getLocalizedPath('/assets', lang)}>{tr.nav.assets}</a>
 		</nav>
+		<div class="nav-actions">
+			<a href={switchHref} class="lang-switch">{switchLabel}</a>
+			<button class="bgm-toggle" id="bgm-toggle" aria-label="Toggle BGM">
+				<svg class="icon-muted" id="icon-muted" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+					<line x1="23" y1="9" x2="17" y2="15"></line>
+					<line x1="17" y1="9" x2="23" y2="15"></line>
+				</svg>
+				<svg class="icon-playing" id="icon-playing" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+					<path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+					<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+				</svg>
+			</button>
+			<button class="hamburger" id="hamburger" aria-label="Menu">
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+		</div>
 	</div>
 </header>
 
 <script>
+	// BGM setup - runs once, persists across page navigations
+	(function initBgm() {
+		if (window.__bgmInitDone) return;
+		window.__bgmInitDone = true;
+
+		const bgms = Array.from({ length: 11 }, (_, i) => `/audio/bgm_${i}.ogg`);
+		const chosen = bgms[Math.floor(Math.random() * bgms.length)];
+		const audio = new Audio(chosen);
+		audio.loop = true;
+		audio.volume = 0.5;
+		window.__bgmAudio = audio;
+		window.__bgmPlaying = false;
+	})();
+
 	document.addEventListener('astro:page-load', () => {
 		const hamburger = document.getElementById('hamburger');
 		const navLinks = document.getElementById('nav-links');
 
-		if (!hamburger || hamburger.dataset.init) return;
-		hamburger.dataset.init = 'true';
+		if (hamburger && !hamburger.dataset.init) {
+			hamburger.dataset.init = 'true';
+			hamburger.addEventListener('click', () => {
+				hamburger.classList.toggle('active');
+				navLinks?.classList.toggle('open');
+			});
+		}
 
-		hamburger.addEventListener('click', () => {
-			hamburger.classList.toggle('active');
-			navLinks?.classList.toggle('open');
-		});
+		// BGM toggle
+		const toggleBtn = document.getElementById('bgm-toggle');
+		const iconMuted = document.getElementById('icon-muted');
+		const iconPlaying = document.getElementById('icon-playing');
+
+		if (toggleBtn && iconMuted && iconPlaying) {
+			// Sync icon with current state
+			if (window.__bgmPlaying) {
+				iconMuted.style.display = 'none';
+				iconPlaying.style.display = 'block';
+			} else {
+				iconMuted.style.display = 'block';
+				iconPlaying.style.display = 'none';
+			}
+
+			if (!toggleBtn.dataset.init) {
+				toggleBtn.dataset.init = 'true';
+				toggleBtn.addEventListener('click', () => {
+					const audio = window.__bgmAudio;
+					if (!audio) return;
+
+					const mIcon = document.getElementById('icon-muted');
+					const pIcon = document.getElementById('icon-playing');
+
+					if (window.__bgmPlaying) {
+						audio.pause();
+						window.__bgmPlaying = false;
+						if (mIcon) mIcon.style.display = 'block';
+						if (pIcon) pIcon.style.display = 'none';
+					} else {
+						audio.play().catch(() => {});
+						window.__bgmPlaying = true;
+						if (mIcon) mIcon.style.display = 'none';
+						if (pIcon) pIcon.style.display = 'block';
+					}
+				});
+			}
+		}
 	});
+
+	// Type declarations
+	declare global {
+		interface Window {
+			__bgmInitDone?: boolean;
+			__bgmAudio?: HTMLAudioElement;
+			__bgmPlaying?: boolean;
+		}
+	}
 </script>
 
 <style>
@@ -66,6 +153,21 @@ import logoImg from '../img/logo.webp';
 
 	.logo a:hover .logo-img {
 		filter: drop-shadow(0 0 5px #00f0ff);
+	}
+
+	.bgm-toggle {
+		background: none;
+		border: none;
+		color: #e0ffff;
+		cursor: pointer;
+		padding: 5px;
+		display: flex;
+		align-items: center;
+		transition: color 0.2s;
+	}
+
+	.bgm-toggle:hover {
+		color: #00f0ff;
 	}
 
 	.hamburger {
@@ -127,6 +229,23 @@ import logoImg from '../img/logo.webp';
 		width: 100%;
 	}
 
+	.nav-actions {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+	}
+
+	.lang-switch {
+		color: #e0ffff;
+		text-decoration: none;
+		font-size: 0.9rem;
+		transition: color 0.2s;
+	}
+
+	.lang-switch:hover {
+		color: #00f0ff;
+	}
+
 	@media (max-width: 800px) {
 		.nav-container {
 			justify-content: space-between;
@@ -161,4 +280,5 @@ import logoImg from '../img/logo.webp';
 			text-align: center;
 		}
 	}
+
 </style>
