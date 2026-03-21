@@ -1,23 +1,36 @@
 ---
-import { ClientRouter } from 'astro:transitions';
-import bgImage from '../img/bg1.jpg';
-import Header from '../components/Header.astro';
+import { ClientRouter } from "astro:transitions";
+import bg1 from "../img/bg1.jpg";
+import bg2 from "../img/bg2.webp";
+import bg3 from "../img/bg3.webp";
+import bg4 from "../img/bg4.webp";
+import bg5 from "../img/bg5.webp";
+import Header from "../components/Header.astro";
+
+const bgs = [bg1, bg2, bg3, bg4, bg5];
+const bgImage = bgs[Math.floor(Math.random() * bgs.length)];
 ---
+
 <!doctype html>
 <html lang="zh-CN">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400&display=swap" rel="stylesheet" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400&display=swap"
+			rel="stylesheet"
+		/>
 		<meta name="generator" content={Astro.generator} />
-		<title>Destroy Gunners Community</title>
+		<meta name="description" content="A fan-built hub for the Destroy Gunners mecha series by SHADE Inc. Offline patches, game archives, and a growing community." />
+		<title>Destroy Gunners — Offline Patch Download & Community</title>
 		<ClientRouter />
 	</head>
-	<body style={`background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('${bgImage.src}');`}>
+	<body
+		style={`background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.65)), url('${bgImage.src}');`}
+	>
 		<Header />
 		<slot />
 	</body>
@@ -25,8 +38,8 @@ import Header from '../components/Header.astro';
 
 <style is:global>
 	@font-face {
-		font-family: 'RetroTerminal';
-		src: local('Courier New'), local('Courier'), monospace;
+		font-family: "RetroTerminal";
+		src: local("Courier New"), local("Courier"), monospace;
 	}
 
 	html {
@@ -44,7 +57,7 @@ import Header from '../components/Header.astro';
 		background-attachment: fixed;
 		background-repeat: no-repeat;
 		color: #e0ffff;
-		font-family: 'Noto Sans', sans-serif;
+		font-family: "Noto Sans", sans-serif;
 		font-weight: 300;
 		line-height: 1.5;
 	}
