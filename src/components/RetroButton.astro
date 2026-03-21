@@ -1,0 +1,55 @@
+---
+import buttonImg from "../img/button.webp";
+
+interface Props {
+	label: string;
+	href: string;
+}
+
+const { label, href } = Astro.props;
+---
+
+<a
+	href={href}
+	class="retro-btn"
+	style={`background-image: url('${buttonImg.src}');`}
+>
+	<span class="btn-inner">{label}</span>
+</a>
+
+<style>
+	.retro-btn {
+		display: block;
+		text-decoration: none;
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		background-position: center;
+		transition: filter 0.2s;
+	}
+
+	.btn-inner {
+		display: block;
+		text-align: center;
+		padding: 12px 20px;
+		color: #44eeaa;
+		font-family: inherit;
+		font-size: 0.9rem;
+		font-weight: normal;
+		letter-spacing: 2px;
+		text-transform: capitalize;
+		transition: color 0.2s;
+	}
+
+	.retro-btn:hover {
+		filter: drop-shadow(0 0 5px rgba(0, 240, 255, 0.4));
+	}
+
+	.retro-btn:hover .btn-inner {
+		color: #ffffff;
+		text-shadow: 0 0 8px #00f0ff;
+	}
+
+	.retro-btn:active {
+		filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.8));
+	}
+</style>

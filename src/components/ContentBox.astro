@@ -1,0 +1,60 @@
+---
+import borderImg from '../img/border.webp';
+
+interface Props {
+	title?: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="sf-box" style={`--border-img: url('${borderImg.src}');`}>
+	{title && <h2 class="box-title">{title}</h2>}
+	<div class="box-content">
+		<slot />
+	</div>
+</div>
+
+<style>
+	.sf-box {
+		position: relative;
+		display: block;
+		margin: 25px 0;
+		padding: 15px;
+		background: rgba(8, 28, 29, 0.85);
+		clip-path: polygon(
+			0 0,
+			calc(100% - 20px) 0,
+			100% 20px,
+			100% 100%,
+			20px 100%,
+			0 calc(100% - 20px)
+		);
+	}
+
+	.sf-box::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image: var(--border-img);
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		pointer-events: none;
+	}
+
+	.box-title {
+		position: relative;
+		text-align: center;
+		color: #e0ffff;
+		font-weight: normal;
+		font-size: 1.2rem;
+		margin: 0;
+		padding: 15px 0 0 0;
+		letter-spacing: 2px;
+	}
+
+	.box-content {
+		position: relative;
+		padding: 15px 25px;
+	}
+</style>

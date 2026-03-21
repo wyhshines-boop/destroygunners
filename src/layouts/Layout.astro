@@ -1,0 +1,65 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import bgImage from '../img/bg1.jpg';
+import Header from '../components/Header.astro';
+---
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400&display=swap" rel="stylesheet" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Destroy Gunners Community</title>
+		<ClientRouter />
+	</head>
+	<body style={`background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('${bgImage.src}');`}>
+		<Header />
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	@font-face {
+		font-family: 'RetroTerminal';
+		src: local('Courier New'), local('Courier'), monospace;
+	}
+
+	html {
+		height: 100%;
+	}
+
+	body {
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		min-height: 100vh;
+		background-color: #000;
+		background-size: cover;
+		background-position: center center;
+		background-attachment: fixed;
+		background-repeat: no-repeat;
+		color: #e0ffff;
+		font-family: 'Noto Sans', sans-serif;
+		font-weight: 300;
+		line-height: 1.5;
+	}
+
+	a {
+		color: #00f0ff;
+		text-decoration: none;
+	}
+
+	a:hover {
+		color: #fff;
+		text-shadow: 0 0 5px #00f0ff;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+</style>
