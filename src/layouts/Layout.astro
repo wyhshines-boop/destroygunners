@@ -30,9 +30,17 @@ const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
 	<body>
 		<Header />
 		<slot />
-		<script define:vars={{ bgSrcs }}>
-			const bg = bgSrcs[Math.floor(Math.random() * bgSrcs.length)];
-			document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.65)), url('${bg}')`;
+		<script is:inline define:vars={{ bgSrcs }}>
+			window.__bgSrcs = bgSrcs;
+			window.__bgChosen = window.__bgChosen || bgSrcs[Math.floor(Math.random() * bgSrcs.length)];
+		</script>
+		<script>
+			function applyBg() {
+				if (window.__bgChosen) {
+					document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.65)), url('${window.__bgChosen}')`;
+				}
+			}
+			document.addEventListener('astro:page-load', applyBg);
 		</script>
 	</body>
 </html>
