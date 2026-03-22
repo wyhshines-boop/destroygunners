@@ -1,0 +1,38 @@
+---
+import { type Lang } from '../i18n/translations';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const giscusLang = lang === 'zh' ? 'zh-CN' : 'en';
+---
+
+<div class="giscus-wrapper">
+	<script
+		is:inline
+		src="https://giscus.app/client.js"
+		data-repo="wyhshines-boop/dgzz-discussion"
+		data-repo-id="R_kgDORtnlWQ"
+		data-category="General"
+		data-category-id="DIC_kwDORtnlWc4C5BBs"
+		data-mapping="pathname"
+		data-strict="0"
+		data-reactions-enabled="1"
+		data-emit-metadata="0"
+		data-input-position="bottom"
+		data-theme="cobalt"
+		data-lang={giscusLang}
+		crossorigin="anonymous"
+		async
+	></script>
+</div>
+
+<style>
+	.giscus-wrapper {
+		max-width: 1100px;
+		margin: 30px auto 0;
+		padding: 0 20px;
+	}
+</style>

@@ -3,6 +3,7 @@ import ContentBox from './ContentBox.astro';
 import borderImg from '../img/border.webp';
 import buttonImg from '../img/button.webp';
 import { type Lang, t } from '../i18n/translations';
+import Giscus from './Giscus.astro';
 
 interface Props {
 	lang: Lang;
@@ -59,6 +60,8 @@ const tr = t(lang);
 			<p>{tr.about.contact} <a href="mailto:wyhshines@gmail.com">wyhshines@gmail.com</a></p>
 		</ContentBox>
 	</main>
+
+	<Giscus lang={lang} />
 
 	<footer class="site-footer">
 		<p>{tr.footer}</p>
