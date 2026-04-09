@@ -18,23 +18,29 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 		</div>
 		<div class="nav-right">
 			<nav class="nav-links" id="nav-links">
-				<a href={getLocalizedPath('/', lang)}>{tr.nav.home}</a>
-				<a href={getLocalizedPath('/games', lang)}>{tr.nav.games}</a>
-				<a href={getLocalizedPath('/story', lang)}>{tr.nav.story}</a>
-				<a href={getLocalizedPath('/mechas', lang)}>{tr.nav.mecha}</a>
+				<a href={getLocalizedPath('/', lang)} class={basePath === '/' ? 'active' : ''}>{tr.nav.home}</a>
+				<a href={getLocalizedPath('/games', lang)} class={basePath.startsWith('/games') ? 'active' : ''}>{tr.nav.games}</a>
+				<a href={getLocalizedPath('/story', lang)} class={basePath.startsWith('/story') ? 'active' : ''}>{tr.nav.story}</a>
+				<a href={getLocalizedPath('/mechas', lang)} class={basePath.startsWith('/mechas') ? 'active' : ''}>{tr.nav.mecha}</a>
 				<div class="mobile-break"></div>
-				<a href={getLocalizedPath('/enemies', lang)}>{tr.nav.enemy}</a>
-				<a href={getLocalizedPath('/assets', lang)}>{tr.nav.assets}</a>
+				<a href={getLocalizedPath('/enemies', lang)} class={basePath.startsWith('/enemies') ? 'active' : ''}>{tr.nav.enemy}</a>
+				<a href={getLocalizedPath('/assets', lang)} class={basePath.startsWith('/assets') ? 'active' : ''}>{tr.nav.assets}</a>
 			</nav>
 			<div class="nav-actions">
-				<a href={switchHref} class="lang-switch">{switchLabel}</a>
+				<a href={switchHref} class="lang-switch" aria-label={switchLabel} title={switchLabel}>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="12" cy="12" r="10"></circle>
+						<line x1="2" y1="12" x2="22" y2="12"></line>
+						<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+					</svg>
+				</a>
 				<button class="bgm-toggle" id="bgm-toggle" aria-label="Toggle BGM">
-					<svg class="icon-muted" id="icon-muted" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<svg class="icon-muted" id="icon-muted" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
 						<line x1="23" y1="9" x2="17" y2="15"></line>
 						<line x1="17" y1="9" x2="23" y2="15"></line>
 					</svg>
-					<svg class="icon-playing" id="icon-playing" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<svg class="icon-playing" id="icon-playing" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
 						<path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
 						<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
@@ -173,24 +179,15 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 	.nav-links a {
 		position: relative;
 		font-size: 1rem;
-		padding: 5px 0;
+		padding: 4px 8px;
+		border-radius: 4px;
 		transition: all 0.2s;
 	}
 
-	.nav-links a::after {
-		content: '';
-		position: absolute;
-		left: 0;
-		bottom: -5px;
-		width: 0;
-		height: 2px;
-		background: #00f0ff;
-		transition: width 0.3s ease;
-		box-shadow: 0 0 5px #00f0ff;
-	}
-
-	.nav-links a:hover::after {
-		width: 100%;
+	.nav-links a:hover,
+	.nav-links a.active {
+		background: rgba(0, 240, 255, 0.25);
+		text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
 	}
 
 	.mobile-break {
@@ -206,7 +203,9 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 	.lang-switch {
 		color: #e0ffff;
 		text-decoration: none;
-		font-size: 0.9rem;
+		display: flex;
+		align-items: center;
+		padding: 5px;
 		transition: color 0.2s;
 	}
 
@@ -238,12 +237,13 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 		}
 
 		.nav-links a {
-			padding: 0;
+			padding: 2px 4px;
 			width: auto;
 			text-align: left;
 			white-space: nowrap;
 			font-size: 0.85rem;
 			line-height: 1.2;
+			border-radius: 3px;
 		}
 
 		.mobile-break {
@@ -253,7 +253,7 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 		}
 
 		.logo-img {
-			height: 38px;
+			height: 44px;
 		}
 
 		.bgm-toggle, .lang-switch {
