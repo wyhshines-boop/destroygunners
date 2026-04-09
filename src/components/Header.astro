@@ -16,29 +16,31 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 		<div class="logo">
 			<a href={getLocalizedPath('/', lang)}><img src={logoImg.src} alt="Destroy Gunners" class="logo-img" /></a>
 		</div>
-		<nav class="nav-links" id="nav-links">
-			<a href={getLocalizedPath('/', lang)}>{tr.nav.home}</a>
-			<a href={getLocalizedPath('/games', lang)}>{tr.nav.games}</a>
-			<a href={getLocalizedPath('/story', lang)}>{tr.nav.story}</a>
-			<a href={getLocalizedPath('/mechas', lang)}>{tr.nav.mecha}</a>
-			<a href={getLocalizedPath('/enemies', lang)}>{tr.nav.enemy}</a>
-			<a href={getLocalizedPath('/assets', lang)}>{tr.nav.assets}</a>
-		</nav>
-		<div class="nav-actions">
-			<a href={switchHref} class="lang-switch">{switchLabel}</a>
-			<button class="bgm-toggle" id="bgm-toggle" aria-label="Toggle BGM">
-				<svg class="icon-muted" id="icon-muted" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-					<line x1="23" y1="9" x2="17" y2="15"></line>
-					<line x1="17" y1="9" x2="23" y2="15"></line>
-				</svg>
-				<svg class="icon-playing" id="icon-playing" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-					<path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-					<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-				</svg>
-			</button>
-
+		<div class="nav-right">
+			<nav class="nav-links" id="nav-links">
+				<a href={getLocalizedPath('/', lang)}>{tr.nav.home}</a>
+				<a href={getLocalizedPath('/games', lang)}>{tr.nav.games}</a>
+				<a href={getLocalizedPath('/story', lang)}>{tr.nav.story}</a>
+				<a href={getLocalizedPath('/mechas', lang)}>{tr.nav.mecha}</a>
+				<div class="mobile-break"></div>
+				<a href={getLocalizedPath('/enemies', lang)}>{tr.nav.enemy}</a>
+				<a href={getLocalizedPath('/assets', lang)}>{tr.nav.assets}</a>
+			</nav>
+			<div class="nav-actions">
+				<a href={switchHref} class="lang-switch">{switchLabel}</a>
+				<button class="bgm-toggle" id="bgm-toggle" aria-label="Toggle BGM">
+					<svg class="icon-muted" id="icon-muted" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+						<line x1="23" y1="9" x2="17" y2="15"></line>
+						<line x1="17" y1="9" x2="23" y2="15"></line>
+					</svg>
+					<svg class="icon-playing" id="icon-playing" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+						<path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+						<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+					</svg>
+				</button>
+			</div>
 		</div>
 	</div>
 </header>
@@ -132,6 +134,10 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 		height: 60px;
 	}
 
+	.nav-right {
+		display: contents;
+	}
+
 	.logo-img {
 		height: 40px;
 		width: auto;
@@ -187,6 +193,10 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 		width: 100%;
 	}
 
+	.mobile-break {
+		display: none;
+	}
+
 	.nav-actions {
 		display: flex;
 		align-items: center;
@@ -206,41 +216,48 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 
 	@media (max-width: 800px) {
 		.nav-container {
-			flex-wrap: wrap;
+			flex-wrap: nowrap;
 			height: auto;
 			padding: 10px 0;
 			justify-content: space-between;
-			gap: 15px 0;
+			align-items: center;
+			gap: 10px;
 		}
 
-		.logo { order: 1; }
-		.nav-actions { order: 2; }
-
-		.nav-links {
-			order: 3;
+		.nav-right {
 			display: flex;
-			position: static;
-			flex-direction: row;
-			justify-content: flex-start;
-			overflow-x: auto;
-			width: 100%;
-			gap: 20px;
-			background: transparent;
-			border-bottom: none;
-			padding: 0 0 5px 0;
-			-ms-overflow-style: none; /* IE and Edge */
-			scrollbar-width: none; /* Firefox */
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: center;
+			gap: 0 12px;
+			flex: 1;
 		}
 
-		.nav-links::-webkit-scrollbar {
-			display: none; /* Chrome, Safari and Opera */
+		.nav-links, .nav-actions {
+			display: contents;
 		}
 
 		.nav-links a {
-			padding: 5px 0;
+			padding: 0;
 			width: auto;
 			text-align: left;
 			white-space: nowrap;
+			font-size: 0.85rem;
+			line-height: 1.2;
+		}
+
+		.mobile-break {
+			display: block;
+			flex-basis: 100%;
+			height: 0;
+		}
+
+		.logo-img {
+			height: 38px;
+		}
+
+		.bgm-toggle, .lang-switch {
+			margin-left: 5px;
 		}
 	}
 
