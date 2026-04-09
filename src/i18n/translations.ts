@@ -21,8 +21,8 @@ export const translations = {
 						{
 							title: 'Destroy Gunners ZZ v3.0.0b',
 							items: [
-								'Compared to previous versions: Fixed "could not update information" popup.',
 								'Cracked IAP: You can buy gold and items for free.',
+								'Note: Occasional crash after IAP (normal behavior, doesn\'t affect gameplay).',
 							],
 						},
 						{
@@ -154,8 +154,8 @@ export const translations = {
 						{
 							title: 'Destroy Gunners ZZ v3.0.0b',
 							items: [
-								'相比之前的版本：修复了 "could not update information" 弹窗。',
 								'破解内购，可随意购买金币道具。',
+								'内购后偶尔会闪退（正常现象，不影响游戏）。',
 							],
 						},
 						{
