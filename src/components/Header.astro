@@ -4,8 +4,8 @@ import { getLangFromUrl, t, getLocalizedPath } from '../i18n/translations';
 
 const lang = getLangFromUrl(Astro.url);
 const tr = t(lang);
-const switchLang = lang === 'en' ? 'zh' : 'en';
-const switchLabel = lang === 'en' ? '中文' : 'EN';
+const switchLang = lang === 'en' ? 'zh' : (lang === 'zh' ? 'ja' : 'en');
+const switchLabel = lang === 'en' ? '中文' : (lang === 'zh' ? '日本語' : 'EN');
 
 const currentPath = Astro.url.pathname;
 const basePath = lang === 'zh' ? currentPath.replace(/^\/zh/, '') || '/' : currentPath;

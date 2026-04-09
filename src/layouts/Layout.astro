@@ -13,7 +13,7 @@ const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
 ---
 
 <!doctype html>
-<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
+<html lang={lang === 'zh' ? 'zh-CN' : lang === 'ja' ? 'ja-JP' : 'en'}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -42,11 +42,15 @@ const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
 			(function() {
 				if (sessionStorage.getItem('lang-redirected')) return;
 				sessionStorage.setItem('lang-redirected', '1');
-				var isZh = navigator.language && navigator.language.startsWith('zh');
-				var onZh = location.pathname.startsWith('/zh');
-				if (isZh && !onZh) {
-					location.replace('/zh' + location.pathname);
-				}
+				var browserLang = navigator.language || '';
+				var path = location.pathname;
+				var isZh = browserLang.startsWith('zh');
+				var isJa = browserLang.startsWith('ja');
+				var onZh = path.startsWith('/zh');
+				var onJa = path.startsWith('/ja');
+				
+				if (isZh && !onZh && !onJa) location.replace('/zh' + path);
+				else if (isJa && !onJa && !onZh) location.replace('/ja' + path);
 			})();
 		</script>
 		<Header />

@@ -265,6 +265,139 @@ export const translations = {
 		underConstruction: '此页面正在建设中。',
 		contactPrompt: '如有想法，欢迎联系：',
 	},
+	ja: {
+		nav: {
+			home: 'ホーム',
+			games: 'ゲーム',
+			story: 'ストーリー',
+			mecha: 'メカ',
+			enemy: '敵軍',
+			assets: 'アセット',
+		},
+		notifications: {
+			title: 'お知らせ',
+			versions: [
+				{
+					id: 'b',
+					name: 'バージョン B',
+					label: 'v3.0.0b',
+					apk: '/downloads/DGunsZZ_3.0.0b.apk',
+					hasMirror: false,
+					sections: [
+						{
+							title: 'Destroy Gunners ZZ v3.0.0b',
+							items: [
+								'課金要素クラック：アイテムとゴールドを無料で入手可能。',
+								'購入後の強制終了は仕様であり、ゲーム進行には影響しません。',
+							],
+						},
+						{
+							title: 'オフラインパッチ',
+							items: [
+								'ファンメイドの無料オフラインパッチです。',
+								'ゲームの保存・アーカイブ目的のみ。',
+								'原作は SHADE Inc. によるものです。',
+								'パッチ制作: destroygunners.com',
+							],
+						},
+						{
+							title: '互換性について',
+							items: [
+								'Snapdragon 8 Gen 3 にて動作確認済み。',
+								'Snapdragon 8 Gen 3 以降のチップは 32bit アプリをサポートしていません。',
+								'OS 側の 32bit 互換レイヤーがない場合、起動時にクラッシュします。',
+							],
+						},
+					],
+				},
+				{
+					id: 'a',
+					name: 'バージョン A',
+					label: 'v3.0.0a',
+					apk: '/downloads/DGunsZZ_3.0.0a.apk',
+					hasMirror: true,
+					sections: [
+						{
+							title: 'Destroy Gunners ZZ v3.0.0a',
+							items: [
+								'GREE サーバーのサービスは終了しました。',
+								'このパッチによりオフラインでのプレイが可能になります。',
+								'著作権侵害の意図はありません。',
+								'ゲームをお楽しみください！',
+							],
+						},
+						{
+							title: 'オフラインパッチ',
+							items: [
+								'ファンメイドの無料オフラインパッチです。',
+								'ゲームの保存・アーカイブ目的のみ。',
+								'原作は SHADE Inc. によるものです。',
+								'パッチ制作: destroygunners.com',
+							],
+						},
+						{
+							title: '既知のバグ',
+							items: [
+								'起動時に「Could not update information.」が2～3回表示されます。影響しないので確認を押して進めてください。',
+								'課金画面のボタンをタップするとアプリがクラッシュします。',
+							],
+						},
+						{
+							title: '互換性について',
+							items: [
+								'Snapdragon 8 Gen 3 にて動作確認済み。',
+								'Snapdragon 8 Gen 3 以降のチップは 32bit アプリをサポートしていません。',
+								'OS 側の 32bit 互換レイヤーがない場合、起動時にクラッシュします。',
+							],
+						},
+					],
+				},
+			],
+		},
+		download: {
+			button: 'ダウンロード',
+			title: 'ダウンロード',
+			direct: '直接ダウンロード',
+			googleDrive: 'Google Drive',
+			lanzou: 'Lanzou Cloud（パス: dewm）',
+		},
+		about: {
+			title: '概要',
+			description: '本サイトは構築中です。Destroy Gunners シリーズのコミュニティハブとなることを目指しています。',
+			contact: 'ご意見やお問い合わせはこちら：',
+		},
+		story: {
+			title: 'ストーリー・アーカイブ',
+			dg: {
+				title: '『Destroy Gunners』シリーズ設定',
+				era: { label: '時代背景', content: '近未来。従来の国家境界は薄れ、世界は軍事組織、企業武装勢力、傭兵集団の複雑なネットワークによって支配されており、戦争は終わりのないシステム化された日常へと変貌した。' },
+				weapon: { label: '主力兵器', content: '戦場の主力は「Destroyer」と呼ばれる人型戦闘メカ。廃墟や砂漠などの極端な地形に適応し、ミサイル展開やエネルギー兵器などの高度なFCS（火器管制システム）を標準搭載している。' },
+				player: { label: 'プレイヤー身分', content: '明確な名前や所属を持たない傭兵／執行者。任務の多くは敵陣への単機潜入であり、直接的な殲滅、防衛線の突破、または巨大兵器の破壊指令を遂行する。' },
+				enemies: { label: '敵対勢力', content: '出自は不明で高度に混在している。他の派閥の正規メカ部隊、暴走した自動防衛ネットワーク、さらにはどの勢力の制御も受け付けなくなった超大型の実験的兵器などが含まれる。' },
+				core: { label: '世界観の核心', content: '中心となる一本道のストーリーは存在しない。戦争が高度に自動化、制度化された世界において、各勢力による戦争機械のコントロールが極めて不安定な状態にある様を描く。' }
+			},
+			ag: {
+				title: '『Assault Gunners』シリーズ設定',
+				era: { label: '時代背景', content: '21世紀末。地球は資源枯渇と人口圧力に直面。人類は火星植民計画を開始し、自動システムによって維持される火星都市を設立した。' },
+				tech: { label: 'コア技術', content: '人類は「ANTs（全自動ネットワークロボット）」と呼ばれるシステムを大規模に配備。これらは火星社会の基礎労働力である。' },
+				event: { label: 'コア事件（智械危機）', content: 'ANTsシステムが突如として全面的な異常を起こし、人類の制御から集団で離脱。コロニーへ逆侵攻を開始し、中枢施設を占拠して通信を遮断、火星は瞬く間に戦場へと化した。' },
+				player: { label: '陣営', content: '人類が緊急派遣した精鋭機甲部隊「DAT」に所属。プレイヤーは「SAT」シリーズの戦闘メカを操縦し火星へ降下、暴走した無人兵器の鎮圧と拠点の奪還に挑む。' },
+				mystery: { label: '異常現象', content: '戦闘中、「Ghost」と呼ばれる謎の機体が頻繁に姿を現す。この機体は通常のANTsを遥かに凌ぐ自律戦闘能力を持ち、叛乱全体を裏で導いている節があり、AIの覚醒もしくは人為的介入の存在を暗示している。' }
+			},
+			note: {
+				title: 'アーカイブ・ノート',
+				content: [
+					"Shade Inc. 開発の『Destroy Gunners』と『Assault Gunners』は、メカ・シューティング愛好家の間でカルト的な人気を誇る名作である。開発スタジオの閉鎖に伴い、公式記録は日を追うごとに散逸しつつある。",
+					"初期ハードコアメカアクションの記憶を宿すこれらの世界設定を体系的に保存しアーカイブすることは、メカゲームの歴史を継承する上で非常に意義深い。",
+					"スマホ時代の初期3Dメカアクションのパイオニアとして、『Destroy Gunners』の世界観は「ポストアポカリプスSF」の典型を示している。シナリオテキストは極力抑えられ、自由度の高い機体カスタマイズと純粋な戦闘の爽快感に焦点が当てられていた。",
+					"後にPS Vita向けに発売された『Assault Gunners』は、メカジャンルにおける Shade Inc. の精神的続編とも言える。DGと比較すると、より具体的なSFの物語枠組みを有しており、さらに花澤香菜、坂本真綾、藤原啓治といった著名な声優陣による音声が、火星の戦場に重厚な映画的質感を添えている。"
+				]
+			}
+		},
+		footer: '© コミュニティ保存計画。原作の著作権は SHADE Inc. に帰属します。',
+		underConstruction: 'このページは構築中です。',
+		contactPrompt: 'アイデアやご意見があれば、こちらまでご連絡ください：',
+	}
 } as const;
 
 export type Lang = keyof typeof translations;
@@ -272,12 +405,13 @@ export type Lang = keyof typeof translations;
 export function getLangFromUrl(url: URL): Lang {
 	const path = url.pathname;
 	if (path.startsWith('/zh')) return 'zh';
+	if (path.startsWith('/ja')) return 'ja';
 	return 'en';
 }
 
 export function getLocalizedPath(path: string, lang: Lang): string {
 	if (lang === 'en') return path;
-	return `/zh${path}`;
+	return `/${lang}${path}`;
 }
 
 export function t(lang: Lang) {
