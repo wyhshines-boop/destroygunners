@@ -38,11 +38,7 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 					<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
 				</svg>
 			</button>
-			<button class="hamburger" id="hamburger" aria-label="Menu">
-				<span></span>
-				<span></span>
-				<span></span>
-			</button>
+
 		</div>
 	</div>
 </header>
@@ -53,7 +49,7 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 		if (window.__bgmInitDone) return;
 		window.__bgmInitDone = true;
 
-		const bgms = Array.from({ length: 11 }, (_, i) => `/audio/bgm_${i}.ogg`);
+		const bgms = [0, 1, 2, 4, 5, 10].map(i => `/audio/bgm_${i}.ogg`);
 		const chosen = bgms[Math.floor(Math.random() * bgms.length)];
 		const audio = new Audio(chosen);
 		audio.loop = true;
@@ -63,16 +59,7 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 	})();
 
 	document.addEventListener('astro:page-load', () => {
-		const hamburger = document.getElementById('hamburger');
-		const navLinks = document.getElementById('nav-links');
 
-		if (hamburger && !hamburger.dataset.init) {
-			hamburger.dataset.init = 'true';
-			hamburger.addEventListener('click', () => {
-				hamburger.classList.toggle('active');
-				navLinks?.classList.toggle('open');
-			});
-		}
 
 		// BGM toggle
 		const toggleBtn = document.getElementById('bgm-toggle');
@@ -170,36 +157,7 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 		color: #00f0ff;
 	}
 
-	.hamburger {
-		display: none;
-		flex-direction: column;
-		justify-content: center;
-		gap: 5px;
-		background: none;
-		border: none;
-		cursor: pointer;
-		padding: 5px;
-	}
 
-	.hamburger span {
-		display: block;
-		width: 24px;
-		height: 2px;
-		background: #e0ffff;
-		transition: transform 0.3s, opacity 0.3s;
-	}
-
-	.hamburger.active span:nth-child(1) {
-		transform: translateY(7px) rotate(45deg);
-	}
-
-	.hamburger.active span:nth-child(2) {
-		opacity: 0;
-	}
-
-	.hamburger.active span:nth-child(3) {
-		transform: translateY(-7px) rotate(-45deg);
-	}
 
 	.nav-links {
 		display: flex;
@@ -248,36 +206,41 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 
 	@media (max-width: 800px) {
 		.nav-container {
+			flex-wrap: wrap;
+			height: auto;
+			padding: 10px 0;
 			justify-content: space-between;
-			height: 60px;
+			gap: 15px 0;
 		}
 
-		.hamburger {
-			display: flex;
-		}
+		.logo { order: 1; }
+		.nav-actions { order: 2; }
 
 		.nav-links {
-			display: none;
-			position: absolute;
-			top: 60px;
-			left: 0;
-			right: 0;
-			flex-direction: column;
-			align-items: center;
-			gap: 0;
-			background: rgba(0, 15, 20, 0.95);
-			border-bottom: 2px solid #00f0ff;
-			padding: 10px 0;
+			order: 3;
+			display: flex;
+			position: static;
+			flex-direction: row;
+			justify-content: flex-start;
+			overflow-x: auto;
+			width: 100%;
+			gap: 20px;
+			background: transparent;
+			border-bottom: none;
+			padding: 0 0 5px 0;
+			-ms-overflow-style: none; /* IE and Edge */
+			scrollbar-width: none; /* Firefox */
 		}
 
-		.nav-links.open {
-			display: flex;
+		.nav-links::-webkit-scrollbar {
+			display: none; /* Chrome, Safari and Opera */
 		}
 
 		.nav-links a {
-			padding: 12px 0;
-			width: 100%;
-			text-align: center;
+			padding: 5px 0;
+			width: auto;
+			text-align: left;
+			white-space: nowrap;
 		}
 	}
 
