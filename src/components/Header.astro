@@ -214,53 +214,54 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 
 	@media (max-width: 800px) {
 		.nav-container {
-			flex-direction: row;
-			justify-content: space-between;
+			flex-wrap: wrap;
 			height: auto;
 			padding: 10px 0;
-			gap: 15px;
-			align-items: flex-start;
+			justify-content: space-between;
+			align-items: center;
+			gap: 10px;
 		}
 
 		.nav-right {
-			display: flex;
-			flex-direction: column;
-			align-items: flex-end;
-			gap: 8px;
-			flex: 1;
-			overflow: hidden;
+			display: contents;
 		}
 
 		.nav-links {
-			display: flex;
-			width: 100%;
-			justify-content: flex-end;
-			gap: 8px;
-			flex-wrap: wrap;
+			order: 3;
+			flex-basis: 100%;
+			justify-content: center;
+			gap: 15px;
+			padding: 10px 0 5px;
+			overflow-x: auto;
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+		}
+
+		.nav-links::-webkit-scrollbar {
+			display: none;
 		}
 
 		.nav-actions {
-			display: flex;
-			gap: 12px;
-			margin-bottom: 2px;
+			order: 2;
+			gap: 10px;
 		}
 
 		.nav-links a {
 			padding: 2px 4px;
-			font-size: 0.8rem;
+			font-size: 0.85rem;
 			white-space: nowrap;
 		}
-	}
 
-
+		.logo {
+			order: 1;
+		}
 
 		.logo-img {
 			height: 44px;
 		}
 
-		.bgm-toggle, .lang-switch {
-			margin-left: 5px;
+		.lang-switch, .bgm-toggle {
+			padding: 4px;
 		}
 	}
-
 </style>
