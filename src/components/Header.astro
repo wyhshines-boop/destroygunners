@@ -8,7 +8,7 @@ const switchLang = lang === 'en' ? 'zh' : (lang === 'zh' ? 'ja' : 'en');
 const switchLabel = lang === 'en' ? '中文' : (lang === 'zh' ? '日本語' : 'EN');
 
 const currentPath = Astro.url.pathname;
-const basePath = lang === 'en' ? currentPath : currentPath.replace(new RegExp(`^/${lang}`), '') || '/';
+const basePath = lang === 'en' ? currentPath : (currentPath.replace(new RegExp(`^\\/${lang}`), '') || '/');
 const switchHref = getLocalizedPath(basePath, switchLang);
 ---
 <header class="global-navbar">
@@ -22,7 +22,7 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 				<a href={getLocalizedPath('/games', lang)} class={basePath.startsWith('/games') ? 'active' : ''}>{tr.nav.games}</a>
 				<a href={getLocalizedPath('/story', lang)} class={basePath.startsWith('/story') ? 'active' : ''}>{tr.nav.story}</a>
 				<a href={getLocalizedPath('/mechas', lang)} class={basePath.startsWith('/mechas') ? 'active' : ''}>{tr.nav.mecha}</a>
-				
+				<div class="mobile-break"></div>
 				<a href={getLocalizedPath('/enemies', lang)} class={basePath.startsWith('/enemies') ? 'active' : ''}>{tr.nav.enemy}</a>
 				<a href={getLocalizedPath('/assets', lang)} class={basePath.startsWith('/assets') ? 'active' : ''}>{tr.nav.assets}</a>
 			</nav>
@@ -214,7 +214,7 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 
 	@media (max-width: 800px) {
 		.nav-container {
-			flex-wrap: wrap;
+			flex-wrap: nowrap;
 			height: auto;
 			padding: 10px 0;
 			justify-content: space-between;
@@ -223,45 +223,40 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 		}
 
 		.nav-right {
-			display: contents;
-		}
-
-		.nav-links {
-			order: 3;
-			flex-basis: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
 			justify-content: center;
-			gap: 15px;
-			padding: 10px 0 5px;
-			overflow-x: auto;
-			scrollbar-width: none;
-			-ms-overflow-style: none;
+			gap: 0 12px;
+			flex: 1;
 		}
 
-		.nav-links::-webkit-scrollbar {
-			display: none;
-		}
-
-		.nav-actions {
-			order: 2;
-			gap: 10px;
+		.nav-links, .nav-actions {
+			display: contents;
 		}
 
 		.nav-links a {
 			padding: 2px 4px;
-			font-size: 0.85rem;
+			width: auto;
+			text-align: left;
 			white-space: nowrap;
+			font-size: 0.85rem;
+			line-height: 1.2;
 		}
 
-		.logo {
-			order: 1;
+		.mobile-break {
+			display: block;
+			flex-basis: 100%;
+			height: 0;
 		}
 
 		.logo-img {
 			height: 44px;
 		}
 
-		.lang-switch, .bgm-toggle {
-			padding: 4px;
+		.bgm-toggle, .lang-switch {
+			margin-left: 5px;
 		}
 	}
+
 </style>
