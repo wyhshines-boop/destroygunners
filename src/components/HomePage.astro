@@ -16,38 +16,40 @@ const tr = t(lang);
 <div class="container">
 	<main>
 		<ContentBox title={tr.notifications.title}>
-			<div class="notification-item">
-				<h3 class="cyan-text">{tr.notifications.version}</h3>
-				<ul>
-					{tr.notifications.versionItems.map(item => <li>{item}</li>)}
-				</ul>
+			<div class="version-tabs">
+				{tr.notifications.versions.map((v, i) => (
+					<button 
+						class={`version-tab ${i === 0 ? 'active' : ''}`} 
+						data-version-id={v.id}
+						data-apk={v.apk}
+						data-has-mirror={String(v.hasMirror)}
+					>
+						{v.name}
+					</button>
+				))}
 			</div>
 
-			<div class="notification-item">
-				<h3 class="cyan-text">{tr.notifications.patchTitle}</h3>
-				<ul>
-					{tr.notifications.patchItems.map(item => <li>{item}</li>)}
-				</ul>
-			</div>
-
-			<div class="notification-item">
-				<h3 class="cyan-text">{tr.notifications.bugsTitle}</h3>
-				<ul>
-					{tr.notifications.bugsItems.map(item => <li>{item}</li>)}
-				</ul>
-			</div>
-
-			<div class="notification-item">
-				<h3 class="cyan-text">{tr.notifications.compatTitle}</h3>
-				<ul>
-					{tr.notifications.compatItems.map(item => <li>{item}</li>)}
-				</ul>
+			<div id="notifications-container">
+				{tr.notifications.versions.map((v, i) => (
+					<div class={`version-content ${i === 0 ? 'active' : ''}`} id={`version-content-${v.id}`}>
+						{v.sections.map(section => (
+							<div class="notification-item">
+								<h3 class="cyan-text">{section.title}</h3>
+								<ul>
+									{section.items.map(item => <li>{item}</li>)}
+								</ul>
+							</div>
+						))}
+					</div>
+				))}
 			</div>
 
 			<div class="download-btn-wrap">
 				<button
 					id="open-download"
 					class="retro-btn"
+					data-apk={tr.notifications.versions[0].apk}
+					data-has-mirror={String(tr.notifications.versions[0].hasMirror)}
 					style={`background-image: url('${buttonImg.src}');`}
 				>
 					<span class="btn-inner">{tr.download.button}</span>
@@ -74,6 +76,7 @@ const tr = t(lang);
 		<h2 class="modal-title">{tr.download.title}</h2>
 		<div class="modal-content">
 			<a
+				id="modal-download-direct"
 				href="/downloads/DGunsZZ_3.0.0a.apk"
 				download
 				class="retro-btn download-track"
@@ -82,26 +85,28 @@ const tr = t(lang);
 			>
 				<span class="btn-inner">{tr.download.direct}</span>
 			</a>
-			<a
-				href="https://drive.google.com/file/d/1KdW-uS2Omxlbf_SdiNN0IFlF_kXKaTGI/view?usp=sharing"
-				target="_blank"
-				rel="noopener"
-				class="retro-btn download-track"
-				data-method="google_drive"
-				style={`background-image: url('${buttonImg.src}');`}
-			>
-				<span class="btn-inner">{tr.download.googleDrive}</span>
-			</a>
-			<a
-				href="https://wwbdr.lanzout.com/iXWYj3l6yb2d"
-				target="_blank"
-				rel="noopener"
-				class="retro-btn download-track"
-				data-method="lanzou_cloud"
-				style={`background-image: url('${buttonImg.src}');`}
-			>
-				<span class="btn-inner">{tr.download.lanzou}</span>
-			</a>
+			<div id="mirror-links" class="mirror-links">
+				<a
+					href="https://drive.google.com/file/d/1KdW-uS2Omxlbf_SdiNN0IFlF_kXKaTGI/view?usp=sharing"
+					target="_blank"
+					rel="noopener"
+					class="retro-btn download-track"
+					data-method="google_drive"
+					style={`background-image: url('${buttonImg.src}');`}
+				>
+					<span class="btn-inner">{tr.download.googleDrive}</span>
+				</a>
+				<a
+					href="https://wwbdr.lanzout.com/iXWYj3l6yb2d"
+					target="_blank"
+					rel="noopener"
+					class="retro-btn download-track"
+					data-method="lanzou_cloud"
+					style={`background-image: url('${buttonImg.src}');`}
+				>
+					<span class="btn-inner">{tr.download.lanzou}</span>
+				</a>
+			</div>
 		</div>
 		<button id="close-download" class="close-btn">&times;</button>
 	</div>
@@ -116,11 +121,48 @@ const tr = t(lang);
 		audio.play().catch(() => {});
 	}
 
+	function initVersionSwitcher() {
+		const tabs = document.querySelectorAll('.version-tab');
+		const contents = document.querySelectorAll('.version-content');
+		const mainDownloadBtn = document.getElementById('open-download');
+
+		tabs.forEach(tab => {
+			tab.addEventListener('click', () => {
+				playSound(sfxOpen);
+				const versionId = (tab as HTMLElement).dataset.versionId;
+				const apk = (tab as HTMLElement).dataset.apk;
+				const hasMirror = (tab as HTMLElement).dataset.hasMirror;
+
+				// Update tabs
+				tabs.forEach(t => t.classList.remove('active'));
+				tab.classList.add('active');
+
+				// Update content
+				contents.forEach(c => {
+					if (c.id === `version-content-${versionId}`) {
+						c.classList.add('active');
+					} else {
+						c.classList.remove('active');
+					}
+				});
+
+				// Update main download button data
+				if (mainDownloadBtn && apk && hasMirror) {
+					mainDownloadBtn.dataset.apk = apk;
+					mainDownloadBtn.dataset.hasMirror = hasMirror;
+				}
+			});
+		});
+	}
+
 	function initModal() {
 		const openBtn = document.getElementById("open-download");
 		const modal = document.getElementById("download-modal");
 		const closeBtn = document.getElementById("close-download");
 		const modalBox = modal?.querySelector(".modal-box");
+		
+		const modalDirectLink = document.getElementById('modal-download-direct') as HTMLAnchorElement;
+		const mirrorLinks = document.getElementById('mirror-links');
 
 		if (!openBtn || !modal) return;
 
@@ -139,6 +181,15 @@ const tr = t(lang);
 
 		openBtn.addEventListener("click", () => {
 			playSound(sfxOpen);
+
+			// Update modal content based on current version data from button
+			if (modalDirectLink) {
+				modalDirectLink.href = openBtn.dataset.apk || '';
+			}
+			if (mirrorLinks) {
+				mirrorLinks.style.display = openBtn.dataset.hasMirror === 'true' ? 'block' : 'none';
+			}
+
 			modal.classList.remove("closing");
 			modal.classList.add("active");
 		});
@@ -157,7 +208,9 @@ const tr = t(lang);
 			btn.addEventListener('click', () => {
 				playSound(sfxOpen);
 				const method = (btn as HTMLElement).dataset.method;
+				// @ts-ignore
 				if (typeof gtag === 'function') {
+					// @ts-ignore
 					gtag('event', 'download', {
 						event_category: 'apk',
 						event_label: method,
@@ -167,9 +220,11 @@ const tr = t(lang);
 		});
 	}
 
+	initVersionSwitcher();
 	initModal();
 	initDownloadTracking();
 	document.addEventListener("astro:page-load", () => {
+		initVersionSwitcher();
 		initModal();
 		initDownloadTracking();
 	});
@@ -180,6 +235,69 @@ const tr = t(lang);
 		max-width: 1100px;
 		margin: 0 auto;
 		padding: 40px 20px;
+	}
+
+	.version-tabs {
+		display: flex;
+		gap: 15px;
+		margin-bottom: 30px;
+		border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+		padding-bottom: 15px;
+	}
+
+	.version-tab {
+		background: rgba(0, 240, 255, 0.05);
+		border: 1px solid rgba(0, 240, 255, 0.25);
+		color: rgba(224, 255, 255, 0.6);
+		padding: 8px 20px;
+		cursor: pointer;
+		font-family: inherit;
+		font-size: 0.85rem;
+		letter-spacing: 1px;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		clip-path: polygon(
+			0 0, 
+			calc(100% - 10px) 0, 
+			100% 10px, 
+			100% 100%, 
+			0 100%
+		);
+	}
+
+	.version-tab:hover {
+		color: #00f0ff;
+		border-color: #00f0ff;
+		background: rgba(0, 240, 255, 0.15);
+	}
+
+	.version-tab.active {
+		color: #fff;
+		border-color: #00f0ff;
+		background: rgba(0, 240, 255, 0.25);
+		box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+		text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+	}
+
+	.version-content {
+		display: none;
+	}
+
+	.version-content.active {
+		display: block;
+		animation: versionFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	@keyframes versionFadeIn {
+		from { 
+			opacity: 0; 
+			transform: translateY(10px);
+			filter: blur(5px);
+		}
+		to { 
+			opacity: 1; 
+			transform: translateY(0);
+			filter: blur(0);
+		}
 	}
 
 	.notification-item {
@@ -308,10 +426,11 @@ const tr = t(lang);
 	.modal-box::before {
 		content: "";
 		position: absolute;
-		inset: 0;
-		background-image: var(--border-img);
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
+		inset: -2px;
+		border: 45px solid transparent;
+		border-image-source: var(--border-img);
+		border-image-slice: 100 120 100 120;
+		border-image-repeat: stretch;
 		pointer-events: none;
 	}
 

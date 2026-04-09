@@ -35,11 +35,13 @@ const { title } = Astro.props;
 	.sf-box::before {
 		content: '';
 		position: absolute;
-		inset: 0;
-		background-image: var(--border-img);
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
+		inset: -2px; /* 稍微向外扩展一点以确保覆盖 */
+		border: 45px solid transparent; /* 边框厚度 */
+		border-image-source: var(--border-img);
+		border-image-slice: 100 120 100 120; /* 关键：根据 border.webp (1024x582) 的比例切片 */
+		border-image-repeat: stretch;
 		pointer-events: none;
+		filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.1));
 	}
 
 	.box-title {

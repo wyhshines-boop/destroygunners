@@ -58,7 +58,7 @@ const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
 		<script>
 			function applyBg() {
 				if (window.__bgChosen) {
-					document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.65)), url('${window.__bgChosen}')`;
+					document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.25)), url('${window.__bgChosen}')`;
 				}
 			}
 			document.addEventListener('astro:page-load', applyBg);

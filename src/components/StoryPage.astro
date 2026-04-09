@@ -1,0 +1,143 @@
+---
+import ContentBox from './ContentBox.astro';
+import { type Lang, t } from '../i18n/translations';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const tr = t(lang);
+const story = tr.story;
+
+const dgItems = [
+	story.dg.era,
+	story.dg.weapon,
+	story.dg.player,
+	story.dg.enemies,
+	story.dg.core
+];
+
+const agItems = [
+	story.ag.era,
+	story.ag.tech,
+	story.ag.event,
+	story.ag.player,
+	story.ag.mystery
+];
+---
+
+<div class="container">
+	<h1 class="page-title">{story.title}</h1>
+
+	<div class="archivist-note">
+		<h2 class="note-title">{story.note.title}</h2>
+		{story.note.content.map(paragraph => (
+			<p>{paragraph}</p>
+		))}
+	</div>
+
+	<ContentBox title={story.dg.title}>
+		<div class="story-grid">
+			{dgItems.map(item => (
+				<div class="story-item">
+					<h3 class="cyan-text">{item.label}</h3>
+					<p>{item.content}</p>
+				</div>
+			))}
+		</div>
+	</ContentBox>
+
+	<ContentBox title={story.ag.title}>
+		<div class="story-grid">
+			{agItems.map(item => (
+				<div class="story-item">
+					<h3 class="cyan-text">{item.label}</h3>
+					<p>{item.content}</p>
+				</div>
+			))}
+		</div>
+	</ContentBox>
+</div>
+
+<style>
+	.container {
+		max-width: 1000px;
+		margin: 0 auto;
+		padding: 40px 20px;
+	}
+
+	.page-title {
+		text-align: center;
+		color: #e0ffff;
+		font-size: 2rem;
+		margin-bottom: 40px;
+		letter-spacing: 4px;
+		text-transform: uppercase;
+		text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+	}
+
+	.story-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 25px;
+	}
+
+	.story-item {
+		position: relative;
+	}
+
+	.cyan-text {
+		color: #00f0ff;
+		margin-top: 0;
+		margin-bottom: 8px;
+		font-size: 1.1rem;
+		font-weight: normal;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.cyan-text::before {
+		content: " ";
+		display: inline-block;
+		width: 4px;
+		height: 18px;
+		background: #00f0ff;
+		box-shadow: 0 0 8px #00f0ff;
+	}
+
+	.archivist-note {
+		margin-bottom: 40px;
+		padding: 30px;
+		background: rgba(8, 28, 29, 0.95);
+		border-left: 2px solid #00f0ff;
+		position: relative;
+	}
+
+	.note-title {
+		color: #00f0ff;
+		font-size: 1.4rem;
+		margin-bottom: 20px;
+		font-weight: normal;
+		letter-spacing: 2px;
+	}
+
+	.archivist-note p {
+		margin-bottom: 15px;
+		font-style: italic;
+		color: rgba(224, 255, 255, 0.8);
+	}
+
+	.archivist-note p:last-child {
+		margin-bottom: 0;
+	}
+
+	p {
+		margin: 0;
+		color: #e0ffff;
+		line-height: 1.6;
+		font-size: 0.95rem;
+		opacity: 0.9;
+	}
+</style>
