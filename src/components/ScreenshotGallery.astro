@@ -254,26 +254,25 @@ const screenshots = [img1, img2, img3, img4];
         filter: brightness(1.15);
     }
 
-    /* Scrollbar: Thin line track + Thick block thumb */
+</style>
+
+<style is:global>
+    /* Global scrollbar fix for gallery */
     .gallery-scroll::-webkit-scrollbar {
         height: 12px;
     }
     .gallery-scroll::-webkit-scrollbar-track {
-        background: linear-gradient(
-            to bottom,
-            transparent 0%,
-            transparent 5px,
-            rgba(0, 240, 255, 0.8) 5px,
-            rgba(0, 240, 255, 0.8) 7px,
-            transparent 7px,
-            transparent 100%
-        );
+        /* Use transparent borders + background-clip to create a pixel-perfect 2px line */
+        background-color: rgba(0, 240, 255, 0.8);
+        background-clip: content-box;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
     }
     .gallery-scroll::-webkit-scrollbar-thumb {
-        background: #00a0ac; /* Bright teal for the block */
-        border-top: 3px solid transparent;
-        border-bottom: 3px solid transparent;
+        background: #00a0ac;
         background-clip: padding-box;
+        border-top: 2px solid transparent;
+        border-bottom: 2px solid transparent;
         border-radius: 1px;
     }
 </style>
