@@ -277,6 +277,8 @@ const tr = t(lang);
 		margin-bottom: 30px;
 		border-bottom: 1px solid rgba(0, 240, 255, 0.1);
 		padding-bottom: 15px;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 
 	.version-tab {
@@ -284,6 +286,8 @@ const tr = t(lang);
 		border: 1px solid rgba(0, 240, 255, 0.25);
 		color: rgba(224, 255, 255, 0.6);
 		padding: 8px 20px;
+		white-space: nowrap;
+		flex-shrink: 0;
 		cursor: pointer;
 		font-family: inherit;
 		font-size: 0.85rem;
