@@ -24,7 +24,7 @@ export const translations = {
 					},
 					sections: [
 						{
-							title: 'Destroy Gunners ZZ v3.0.0b',
+							title: 'Destroy Gunners ZZ v3.0.0b (2026-04-10)',
 							items: [
 								'Cracked IAP: You can buy gold and items for free.',
 								'Fixed the "could not update information" dialog issue.',
@@ -64,7 +64,7 @@ export const translations = {
 					},
 					sections: [
 						{
-							title: 'Destroy Gunners ZZ v3.0.0bx',
+							title: 'Destroy Gunners ZZ v3.0.0bx (2026-04-10)',
 							items: [
 								'Original Difficulty: No IAP crack included.',
 								'Perfect for players who enjoy a real challenge.',
@@ -95,7 +95,7 @@ export const translations = {
 					},
 					sections: [
 						{
-							title: 'Destroy Gunners ZZ v3.0.0a',
+							title: 'Destroy Gunners ZZ v3.0.0a (2026-03-22)',
 							items: [
 								'GREE servers have been shut down.',
 								'This patch allows offline play.',
@@ -201,7 +201,7 @@ export const translations = {
 					},
 					sections: [
 						{
-							title: 'Destroy Gunners ZZ v3.0.0b',
+							title: 'Destroy Gunners ZZ v3.0.0b (2026-04-10)',
 							items: [
 								'破解内购，可随意购买金币道具。',
 								'解决了 "could not update information" 弹窗的问题。',
@@ -241,7 +241,7 @@ export const translations = {
 					},
 					sections: [
 						{
-							title: 'Destroy Gunners ZZ v3.0.0bx',
+							title: 'Destroy Gunners ZZ v3.0.0bx (2026-04-10)',
 							items: [
 								'原始难度：不包含内购破解。',
 								'适合喜欢挑战原始游戏乐趣的玩家。',
@@ -272,7 +272,7 @@ export const translations = {
 					},
 					sections: [
 						{
-							title: 'Destroy Gunners ZZ v3.0.0a',
+							title: 'Destroy Gunners ZZ v3.0.0a (2026-03-22)',
 							items: [
 								'GREE 服务器已关闭。',
 								'此补丁支持离线游玩。',
@@ -378,7 +378,7 @@ export const translations = {
 					},
 					sections: [
 						{
-							title: 'Destroy Gunners ZZ v3.0.0b',
+							title: 'Destroy Gunners ZZ v3.0.0b (2026-04-10)',
 							items: [
 								'課金要素クラック：アイテムとゴールドを無料で入手可能。',
 								'「could not update information」ダイアログの問題を解決しました。',
@@ -418,7 +418,7 @@ export const translations = {
 					},
 					sections: [
 						{
-							title: 'Destroy Gunners ZZ v3.0.0bx',
+							title: 'Destroy Gunners ZZ v3.0.0bx (2026-04-10)',
 							items: [
 								'オリジナル難易度：課金要素のクラックは含まれていません。',
 								'オリジナルのゲームバランスで挑戦したいプレイヤーに最適です。',
@@ -449,7 +449,7 @@ export const translations = {
 					},
 					sections: [
 						{
-							title: 'Destroy Gunners ZZ v3.0.0a',
+							title: 'Destroy Gunners ZZ v3.0.0a (2026-03-22)',
 							items: [
 								'GREE サーバーのサービスは終了しました。',
 								'このパッチによりオフラインでのプレイが可能になります。',
