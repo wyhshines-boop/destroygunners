@@ -1,21 +1,31 @@
 ---
-import img1 from '../img/dgzz/dgzz1.webp';
-import img2 from '../img/dgzz/dgzz2.webp';
-import img3 from '../img/dgzz/dgzz3.webp';
-import img4 from '../img/dgzz/dgzz4.webp';
+import img1 from "../img/dgzz/dgzz1.webp";
+import img2 from "../img/dgzz/dgzz2.webp";
+import img3 from "../img/dgzz/dgzz3.webp";
+import img4 from "../img/dgzz/dgzz4.webp";
 
 const screenshots = [img1, img2, img3, img4];
 ---
 
 <div class="gallery-wrapper">
     <div class="gallery-scroll">
-        {screenshots.map((img, index) => (
-            <div class="gallery-item" data-index={index}>
-                <div class="img-frame">
-                    <img src={img.src} alt={`Screenshot ${index + 1}`} class="gallery-thumb" loading="lazy" />
+        {
+            screenshots.map((img, index) => (
+                <div class="gallery-item" data-index={index}>
+                    <div class="img-frame">
+                        <img
+                            src={img.src}
+                            alt={`Screenshot ${index + 1}`}
+                            class="gallery-thumb"
+                            loading="lazy"
+                        />
+                    </div>
                 </div>
-            </div>
-        ))}
+            ))
+        }
+    </div>
+    <div class="fake-scrollbar" aria-hidden="true">
+        <div class="fake-thumb"></div>
     </div>
 </div>
 
@@ -23,8 +33,21 @@ const screenshots = [img1, img2, img3, img4];
 <div id="gallery-lightbox" class="lightbox-overlay" style="display:none;">
     <div class="lightbox-backdrop"></div>
     <div class="lightbox-content">
-        <button id="gallery-close-btn" class="lightbox-close" aria-label="Close">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <button
+            id="gallery-close-btn"
+            class="lightbox-close"
+            aria-label="Close"
+        >
+            <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
@@ -36,58 +59,100 @@ const screenshots = [img1, img2, img3, img4];
 <script>
     function initGallery() {
         // Teleport lightbox to body to escape any parent clip-path
-        const lightbox = document.getElementById('gallery-lightbox');
+        const lightbox = document.getElementById("gallery-lightbox");
         if (lightbox && lightbox.parentElement !== document.body) {
             document.body.appendChild(lightbox);
-            lightbox.style.display = '';
+            lightbox.style.display = "";
         }
 
-        const thumbs = document.querySelectorAll('.gallery-thumb');
-        const lightboxImg = document.getElementById('gallery-lightbox-img') as HTMLImageElement;
-        const closeBtn = document.getElementById('gallery-close-btn');
-        const backdrop = lightbox?.querySelector('.lightbox-backdrop');
+        const thumbs = document.querySelectorAll(".gallery-thumb");
+        const lightboxImg = document.getElementById(
+            "gallery-lightbox-img",
+        ) as HTMLImageElement;
+        const closeBtn = document.getElementById("gallery-close-btn");
+        const backdrop = lightbox?.querySelector(".lightbox-backdrop");
 
         if (!lightbox || !lightboxImg) return;
 
         const openLightbox = (src: string) => {
             lightboxImg.src = src;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            lightbox.classList.add("active");
+            document.body.style.overflow = "hidden";
         };
 
         const closeLightbox = () => {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = '';
+            lightbox.classList.remove("active");
+            document.body.style.overflow = "";
         };
 
         // Attach click only once per thumb
-        thumbs.forEach(thumb => {
+        thumbs.forEach((thumb) => {
             if ((thumb as HTMLElement).dataset.lightboxInit) return;
-            (thumb as HTMLElement).dataset.lightboxInit = 'true';
-            thumb.addEventListener('click', () => {
+            (thumb as HTMLElement).dataset.lightboxInit = "true";
+            thumb.addEventListener("click", () => {
                 openLightbox((thumb as HTMLImageElement).src);
             });
         });
 
         if (closeBtn && !(closeBtn as HTMLElement).dataset.lightboxInit) {
-            (closeBtn as HTMLElement).dataset.lightboxInit = 'true';
-            closeBtn.addEventListener('click', closeLightbox);
+            (closeBtn as HTMLElement).dataset.lightboxInit = "true";
+            closeBtn.addEventListener("click", closeLightbox);
         }
 
         if (backdrop && !(backdrop as HTMLElement).dataset.lightboxInit) {
-            (backdrop as HTMLElement).dataset.lightboxInit = 'true';
-            backdrop.addEventListener('click', closeLightbox);
+            (backdrop as HTMLElement).dataset.lightboxInit = "true";
+            backdrop.addEventListener("click", closeLightbox);
         }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && lightbox.classList.contains("active")) {
                 closeLightbox();
             }
         });
     }
 
+    function initFakeScrollbar() {
+        const scrolls = document.querySelectorAll<HTMLElement>(".gallery-scroll");
+        scrolls.forEach((scroll) => {
+            if (scroll.dataset.fakeSbInit) return;
+            scroll.dataset.fakeSbInit = "true";
+
+            const wrapper = scroll.parentElement;
+            if (!wrapper) return;
+            const bar = wrapper.querySelector<HTMLElement>(".fake-scrollbar");
+            const thumb = wrapper.querySelector<HTMLElement>(".fake-thumb");
+            if (!bar || !thumb) return;
+
+            const update = () => {
+                const { scrollLeft, scrollWidth, clientWidth } = scroll;
+                const max = scrollWidth - clientWidth;
+                if (max <= 0) {
+                    bar.style.display = "none";
+                    return;
+                }
+                bar.style.display = "";
+                const barWidth = bar.clientWidth;
+                const ratio = clientWidth / scrollWidth;
+                const thumbWidth = Math.max(24, barWidth * ratio);
+                const offset = (scrollLeft / max) * (barWidth - thumbWidth);
+                thumb.style.width = thumbWidth + "px";
+                thumb.style.transform = `translateX(${offset}px)`;
+            };
+
+            scroll.addEventListener("scroll", update, { passive: true });
+            window.addEventListener("resize", update);
+            // Run after layout/images settle
+            requestAnimationFrame(update);
+            setTimeout(update, 300);
+        });
+    }
+
     initGallery();
-    document.addEventListener('astro:page-load', initGallery);
+    initFakeScrollbar();
+    document.addEventListener("astro:page-load", () => {
+        initGallery();
+        initFakeScrollbar();
+    });
 </script>
 
 <style is:global>
@@ -154,17 +219,13 @@ const screenshots = [img1, img2, img3, img4];
     .lightbox-content {
         position: relative;
         z-index: 9001;
-        max-width: 95vw; /* Almost full width on mobile */
+        max-width: calc(
+            100vw - 100px
+        ); /* Leave room for close button on sides */
         max-height: 90vh;
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    @media (min-width: 768px) {
-        .lightbox-content {
-            max-width: calc(100vw - 120px); /* Leave room for close button on desktop */
-        }
     }
 
     .lightbox-content img {
@@ -172,13 +233,21 @@ const screenshots = [img1, img2, img3, img4];
         max-height: 90vh;
         object-fit: contain;
         border: 2px solid #00f0ff;
-        box-shadow: 0 0 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 240, 255, 0.3);
+        box-shadow:
+            0 0 60px rgba(0, 0, 0, 0.9),
+            0 0 30px rgba(0, 240, 255, 0.3);
         animation: lightboxIn 0.25s ease;
     }
 
     @keyframes lightboxIn {
-        from { transform: scale(0.92); opacity: 0; }
-        to   { transform: scale(1);    opacity: 1; }
+        from {
+            transform: scale(0.92);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
     }
 </style>
 
@@ -191,10 +260,40 @@ const screenshots = [img1, img2, img3, img4];
         display: flex;
         gap: 12px;
         overflow-x: auto;
-        padding-bottom: 10px;
-        scrollbar-width: thin;
-        scrollbar-color: #00f0ff rgba(0, 0, 0, 0.2);
+        padding-bottom: 0;
         scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+    }
+    .gallery-scroll::-webkit-scrollbar {
+        display: none; /* Safari / Chrome */
+    }
+
+    /* Fake scrollbar (mobile only) */
+    .fake-scrollbar {
+        position: relative;
+        height: 12px;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+    }
+    .fake-scrollbar::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 1px;
+        background: rgba(0, 240, 255, 0.35);
+        transform: translateY(-0.5px);
+    }
+    .fake-thumb {
+        position: relative;
+        height: 6px;
+        background: #00f0ff;
+        box-shadow: 0 0 6px rgba(0, 240, 255, 0.6);
+        will-change: transform, width;
+        transition: width 0.15s ease;
     }
 
     @media (min-width: 768px) {
@@ -203,6 +302,9 @@ const screenshots = [img1, img2, img3, img4];
             grid-template-columns: repeat(4, 1fr);
             overflow-x: visible;
             scroll-snap-type: none;
+        }
+        .fake-scrollbar {
+            display: none;
         }
     }
 
@@ -254,25 +356,4 @@ const screenshots = [img1, img2, img3, img4];
         filter: brightness(1.15);
     }
 
-</style>
-
-<style is:global>
-    /* Global scrollbar fix for gallery */
-    .gallery-scroll::-webkit-scrollbar {
-        height: 12px;
-    }
-    .gallery-scroll::-webkit-scrollbar-track {
-        /* Use transparent borders + background-clip to create a pixel-perfect 2px line */
-        background-color: rgba(0, 240, 255, 0.8);
-        background-clip: content-box;
-        border-top: 5px solid transparent;
-        border-bottom: 5px solid transparent;
-    }
-    .gallery-scroll::-webkit-scrollbar-thumb {
-        background: #00a0ac;
-        background-clip: padding-box;
-        border-top: 2px solid transparent;
-        border-bottom: 2px solid transparent;
-        border-radius: 1px;
-    }
 </style>
