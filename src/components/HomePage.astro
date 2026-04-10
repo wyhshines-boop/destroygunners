@@ -279,6 +279,21 @@ const tr = t(lang);
 		padding-bottom: 15px;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
+		scrollbar-width: thin;
+		scrollbar-color: #00f0ff rgba(0, 240, 255, 0.1);
+	}
+
+	.version-tabs::-webkit-scrollbar {
+		height: 3px;
+	}
+
+	.version-tabs::-webkit-scrollbar-track {
+		background: rgba(0, 240, 255, 0.1);
+	}
+
+	.version-tabs::-webkit-scrollbar-thumb {
+		background: #00f0ff;
+		box-shadow: 0 0 4px rgba(0, 240, 255, 0.6);
 	}
 
 	.version-tab {
