@@ -25,6 +25,9 @@ const tr = t(lang);
 						data-version-id={v.id}
 						data-apk={v.apk}
 						data-has-mirror={String(v.hasMirror)}
+						data-google-drive={v.mirrors?.googleDrive}
+						data-lanzou={v.mirrors?.lanzou}
+						data-lanzou-pw={v.mirrors?.lanzouPw}
 					>
 						{v.name}
 					</button>
@@ -52,6 +55,9 @@ const tr = t(lang);
 					class="retro-btn"
 					data-apk={tr.notifications.versions[0].apk}
 					data-has-mirror={String(tr.notifications.versions[0].hasMirror)}
+					data-google-drive={tr.notifications.versions[0].mirrors?.googleDrive}
+					data-lanzou={tr.notifications.versions[0].mirrors?.lanzou}
+					data-lanzou-pw={tr.notifications.versions[0].mirrors?.lanzouPw}
 					style={`background-image: url('${buttonImg.src}');`}
 				>
 					<span class="btn-inner">{tr.download.button}</span>
@@ -91,7 +97,8 @@ const tr = t(lang);
 			</a>
 			<div id="mirror-links" class="mirror-links">
 				<a
-					href="https://drive.google.com/file/d/1KdW-uS2Omxlbf_SdiNN0IFlF_kXKaTGI/view?usp=sharing"
+					id="modal-download-google"
+					href="#"
 					target="_blank"
 					rel="noopener"
 					class="retro-btn download-track"
@@ -101,14 +108,17 @@ const tr = t(lang);
 					<span class="btn-inner">{tr.download.googleDrive}</span>
 				</a>
 				<a
-					href="https://wwbdr.lanzout.com/iXWYj3l6yb2d"
+					id="modal-download-lanzou"
+					href="#"
 					target="_blank"
 					rel="noopener"
 					class="retro-btn download-track"
 					data-method="lanzou_cloud"
 					style={`background-image: url('${buttonImg.src}');`}
 				>
-					<span class="btn-inner">{tr.download.lanzou}</span>
+					<span class="btn-inner" id="lanzou-btn-text">
+						{tr.download.lanzou}
+					</span>
 				</a>
 			</div>
 		</div>
@@ -151,9 +161,12 @@ const tr = t(lang);
 				});
 
 				// Update main download button data
-				if (mainDownloadBtn && apk && hasMirror) {
-					mainDownloadBtn.dataset.apk = apk;
-					mainDownloadBtn.dataset.hasMirror = hasMirror;
+				if (mainDownloadBtn) {
+					mainDownloadBtn.dataset.apk = (tab as HTMLElement).dataset.apk;
+					mainDownloadBtn.dataset.hasMirror = (tab as HTMLElement).dataset.hasMirror;
+					mainDownloadBtn.dataset.googleDrive = (tab as HTMLElement).dataset.googleDrive;
+					mainDownloadBtn.dataset.lanzou = (tab as HTMLElement).dataset.lanzou;
+					mainDownloadBtn.dataset.lanzouPw = (tab as HTMLElement).dataset.lanzouPw;
 				}
 			});
 		});
@@ -185,13 +198,30 @@ const tr = t(lang);
 
 		openBtn.addEventListener("click", () => {
 			playSound(sfxOpen);
+			
+			const { apk, hasMirror, googleDrive, lanzou, lanzouPw } = openBtn.dataset;
 
 			// Update modal content based on current version data from button
 			if (modalDirectLink) {
-				modalDirectLink.href = openBtn.dataset.apk || '';
+				modalDirectLink.href = apk || '';
 			}
+			
 			if (mirrorLinks) {
-				mirrorLinks.style.display = openBtn.dataset.hasMirror === 'true' ? 'block' : 'none';
+				mirrorLinks.style.display = hasMirror === 'true' ? 'block' : 'none';
+				
+				const googleLink = document.getElementById('modal-download-google') as HTMLAnchorElement;
+				const lanzouLink = document.getElementById('modal-download-lanzou') as HTMLAnchorElement;
+				const lanzouText = document.getElementById('lanzou-btn-text');
+
+				if (googleLink) googleLink.href = googleDrive || '#';
+				if (lanzouLink) lanzouLink.href = lanzou || '#';
+				if (lanzouText) {
+					const lang = document.documentElement.lang || 'en';
+					// Simple hack to get labels without full i18n object in client script
+					const pwLabel = lang === 'zh' ? '密码' : (lang === 'ja' ? 'パスワード' : 'Password');
+					const lanzouLabel = lang === 'zh' ? '蓝奏云' : (lang === 'ja' ? 'Lanzou Cloud' : 'Lanzou Cloud');
+					lanzouText.textContent = `${lanzouLabel} (${pwLabel}: ${lanzouPw})`;
+				}
 			}
 
 			modal.classList.remove("closing");

@@ -9,19 +9,26 @@ export const translations = {
 			assets: 'ASSETS',
 		},
 		notifications: {
-			title: 'Notifications',
+			title: 'Destroy Gunners ZZ Offline Cracked Edition',
 			versions: [
 				{
 					id: 'b',
 					name: 'Version B',
 					label: 'v3.0.0b',
 					apk: '/downloads/DGunsZZ_3.0.0b.apk',
-					hasMirror: false,
+					hasMirror: true,
+					mirrors: {
+						googleDrive: 'https://drive.google.com/file/d/1RdkYnTKCYO4pM74SVMKyVMlvuq6ha9VL/view?usp=sharing',
+						lanzou: 'https://wwbdr.lanzout.com/iOoet3mwd5ri',
+						lanzouPw: '34p3'
+					},
 					sections: [
 						{
 							title: 'Destroy Gunners ZZ v3.0.0b',
 							items: [
 								'Cracked IAP: You can buy gold and items for free.',
+								'Fixed the "could not update information" dialog issue.',
+								'Direct overwrite installation supported. The application may crash on the first launch after updating.',
 								'Note: Occasional crash after IAP (normal behavior, doesn\'t affect gameplay).',
 							],
 						},
@@ -45,11 +52,47 @@ export const translations = {
 					],
 				},
 				{
+					id: 'bx',
+					name: 'Version BX',
+					label: 'v3.0.0bx',
+					apk: '/downloads/DGunsZZ_3.0.0bx.apk',
+					hasMirror: false,
+					mirrors: {
+						googleDrive: '',
+						lanzou: '',
+						lanzouPw: ''
+					},
+					sections: [
+						{
+							title: 'Destroy Gunners ZZ v3.0.0bx',
+							items: [
+								'Original Difficulty: No IAP crack included.',
+								'Perfect for players who enjoy a real challenge.',
+								'Fixed the "could not update information" dialog issue.',
+								'Fixed the crash when tapping in-app purchase buttons.',
+								'Direct overwrite installation supported.',
+							],
+						},
+						{
+							title: 'Compatibility',
+							items: [
+								'Tested on Snapdragon 8 Gen 3 — runs fine.',
+								'Same compatibility as Version B.',
+							],
+						},
+					],
+				},
+				{
 					id: 'a',
 					name: 'Version A',
 					label: 'v3.0.0a',
 					apk: '/downloads/DGunsZZ_3.0.0a.apk',
 					hasMirror: true,
+					mirrors: {
+						googleDrive: 'https://drive.google.com/file/d/1KdW-uS2Omxlbf_SdiNN0IFlF_kXKaTGI/view?usp=sharing',
+						lanzou: 'https://wwbdr.lanzout.com/iXWYj3l6yb2d',
+						lanzouPw: 'dewm'
+					},
 					sections: [
 						{
 							title: 'Destroy Gunners ZZ v3.0.0a',
@@ -93,7 +136,8 @@ export const translations = {
 			title: 'Download',
 			direct: 'Direct Download',
 			googleDrive: 'Google Drive',
-			lanzou: 'Lanzou Cloud (pw: dewm)',
+			lanzou: 'Lanzou Cloud',
+			lanzouPwLabel: 'Password',
 		},
 		about: {
 			title: 'About',
@@ -142,19 +186,26 @@ export const translations = {
 			assets: '素材',
 		},
 		notifications: {
-			title: '公告',
+			title: '毁灭枪手 ZZ 离线破解版',
 			versions: [
 				{
 					id: 'b',
 					name: '版本 B',
 					label: 'v3.0.0b',
 					apk: '/downloads/DGunsZZ_3.0.0b.apk',
-					hasMirror: false,
+					hasMirror: true,
+					mirrors: {
+						googleDrive: 'https://drive.google.com/file/d/1RdkYnTKCYO4pM74SVMKyVMlvuq6ha9VL/view?usp=sharing',
+						lanzou: 'https://wwbdr.lanzout.com/iOoet3mwd5ri',
+						lanzouPw: '34p3'
+					},
 					sections: [
 						{
 							title: 'Destroy Gunners ZZ v3.0.0b',
 							items: [
 								'破解内购，可随意购买金币道具。',
+								'解决了 "could not update information" 弹窗的问题。',
+								'可直接覆盖安装进行更新，更新后首次打开可能会闪退。',
 								'内购后偶尔会闪退（正常现象，不影响游戏）。',
 							],
 						},
@@ -178,11 +229,47 @@ export const translations = {
 					],
 				},
 				{
+					id: 'bx',
+					name: '版本 BX',
+					label: 'v3.0.0bx',
+					apk: '/downloads/DGunsZZ_3.0.0bx.apk',
+					hasMirror: false,
+					mirrors: {
+						googleDrive: '',
+						lanzou: '',
+						lanzouPw: ''
+					},
+					sections: [
+						{
+							title: 'Destroy Gunners ZZ v3.0.0bx',
+							items: [
+								'原始难度：不包含内购破解。',
+								'适合喜欢挑战原始游戏乐趣的玩家。',
+								'解决了 "could not update information" 弹窗的问题。',
+								'解决了点击内购按钮闪退的问题。',
+								'可直接覆盖安装进行更新。',
+							],
+						},
+						{
+							title: '兼容性',
+							items: [
+								'已在骁龙 8 Gen 3 上测试，运行正常。',
+								'兼容性表现与版本 B 一致。',
+							],
+						},
+					],
+				},
+				{
 					id: 'a',
 					name: '版本 A',
 					label: 'v3.0.0a',
 					apk: '/downloads/DGunsZZ_3.0.0a.apk',
 					hasMirror: true,
+					mirrors: {
+						googleDrive: 'https://drive.google.com/file/d/1KdW-uS2Omxlbf_SdiNN0IFlF_kXKaTGI/view?usp=sharing',
+						lanzou: 'https://wwbdr.lanzout.com/iXWYj3l6yb2d',
+						lanzouPw: 'dewm'
+					},
 					sections: [
 						{
 							title: 'Destroy Gunners ZZ v3.0.0a',
@@ -226,7 +313,8 @@ export const translations = {
 			title: '下载',
 			direct: '直接下载',
 			googleDrive: 'Google Drive',
-			lanzou: '蓝奏云（密码：dewm）',
+			lanzou: '蓝奏云',
+			lanzouPwLabel: '密码',
 		},
 		about: {
 			title: '关于',
@@ -275,19 +363,26 @@ export const translations = {
 			assets: 'アセット',
 		},
 		notifications: {
-			title: 'お知らせ',
+			title: 'Destroy Gunners ZZ オフラインクラック版',
 			versions: [
 				{
 					id: 'b',
 					name: 'バージョン B',
 					label: 'v3.0.0b',
 					apk: '/downloads/DGunsZZ_3.0.0b.apk',
-					hasMirror: false,
+					hasMirror: true,
+					mirrors: {
+						googleDrive: 'https://drive.google.com/file/d/1RdkYnTKCYO4pM74SVMKyVMlvuq6ha9VL/view?usp=sharing',
+						lanzou: 'https://wwbdr.lanzout.com/iOoet3mwd5ri',
+						lanzouPw: '34p3'
+					},
 					sections: [
 						{
 							title: 'Destroy Gunners ZZ v3.0.0b',
 							items: [
 								'課金要素クラック：アイテムとゴールドを無料で入手可能。',
+								'「could not update information」ダイアログの問題を解決しました。',
+								'上書きインストールによる更新に対応しました。更新後の初回起動時にクラッシュする場合があります。',
 								'購入後の強制終了は仕様であり、ゲーム進行には影響しません。',
 							],
 						},
@@ -311,11 +406,47 @@ export const translations = {
 					],
 				},
 				{
+					id: 'bx',
+					name: 'バージョン BX',
+					label: 'v3.0.0bx',
+					apk: '/downloads/DGunsZZ_3.0.0bx.apk',
+					hasMirror: false,
+					mirrors: {
+						googleDrive: '',
+						lanzou: '',
+						lanzouPw: ''
+					},
+					sections: [
+						{
+							title: 'Destroy Gunners ZZ v3.0.0bx',
+							items: [
+								'オリジナル難易度：課金要素のクラックは含まれていません。',
+								'オリジナルのゲームバランスで挑戦したいプレイヤーに最適です。',
+								'「could not update information」ダイアログの問題を解决しました。',
+								'アプリ内課金ボタンをタップした際のクラッシュを修正しました。',
+								'上書きインストールによる更新に対応しています。',
+							],
+						},
+						{
+							title: '互換性について',
+							items: [
+								'Snapdragon 8 Gen 3 にて動作確認済み。',
+								'互換性はバージョン B と同様です。',
+							],
+						},
+					],
+				},
+				{
 					id: 'a',
 					name: 'バージョン A',
 					label: 'v3.0.0a',
 					apk: '/downloads/DGunsZZ_3.0.0a.apk',
 					hasMirror: true,
+					mirrors: {
+						googleDrive: 'https://drive.google.com/file/d/1KdW-uS2Omxlbf_SdiNN0IFlF_kXKaTGI/view?usp=sharing',
+						lanzou: 'https://wwbdr.lanzout.com/iXWYj3l6yb2d',
+						lanzouPw: 'dewm'
+					},
 					sections: [
 						{
 							title: 'Destroy Gunners ZZ v3.0.0a',
@@ -359,7 +490,8 @@ export const translations = {
 			title: 'ダウンロード',
 			direct: '直接ダウンロード',
 			googleDrive: 'Google Drive',
-			lanzou: 'Lanzou Cloud（パス: dewm）',
+			lanzou: 'Lanzou Cloud',
+			lanzouPwLabel: 'パスワード',
 		},
 		about: {
 			title: '概要',

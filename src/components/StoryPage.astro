@@ -1,6 +1,8 @@
 ---
 import ContentBox from './ContentBox.astro';
 import { type Lang, t } from '../i18n/translations';
+import dgzzStoryImg from '../img/dgzz_story.jpg';
+import agStoryImg from '../img/ASSAULT GUNNERS_story.jpg';
 
 interface Props {
 	lang: Lang;
@@ -38,6 +40,7 @@ const agItems = [
 	</div>
 
 	<ContentBox title={story.dg.title}>
+		<img src={dgzzStoryImg.src} alt="Destroy Gunners ZZ" class="story-cover" />
 		<div class="story-grid">
 			{dgItems.map(item => (
 				<div class="story-item">
@@ -49,6 +52,7 @@ const agItems = [
 	</ContentBox>
 
 	<ContentBox title={story.ag.title}>
+		<img src={agStoryImg.src} alt="Assault Gunners" class="story-cover" />
 		<div class="story-grid">
 			{agItems.map(item => (
 				<div class="story-item">
@@ -75,6 +79,15 @@ const agItems = [
 		letter-spacing: 4px;
 		text-transform: uppercase;
 		text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+	}
+
+	.story-cover {
+		width: 100%;
+		max-height: 400px;
+		object-fit: cover;
+		border-radius: 4px;
+		margin-bottom: 25px;
+		border: 1px solid rgba(0, 240, 255, 0.15);
 	}
 
 	.story-grid {
