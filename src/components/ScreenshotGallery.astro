@@ -1,0 +1,241 @@
+---
+import img1 from '../img/dgzz/dgzz1.webp';
+import img2 from '../img/dgzz/dgzz2.webp';
+import img3 from '../img/dgzz/dgzz3.webp';
+import img4 from '../img/dgzz/dgzz4.webp';
+
+const screenshots = [img1, img2, img3, img4];
+---
+
+<div class="gallery-wrapper">
+    <div class="gallery-scroll">
+        {screenshots.map((img, index) => (
+            <div class="gallery-item" data-index={index}>
+                <div class="img-frame">
+                    <img src={img.src} alt={`Screenshot ${index + 1}`} class="gallery-thumb" loading="lazy" />
+                </div>
+            </div>
+        ))}
+    </div>
+</div>
+
+<!-- Lightbox lives here but gets teleported to body via JS -->
+<div id="gallery-lightbox" class="lightbox-overlay" style="display:none;">
+    <div class="lightbox-backdrop"></div>
+    <button id="gallery-close-btn" class="lightbox-close" aria-label="Close">&times;</button>
+    <div class="lightbox-content">
+        <img id="gallery-lightbox-img" src="" alt="Enlarged screenshot" />
+    </div>
+</div>
+
+<script>
+    function initGallery() {
+        // Teleport lightbox to body to escape any parent clip-path
+        const lightbox = document.getElementById('gallery-lightbox');
+        if (lightbox && lightbox.parentElement !== document.body) {
+            document.body.appendChild(lightbox);
+            lightbox.style.display = '';
+        }
+
+        const thumbs = document.querySelectorAll('.gallery-thumb');
+        const lightboxImg = document.getElementById('gallery-lightbox-img') as HTMLImageElement;
+        const closeBtn = document.getElementById('gallery-close-btn');
+        const backdrop = lightbox?.querySelector('.lightbox-backdrop');
+
+        if (!lightbox || !lightboxImg) return;
+
+        const openLightbox = (src: string) => {
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeLightbox = () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        // Attach click only once per thumb
+        thumbs.forEach(thumb => {
+            if ((thumb as HTMLElement).dataset.lightboxInit) return;
+            (thumb as HTMLElement).dataset.lightboxInit = 'true';
+            thumb.addEventListener('click', () => {
+                openLightbox((thumb as HTMLImageElement).src);
+            });
+        });
+
+        if (closeBtn && !(closeBtn as HTMLElement).dataset.lightboxInit) {
+            (closeBtn as HTMLElement).dataset.lightboxInit = 'true';
+            closeBtn.addEventListener('click', closeLightbox);
+        }
+
+        if (backdrop && !(backdrop as HTMLElement).dataset.lightboxInit) {
+            (backdrop as HTMLElement).dataset.lightboxInit = 'true';
+            backdrop.addEventListener('click', closeLightbox);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                closeLightbox();
+            }
+        });
+    }
+
+    initGallery();
+    document.addEventListener('astro:page-load', initGallery);
+</script>
+
+<style is:global>
+    .lightbox-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .lightbox-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .lightbox-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.88);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+    }
+
+    .lightbox-close {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9001;
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(0, 240, 255, 0.5);
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.8rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .lightbox-close:hover {
+        background: rgba(0, 240, 255, 0.2);
+        color: #00f0ff;
+        transform: rotate(90deg);
+    }
+
+    .lightbox-content {
+        position: relative;
+        z-index: 9001;
+        max-width: 92vw;
+        max-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lightbox-content img {
+        max-width: 100%;
+        max-height: 90vh;
+        object-fit: contain;
+        border: 2px solid #00f0ff;
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 240, 255, 0.3);
+        animation: lightboxIn 0.25s ease;
+    }
+
+    @keyframes lightboxIn {
+        from { transform: scale(0.92); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+    }
+</style>
+
+<style>
+    .gallery-wrapper {
+        margin-top: 30px;
+    }
+
+    .gallery-scroll {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scrollbar-width: thin;
+        scrollbar-color: #00f0ff rgba(0, 0, 0, 0.2);
+        scroll-snap-type: x mandatory;
+    }
+
+    @media (min-width: 768px) {
+        .gallery-scroll {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            overflow-x: visible;
+            scroll-snap-type: none;
+        }
+    }
+
+    .gallery-item {
+        flex: 0 0 80%;
+        scroll-snap-align: center;
+        cursor: zoom-in;
+        transition: transform 0.25s ease;
+    }
+
+    @media (min-width: 768px) {
+        .gallery-item {
+            flex: none;
+        }
+        .gallery-item:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+    }
+
+    .img-frame {
+        border: 2px solid rgba(0, 240, 255, 0.3);
+        background: rgba(8, 28, 29, 0.9);
+        padding: 4px;
+        clip-path: polygon(
+            0 0,
+            calc(100% - 14px) 0,
+            100% 14px,
+            100% 100%,
+            14px 100%,
+            0 calc(100% - 14px)
+        );
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+        transition: border-color 0.2s;
+    }
+
+    .gallery-item:hover .img-frame {
+        border-color: rgba(0, 240, 255, 0.7);
+    }
+
+    .gallery-thumb {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: filter 0.25s;
+    }
+
+    .gallery-item:hover .gallery-thumb {
+        filter: brightness(1.15);
+    }
+
+    /* Scrollbar */
+    .gallery-scroll::-webkit-scrollbar { height: 4px; }
+    .gallery-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+    .gallery-scroll::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.4); border-radius: 2px; }
+</style>
