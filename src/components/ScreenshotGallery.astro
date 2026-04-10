@@ -22,8 +22,8 @@ const screenshots = [img1, img2, img3, img4];
 <!-- Lightbox lives here but gets teleported to body via JS -->
 <div id="gallery-lightbox" class="lightbox-overlay" style="display:none;">
     <div class="lightbox-backdrop"></div>
-    <button id="gallery-close-btn" class="lightbox-close" aria-label="Close">&times;</button>
     <div class="lightbox-content">
+        <button id="gallery-close-btn" class="lightbox-close" aria-label="Close">&times;</button>
         <img id="gallery-lightbox-img" src="" alt="Enlarged screenshot" />
     </div>
 </div>
@@ -112,20 +112,20 @@ const screenshots = [img1, img2, img3, img4];
     }
 
     .lightbox-close {
-        position: fixed;
-        top: 20px;
-        right: 20px;
+        position: absolute;
+        top: -44px;
+        right: 0;
         z-index: 9001;
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(0, 240, 255, 0.5);
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 240, 255, 0.4);
         border-radius: 50%;
-        width: 48px;
-        height: 48px;
+        width: 36px;
+        height: 36px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: #fff;
-        font-size: 1.8rem;
+        font-size: 1.4rem;
         line-height: 1;
         cursor: pointer;
         transition: all 0.2s;
