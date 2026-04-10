@@ -154,11 +154,17 @@ const screenshots = [img1, img2, img3, img4];
     .lightbox-content {
         position: relative;
         z-index: 9001;
-        max-width: calc(100vw - 100px); /* Leave room for close button on sides */
+        max-width: 95vw; /* Almost full width on mobile */
         max-height: 90vh;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+        .lightbox-content {
+            max-width: calc(100vw - 120px); /* Leave room for close button on desktop */
+        }
     }
 
     .lightbox-content img {
