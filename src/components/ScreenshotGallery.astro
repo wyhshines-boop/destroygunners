@@ -219,13 +219,19 @@ const screenshots = [img1, img2, img3, img4];
     .lightbox-content {
         position: relative;
         z-index: 9001;
-        max-width: calc(
-            100vw - 100px
-        ); /* Leave room for close button on sides */
+        max-width: calc(100vw - 20px); /* Mobile: nearly full width */
         max-height: 90vh;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+        .lightbox-content {
+            max-width: calc(
+                100vw - 100px
+            ); /* Desktop: leave room for side close button */
+        }
     }
 
     .lightbox-content img {
