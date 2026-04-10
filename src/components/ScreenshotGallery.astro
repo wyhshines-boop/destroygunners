@@ -254,15 +254,26 @@ const screenshots = [img1, img2, img3, img4];
         filter: brightness(1.15);
     }
 
-    /* Scrollbar */
+    /* Scrollbar: Thin line track + Thick block thumb */
     .gallery-scroll::-webkit-scrollbar {
-        height: 2px;
+        height: 12px;
     }
     .gallery-scroll::-webkit-scrollbar-track {
-        background: rgba(0, 240, 255, 0.1);
+        background: linear-gradient(
+            to bottom,
+            transparent 0%,
+            transparent 5.5px,
+            rgba(0, 240, 255, 0.3) 5.5px,
+            rgba(0, 240, 255, 0.3) 6.5px,
+            transparent 6.5px,
+            transparent 100%
+        );
     }
     .gallery-scroll::-webkit-scrollbar-thumb {
-        background: rgba(0, 240, 255, 0.6);
-        border-radius: 0;
+        background: #00a0ac; /* Bright teal for the block */
+        border-top: 3px solid transparent;
+        border-bottom: 3px solid transparent;
+        background-clip: padding-box;
+        border-radius: 1px;
     }
 </style>
