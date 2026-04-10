@@ -113,28 +113,26 @@ const screenshots = [img1, img2, img3, img4];
 
     .lightbox-close {
         position: absolute;
-        top: -44px;
+        top: 0;
         right: 0;
-        z-index: 9001;
-        background: rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(0, 240, 255, 0.4);
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
+        z-index: 9002;
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(0, 240, 255, 0.6);
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: #fff;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         line-height: 1;
         cursor: pointer;
         transition: all 0.2s;
     }
 
     .lightbox-close:hover {
-        background: rgba(0, 240, 255, 0.2);
-        color: #00f0ff;
-        transform: rotate(90deg);
+        background: #00f0ff;
+        color: #000;
     }
 
     .lightbox-content {
