@@ -13,10 +13,37 @@ interface Props {
 
 const { lang } = Astro.props;
 const tr = t(lang);
+const scareSoulHref = lang === 'en' ? '/scaresoul' : `/${lang}/scaresoul`;
+const scareSoulCopy = {
+	en: {
+		title: 'ScareSoul',
+		subtitle: 'Offline Cracked Edition',
+		action: 'Open',
+	},
+	zh: {
+		title: 'ScareSoul',
+		subtitle: '离线破解版',
+		action: '进入',
+	},
+	ja: {
+		title: 'ScareSoul',
+		subtitle: 'オフライン改造版',
+		action: 'Open',
+	},
+}[lang];
 ---
 
 <div class="container">
 	<main>
+		<a class="scaresoul-card" href={scareSoulHref}>
+			<img src="/scaresoul/ss_logo.webp" alt="ScareSoul" />
+			<div class="scaresoul-card-copy">
+				<strong>{scareSoulCopy.title}</strong>
+				<span>{scareSoulCopy.subtitle}</span>
+			</div>
+			<span class="scaresoul-card-action">{scareSoulCopy.action}</span>
+		</a>
+
 		<ContentBox title={tr.notifications.title}>
 			<div class="version-tabs">
 				{tr.notifications.versions.map((v, i) => (
@@ -269,6 +296,70 @@ const tr = t(lang);
 		max-width: 1100px;
 		margin: 0 auto;
 		padding: 40px 20px;
+	}
+
+	.scaresoul-card {
+		display: grid;
+		grid-template-columns: 76px minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 12px;
+		width: min(560px, 100%);
+		margin: 0 auto 28px;
+		padding: 10px 12px 10px 10px;
+		background: rgba(8, 8, 8, 0.84);
+		border: 2px solid rgba(255, 0, 50, 0.54);
+		box-shadow:
+			0 0 18px rgba(255, 0, 50, 0.24),
+			inset 0 0 20px rgba(255, 0, 50, 0.1);
+		color: #fff;
+		text-decoration: none;
+		transition: border-color 0.18s ease, box-shadow 0.18s ease;
+	}
+
+	.scaresoul-card:hover {
+		color: #fff;
+		border-color: rgba(255, 70, 100, 0.9);
+		box-shadow:
+			0 0 24px rgba(255, 0, 50, 0.38),
+			inset 0 0 24px rgba(255, 0, 50, 0.15);
+	}
+
+	.scaresoul-card img {
+		width: 76px;
+		height: 50px;
+		object-fit: contain;
+		filter: drop-shadow(0 0 10px rgba(255, 0, 50, 0.55));
+	}
+
+	.scaresoul-card-copy {
+		display: grid;
+		gap: 5px;
+		min-width: 0;
+	}
+
+	.scaresoul-card-copy strong {
+		font-size: clamp(1.05rem, 1.7vw, 1.38rem);
+		line-height: 1;
+		font-weight: 500;
+		font-family: Georgia, "Times New Roman", "Noto Serif SC", serif;
+		text-shadow: 0 0 12px rgba(255, 0, 50, 0.55);
+	}
+
+	.scaresoul-card-copy span {
+		color: rgba(255, 235, 235, 0.82);
+		font-size: 0.78rem;
+	}
+
+	.scaresoul-card-action {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 68px;
+		min-height: 30px;
+		padding: 5px 10px;
+		border: 1px solid rgba(255, 255, 255, 0.72);
+		color: #fff;
+		background: rgba(255, 0, 50, 0.08);
 	}
 
 	.version-tabs {
