@@ -19,7 +19,6 @@ const fallbackBg = bgSrcs[0];
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/png" href="/favicon.png" />
-		<link rel="preload" as="image" href={fallbackBg} fetchpriority="high" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -31,30 +30,18 @@ const fallbackBg = bgSrcs[0];
 		<title>Destroy Gunners — Offline Patch Download & Community</title>
 		<script is:inline define:vars={{ bgSrcs, fallbackBg }}>
 			(function() {
-				var storageKey = 'dg-bg-image-v1';
-				var chosen = fallbackBg;
-
-				try {
-					var stored = localStorage.getItem(storageKey);
-					if (stored && bgSrcs.indexOf(stored) !== -1) {
-						chosen = stored;
-					} else {
-						chosen = bgSrcs[Math.floor(Math.random() * bgSrcs.length)] || fallbackBg;
-						localStorage.setItem(storageKey, chosen);
-					}
-				} catch (e) {}
+				var chosen = bgSrcs[Math.floor(Math.random() * bgSrcs.length)] || fallbackBg;
 
 				document.documentElement.style.setProperty('--bg-image', "url('" + chosen + "')");
 				window.__bgSrcs = bgSrcs;
 				window.__bgChosen = chosen;
 
-				if (chosen !== fallbackBg) {
-					var preload = document.createElement('link');
-					preload.rel = 'preload';
-					preload.as = 'image';
-					preload.href = chosen;
-					document.head.appendChild(preload);
-				}
+				var preload = document.createElement('link');
+				preload.rel = 'preload';
+				preload.as = 'image';
+				preload.href = chosen;
+				preload.fetchPriority = 'high';
+				document.head.appendChild(preload);
 			})();
 		</script>
 		<ClientRouter />
