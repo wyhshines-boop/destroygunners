@@ -70,9 +70,9 @@ const screenshots = [
 				<div class="carousel-viewport">
 					<div class="carousel-track">
 						{screenshots.map((shot, index) => (
-							<a href={shot} class="shot-card" target="_blank" rel="noopener">
+							<button class="shot-card" type="button" data-full-src={shot} data-shot-index={index} aria-label={`Open ScareSoul screenshot ${index + 1}`}>
 								<img src={shot} alt={`ScareSoul screenshot ${index + 1}`} loading={index < 3 ? 'eager' : 'lazy'} />
-							</a>
+							</button>
 						))}
 					</div>
 				</div>
@@ -90,6 +90,13 @@ const screenshots = [
 			<span>{copy.download}</span>
 		</a>
 	</section>
+
+	<div class="lightbox" aria-hidden="true">
+		<button class="lightbox-close" type="button" aria-label="Close screenshot">×</button>
+		<button class="lightbox-nav lightbox-prev" type="button" aria-label="Previous screenshot">‹</button>
+		<img class="lightbox-image" src="" alt="ScareSoul enlarged screenshot" />
+		<button class="lightbox-nav lightbox-next" type="button" aria-label="Next screenshot">›</button>
+	</div>
 </main>
 
 <style is:global>
@@ -313,6 +320,8 @@ const screenshots = [
 		border: 1px solid rgba(255, 244, 239, 0.78);
 		box-shadow: 0 12px 30px rgba(0, 0, 0, 0.58);
 		transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+		padding: 0;
+		cursor: zoom-in;
 	}
 
 	.shot-card {
@@ -375,6 +384,71 @@ const screenshots = [
 		height: 100%;
 		display: block;
 		object-fit: cover;
+	}
+
+	.lightbox {
+		position: fixed;
+		inset: 0;
+		z-index: 100;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 48px 72px;
+		background: rgba(0, 0, 0, 0.86);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.18s ease;
+	}
+
+	.lightbox.active {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.lightbox-image {
+		max-width: min(1200px, 90vw);
+		max-height: 82vh;
+		display: block;
+		border: 1px solid rgba(255, 244, 239, 0.86);
+		box-shadow: 0 0 30px rgba(255, 0, 50, 0.3), 0 20px 60px rgba(0, 0, 0, 0.8);
+		object-fit: contain;
+	}
+
+	.lightbox-close,
+	.lightbox-nav {
+		position: absolute;
+		border: 1px solid rgba(255, 0, 40, 0.72);
+		background: rgba(0, 0, 0, 0.6);
+		color: #fff;
+		cursor: pointer;
+		box-shadow: inset 0 0 14px rgba(255, 0, 35, 0.24), 0 0 12px rgba(255, 0, 35, 0.35);
+	}
+
+	.lightbox-close {
+		top: 22px;
+		right: 24px;
+		width: 42px;
+		height: 42px;
+		font-size: 2rem;
+		line-height: 1;
+	}
+
+	.lightbox-nav {
+		top: 50%;
+		width: 48px;
+		height: 76px;
+		transform: translateY(-50%);
+		font-family: Georgia, serif;
+		font-size: 3.2rem;
+		line-height: 1;
+	}
+
+	.lightbox-prev {
+		left: 24px;
+	}
+
+	.lightbox-next {
+		right: 24px;
 	}
 
 	.download-button {
@@ -520,6 +594,37 @@ const screenshots = [
 
 		.carousel-control.next {
 			right: 0;
+		}
+
+		.lightbox {
+			padding: 40px 16px;
+		}
+
+		.lightbox-image {
+			max-width: 94vw;
+			max-height: 76vh;
+		}
+
+		.lightbox-close {
+			top: 14px;
+			right: 14px;
+			width: 36px;
+			height: 36px;
+			font-size: 1.7rem;
+		}
+
+		.lightbox-nav {
+			width: 34px;
+			height: 58px;
+			font-size: 2.4rem;
+		}
+
+		.lightbox-prev {
+			left: 10px;
+		}
+
+		.lightbox-next {
+			right: 10px;
 		}
 
 		.carousel-dots {
@@ -676,6 +781,64 @@ const screenshots = [
 
 	initScareSoulCarousel();
 	document.addEventListener('astro:page-load', initScareSoulCarousel);
+
+	function initScareSoulLightbox() {
+		const lightbox = document.querySelector('.lightbox');
+		const image = document.querySelector('.lightbox-image') as HTMLImageElement | null;
+		const closeBtn = document.querySelector('.lightbox-close');
+		const prevBtn = document.querySelector('.lightbox-prev');
+		const nextBtn = document.querySelector('.lightbox-next');
+		const shots = Array.from(document.querySelectorAll('.shot-card')) as HTMLElement[];
+		if (!lightbox || !image || !closeBtn || !prevBtn || !nextBtn || shots.length === 0) return;
+
+		let activeIndex = 0;
+
+		function open(index: number) {
+			activeIndex = index;
+			const src = shots[activeIndex]?.dataset.fullSrc;
+			if (!src) return;
+			image.src = src;
+			lightbox.classList.add('active');
+			lightbox.setAttribute('aria-hidden', 'false');
+		}
+
+		function close() {
+			lightbox.classList.remove('active');
+			lightbox.setAttribute('aria-hidden', 'true');
+			image.src = '';
+		}
+
+		function show(offset: number) {
+			activeIndex = (activeIndex + offset + shots.length) % shots.length;
+			const src = shots[activeIndex]?.dataset.fullSrc;
+			if (src) image.src = src;
+		}
+
+		shots.forEach((shot, index) => {
+			if (shot.dataset.lightboxInit) return;
+			shot.dataset.lightboxInit = 'true';
+			shot.addEventListener('click', () => open(index));
+		});
+
+		if (!(closeBtn as HTMLElement).dataset.lightboxInit) {
+			(closeBtn as HTMLElement).dataset.lightboxInit = 'true';
+			closeBtn.addEventListener('click', close);
+			lightbox.addEventListener('click', (event) => {
+				if (event.target === lightbox) close();
+			});
+			prevBtn.addEventListener('click', () => show(-1));
+			nextBtn.addEventListener('click', () => show(1));
+			document.addEventListener('keydown', (event) => {
+				if (!lightbox.classList.contains('active')) return;
+				if (event.key === 'Escape') close();
+				if (event.key === 'ArrowLeft') show(-1);
+				if (event.key === 'ArrowRight') show(1);
+			});
+		}
+	}
+
+	initScareSoulLightbox();
+	document.addEventListener('astro:page-load', initScareSoulLightbox);
 
 	function initScareSoulDownloadTracking() {
 		document.querySelectorAll('.scaresoul-download-track').forEach(link => {

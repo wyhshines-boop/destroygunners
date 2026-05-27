@@ -10,14 +10,16 @@ import { getLangFromUrl } from "../i18n/translations";
 
 const lang = getLangFromUrl(Astro.url);
 const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
+const fallbackBg = bgSrcs[0];
 ---
 
 <!doctype html>
-<html lang={lang === 'zh' ? 'zh-CN' : lang === 'ja' ? 'ja-JP' : 'en'}>
+<html lang={lang === 'zh' ? 'zh-CN' : lang === 'ja' ? 'ja-JP' : 'en'} style={`--bg-image: url('${fallbackBg}')`}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/png" href="/favicon.png" />
+		<link rel="preload" as="image" href={fallbackBg} fetchpriority="high" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -27,6 +29,34 @@ const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content="A fan-built hub for the Destroy Gunners mecha series by SHADE Inc. Offline patches, game archives, and a growing community." />
 		<title>Destroy Gunners — Offline Patch Download & Community</title>
+		<script is:inline define:vars={{ bgSrcs, fallbackBg }}>
+			(function() {
+				var storageKey = 'dg-bg-image-v1';
+				var chosen = fallbackBg;
+
+				try {
+					var stored = localStorage.getItem(storageKey);
+					if (stored && bgSrcs.indexOf(stored) !== -1) {
+						chosen = stored;
+					} else {
+						chosen = bgSrcs[Math.floor(Math.random() * bgSrcs.length)] || fallbackBg;
+						localStorage.setItem(storageKey, chosen);
+					}
+				} catch (e) {}
+
+				document.documentElement.style.setProperty('--bg-image', "url('" + chosen + "')");
+				window.__bgSrcs = bgSrcs;
+				window.__bgChosen = chosen;
+
+				if (chosen !== fallbackBg) {
+					var preload = document.createElement('link');
+					preload.rel = 'preload';
+					preload.as = 'image';
+					preload.href = chosen;
+					document.head.appendChild(preload);
+				}
+			})();
+		</script>
 		<ClientRouter />
 		<!-- Google tag (gtag.js) -->
 		<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-QXY8D8TC12"></script>
@@ -56,15 +86,23 @@ const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
 		<Header />
 		<slot />
 		<script is:inline define:vars={{ bgSrcs }}>
-			window.__bgSrcs = bgSrcs;
-			window.__bgChosen = window.__bgChosen || bgSrcs[Math.floor(Math.random() * bgSrcs.length)];
-		</script>
-		<script>
-			document.addEventListener('astro:page-load', () => {
-				if (window.__bgChosen) {
-					document.documentElement.style.setProperty('--bg-image', `url('${window.__bgChosen}')`);
+			(function() {
+				function warmBackgroundCache() {
+					bgSrcs.forEach(function(src) {
+						var img = new Image();
+						img.decoding = 'async';
+						img.src = src;
+					});
 				}
-			});
+
+				if ('requestIdleCallback' in window) {
+					requestIdleCallback(warmBackgroundCache, { timeout: 3000 });
+				} else {
+					window.addEventListener('load', function() {
+						setTimeout(warmBackgroundCache, 1000);
+					}, { once: true });
+				}
+			})();
 		</script>
 	</body>
 </html>
