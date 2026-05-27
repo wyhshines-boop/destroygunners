@@ -86,7 +86,7 @@ const screenshots = [
 			</div>
 		</div>
 
-		<a class="download-button" href="/downloads/scaresoul_offline.apk" download>
+		<a class="download-button scaresoul-download-track" href="/downloads/scaresoul_offline.apk" download>
 			<span>{copy.download}</span>
 		</a>
 	</section>
@@ -676,4 +676,26 @@ const screenshots = [
 
 	initScareSoulCarousel();
 	document.addEventListener('astro:page-load', initScareSoulCarousel);
+
+	function initScareSoulDownloadTracking() {
+		document.querySelectorAll('.scaresoul-download-track').forEach(link => {
+			if ((link as HTMLElement).dataset.tracked) return;
+			(link as HTMLElement).dataset.tracked = 'true';
+			link.addEventListener('click', () => {
+				// @ts-ignore
+				if (typeof gtag === 'function') {
+					// @ts-ignore
+					gtag('event', 'download', {
+						event_category: 'apk',
+						event_label: 'scaresoul_offline_v8',
+						file_name: 'scaresoul_offline.apk',
+						game: 'scaresoul',
+					});
+				}
+			});
+		});
+	}
+
+	initScareSoulDownloadTracking();
+	document.addEventListener('astro:page-load', initScareSoulDownloadTracking);
 </script>
