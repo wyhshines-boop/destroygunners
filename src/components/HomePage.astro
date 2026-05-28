@@ -14,6 +14,7 @@ interface Props {
 const { lang } = Astro.props;
 const tr = t(lang);
 const scareSoulHref = lang === 'en' ? '/scaresoul' : `/${lang}/scaresoul`;
+const allMechaSaveHref = lang === 'en' ? '/all-mecha-save' : `/${lang}/all-mecha-save`;
 const scareSoulCopy = {
 	en: {
 		title: 'ScareSoul',
@@ -29,6 +30,26 @@ const scareSoulCopy = {
 		title: 'ScareSoul',
 		subtitle: 'オフライン改造版',
 		action: 'Open',
+	},
+}[lang];
+const allMechaSaveCopy = {
+	en: {
+		kicker: 'Save File',
+		title: 'All Mecha Save Release',
+		description: 'A preserved Destroy Gunners ZZ save with the full mecha roster unlocked.',
+		action: 'Read',
+	},
+	zh: {
+		kicker: '存档发布',
+		title: '全机体存档发布',
+		description: 'Destroy Gunners ZZ 全机体解锁存档，面向离线版玩家整理发布。',
+		action: '查看',
+	},
+	ja: {
+		kicker: 'セーブデータ',
+		title: '全メカ解放セーブデータ公開',
+		description: 'Destroy Gunners ZZ の全メカ解放セーブデータをオフライン版向けに公開します。',
+		action: '読む',
 	},
 }[lang];
 ---
@@ -60,6 +81,16 @@ const scareSoulCopy = {
 					</button>
 				))}
 			</div>
+
+			<a class="article-card" href={allMechaSaveHref}>
+				<img src="/save/all-mecha-save.png" alt={allMechaSaveCopy.title} loading="lazy" />
+				<div class="article-card-copy">
+					<span>{allMechaSaveCopy.kicker}</span>
+					<strong>{allMechaSaveCopy.title}</strong>
+					<p>{allMechaSaveCopy.description}</p>
+				</div>
+				<span class="article-card-action">{allMechaSaveCopy.action}</span>
+			</a>
 
 			<div id="notifications-container">
 				{tr.notifications.versions.map((v, i) => (
@@ -422,6 +453,87 @@ const scareSoulCopy = {
 		text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
 	}
 
+	.article-card {
+		display: grid;
+		grid-template-columns: minmax(150px, 26%) minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 18px;
+		margin: 0 0 26px;
+		padding: 12px;
+		background:
+			linear-gradient(90deg, rgba(0, 240, 255, 0.12), rgba(0, 240, 255, 0.03)),
+			rgba(3, 20, 24, 0.78);
+		border: 1px solid rgba(0, 240, 255, 0.36);
+		color: #e0ffff;
+		text-decoration: none;
+		transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+		clip-path: polygon(
+			0 0,
+			calc(100% - 14px) 0,
+			100% 14px,
+			100% 100%,
+			14px 100%,
+			0 calc(100% - 14px)
+		);
+	}
+
+	.article-card:hover {
+		color: #fff;
+		border-color: #00f0ff;
+		background:
+			linear-gradient(90deg, rgba(0, 240, 255, 0.18), rgba(0, 240, 255, 0.05)),
+			rgba(3, 20, 24, 0.86);
+		text-shadow: none;
+	}
+
+	.article-card img {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		display: block;
+		border: 1px solid rgba(224, 255, 255, 0.32);
+	}
+
+	.article-card-copy {
+		min-width: 0;
+		display: grid;
+		gap: 5px;
+	}
+
+	.article-card-copy span {
+		color: rgba(48, 218, 150, 0.86);
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	.article-card-copy strong {
+		color: #00f0ff;
+		font-size: clamp(1.05rem, 2vw, 1.45rem);
+		line-height: 1.15;
+		font-weight: 500;
+	}
+
+	.article-card-copy p {
+		margin: 0;
+		color: rgba(224, 255, 255, 0.82);
+		font-size: 0.9rem;
+		line-height: 1.5;
+	}
+
+	.article-card-action {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 68px;
+		min-height: 32px;
+		padding: 6px 12px;
+		border: 1px solid rgba(0, 240, 255, 0.62);
+		color: #30da96;
+		background: rgba(0, 240, 255, 0.06);
+		white-space: nowrap;
+	}
+
 	.version-content {
 		display: none;
 	}
@@ -625,5 +737,16 @@ const scareSoulCopy = {
 
 	.close-btn:hover {
 		color: #00f0ff;
+	}
+
+	@media (max-width: 700px) {
+		.article-card {
+			grid-template-columns: 1fr;
+			gap: 12px;
+		}
+
+		.article-card-action {
+			justify-self: start;
+		}
 	}
 </style>

@@ -35,18 +35,13 @@ export const translations = {
 						{
 							title: 'Offline Patch',
 							items: [
-								'Fan-made offline patch. Free share.',
-								'For game preservation only.',
-								'Original game by SHADE Inc.',
-								'Patch by: destroygunners.com',
+								'Fan-made and free to share.',
 							],
 						},
 						{
 							title: 'Compatibility',
 							items: [
-								'Tested on Snapdragon 8 Gen 3 — runs fine.',
-								'Snapdragon 8 Gen 3+ dropped 32-bit app support.',
-								"If your OEM didn't add a compatibility layer, the game may crash.",
+								'Tested on Snapdragon 8 Gen 3; devices without 32-bit app support may crash.',
 							],
 						},
 					],
@@ -76,8 +71,7 @@ export const translations = {
 						{
 							title: 'Compatibility',
 							items: [
-								'Tested on Snapdragon 8 Gen 3 — runs fine.',
-								'Same compatibility as Version B.',
+								'Tested on Snapdragon 8 Gen 3; same compatibility as Version B.',
 							],
 						},
 					],
@@ -106,10 +100,7 @@ export const translations = {
 						{
 							title: 'Offline Patch',
 							items: [
-								'Fan-made offline patch. Free share.',
-								'For game preservation only.',
-								'Original game by SHADE Inc.',
-								'Patch by: destroygunners.com',
+								'Fan-made and free to share.',
 							],
 						},
 						{
@@ -122,9 +113,7 @@ export const translations = {
 						{
 							title: 'Compatibility',
 							items: [
-								'Tested on Snapdragon 8 Gen 3 — runs fine.',
-								'Snapdragon 8 Gen 3+ dropped 32-bit app support.',
-								"If your OEM didn't add a compatibility layer, the game may crash.",
+								'Tested on Snapdragon 8 Gen 3; devices without 32-bit app support may crash.',
 							],
 						},
 					],
@@ -212,18 +201,13 @@ export const translations = {
 						{
 							title: '离线补丁',
 							items: [
-								'粉丝自制离线补丁，免费分享。',
-								'仅用于游戏存档保存。',
-								'原作由 SHADE Inc. 开发。',
-								'补丁制作：destroygunners.com',
+								'粉丝自制，免费分享。',
 							],
 						},
 						{
 							title: '兼容性',
 							items: [
-								'已在骁龙 8 Gen 3 上测试，运行正常。',
-								'骁龙 8 Gen 3 及之后的芯片不再支持 32 位应用。',
-								'如果手机厂商未做 32 位兼容，游戏可能会闪退。',
+								'骁龙 8 Gen 3 测试正常；不支持 32 位应用的机型可能闪退。',
 							],
 						},
 					],
@@ -253,8 +237,7 @@ export const translations = {
 						{
 							title: '兼容性',
 							items: [
-								'已在骁龙 8 Gen 3 上测试，运行正常。',
-								'兼容性表现与版本 B 一致。',
+								'骁龙 8 Gen 3 测试正常；兼容性同版本 B。',
 							],
 						},
 					],
@@ -283,10 +266,7 @@ export const translations = {
 						{
 							title: '离线补丁',
 							items: [
-								'粉丝自制离线补丁，免费分享。',
-								'仅用于游戏存档保存。',
-								'原作由 SHADE Inc. 开发。',
-								'补丁制作：destroygunners.com',
+								'粉丝自制，免费分享。',
 							],
 						},
 						{
@@ -299,9 +279,7 @@ export const translations = {
 						{
 							title: '兼容性',
 							items: [
-								'已在骁龙 8 Gen 3 上测试，运行正常。',
-								'骁龙 8 Gen 3 及之后的芯片不再支持 32 位应用。',
-								'如果手机厂商未做 32 位兼容，游戏可能会闪退。',
+								'骁龙 8 Gen 3 测试正常；不支持 32 位应用的机型可能闪退。',
 							],
 						},
 					],
@@ -389,18 +367,13 @@ export const translations = {
 						{
 							title: 'オフラインパッチ',
 							items: [
-								'ファンメイドの無料オフラインパッチです。',
-								'ゲームの保存・アーカイブ目的のみ。',
-								'原作は SHADE Inc. によるものです。',
-								'パッチ制作: destroygunners.com',
+								'ファンメイドで無料配布です。',
 							],
 						},
 						{
 							title: '互換性について',
 							items: [
-								'Snapdragon 8 Gen 3 にて動作確認済み。',
-								'Snapdragon 8 Gen 3 以降のチップは 32bit アプリをサポートしていません。',
-								'OS 側の 32bit 互換レイヤーがない場合、起動時にクラッシュします。',
+								'Snapdragon 8 Gen 3 で確認済み。32bit 非対応端末ではクラッシュする場合があります。',
 							],
 						},
 					],
@@ -430,8 +403,7 @@ export const translations = {
 						{
 							title: '互換性について',
 							items: [
-								'Snapdragon 8 Gen 3 にて動作確認済み。',
-								'互換性はバージョン B と同様です。',
+								'Snapdragon 8 Gen 3 で確認済み。互換性はバージョン B と同様です。',
 							],
 						},
 					],
@@ -460,10 +432,7 @@ export const translations = {
 						{
 							title: 'オフラインパッチ',
 							items: [
-								'ファンメイドの無料オフラインパッチです。',
-								'ゲームの保存・アーカイブ目的のみ。',
-								'原作は SHADE Inc. によるものです。',
-								'パッチ制作: destroygunners.com',
+								'ファンメイドで無料配布です。',
 							],
 						},
 						{
@@ -476,9 +445,7 @@ export const translations = {
 						{
 							title: '互換性について',
 							items: [
-								'Snapdragon 8 Gen 3 にて動作確認済み。',
-								'Snapdragon 8 Gen 3 以降のチップは 32bit アプリをサポートしていません。',
-								'OS 側の 32bit 互換レイヤーがない場合、起動時にクラッシュします。',
+								'Snapdragon 8 Gen 3 で確認済み。32bit 非対応端末ではクラッシュする場合があります。',
 							],
 						},
 					],

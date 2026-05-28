@@ -1,0 +1,280 @@
+---
+import ContentBox from './ContentBox.astro';
+import type { Lang } from '../i18n/translations';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const copy = {
+	en: {
+		title: 'All Mecha Save Release',
+		kicker: 'Destroy Gunners ZZ save file',
+		lead: 'Full mecha save. Replace the original save with svdt.dat.',
+		provider: 'Provided by Baidu Tieba user "派大狗ii".',
+		home: 'Back to Home',
+		download: 'Download svdt.dat',
+		statusTitle: 'Save Contents',
+		statusItems: [
+			'All mecha roster data prepared for the offline edition.',
+			'High resource values shown in the save preview.',
+		],
+		stepsTitle: 'Install Steps',
+		steps: [
+			'Open MT Manager.',
+			'Go to /storage/emulated/0/.',
+			'Open /data/net.gree.android.pfgreeapp58559a.',
+			'Overwrite the original save with svdt.dat.',
+		],
+	},
+	zh: {
+		title: '全机体存档发布',
+		kicker: 'Destroy Gunners ZZ 存档',
+		lead: '全机体存档，下载 svdt.dat 覆盖原存档即可。',
+		provider: '提供：百度贴吧用户“派大狗ii”。',
+		home: '返回首页',
+		download: '下载 svdt.dat',
+		statusTitle: '存档内容',
+		statusItems: [
+			'全机体阵容数据已准备给离线版使用。',
+			'资源数值已在预览图中展示。',
+		],
+		stepsTitle: '安装步骤',
+		steps: [
+			'打开 MT 文件管理器。',
+			'转到路径 /storage/emulated/0/。',
+			'进入 /data/net.gree.android.pfgreeapp58559a。',
+			'用 svdt.dat 覆盖原存档。',
+		],
+	},
+	ja: {
+		title: '全メカ解放セーブデータ公開',
+		kicker: 'Destroy Gunners ZZ セーブデータ',
+		lead: '全メカ解放セーブです。svdt.dat で元のセーブを上書きします。',
+		provider: '提供：百度贴吧ユーザー「派大狗ii」。',
+		home: 'ホームへ戻る',
+		download: 'svdt.dat をダウンロード',
+		statusTitle: 'セーブ内容',
+		statusItems: [
+			'オフライン版向けの全メカデータを準備済み。',
+			'リソース値はプレビュー画像に表示されています。',
+		],
+		stepsTitle: '導入手順',
+		steps: [
+			'MT Manager を開きます。',
+			'/storage/emulated/0/ に移動します。',
+			'/data/net.gree.android.pfgreeapp58559a を開きます。',
+			'svdt.dat で元のセーブを上書きします。',
+		],
+	},
+}[lang];
+
+const homeHref = lang === 'en' ? '/' : `/${lang}/`;
+---
+
+<div class="container save-page">
+	<main>
+		<ContentBox title={copy.title}>
+			<article class="save-article">
+				<p class="kicker">{copy.kicker}</p>
+				<img class="feature-image" src="/save/all-mecha-save.png" alt={copy.title} />
+				<p class="lead">{copy.lead}</p>
+				<p class="provider-note">{copy.provider}</p>
+				<a class="download-link" href="/save/svdt.dat" download>{copy.download}</a>
+
+				<section class="article-section">
+					<h3>{copy.statusTitle}</h3>
+					<ul>
+						{copy.statusItems.map(item => <li>{item}</li>)}
+					</ul>
+				</section>
+
+				<section class="article-section">
+					<h3>{copy.stepsTitle}</h3>
+					<ol class="steps-list">
+						{copy.steps.map(item => <li>{item}</li>)}
+					</ol>
+					<div class="step-images">
+						<img src="/save/save1.png" alt={`${copy.stepsTitle} 1`} loading="lazy" />
+						<img src="/save/save2.png" alt={`${copy.stepsTitle} 2`} loading="lazy" />
+					</div>
+				</section>
+
+				<a class="back-link" href={homeHref}>{copy.home}</a>
+			</article>
+		</ContentBox>
+	</main>
+</div>
+
+<style>
+	.container {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 40px 20px;
+	}
+
+	.save-article {
+		display: grid;
+		gap: 22px;
+		min-width: 0;
+	}
+
+	.kicker {
+		margin: 0;
+		color: #30da96;
+		font-size: 0.78rem;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+	}
+
+	.feature-image {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		display: block;
+		border: 1px solid rgba(0, 240, 255, 0.36);
+		box-shadow: 0 0 24px rgba(0, 240, 255, 0.12);
+	}
+
+	.lead {
+		margin: 0;
+		color: rgba(224, 255, 255, 0.9);
+		font-size: clamp(1rem, 1.8vw, 1.15rem);
+		line-height: 1.75;
+		overflow-wrap: anywhere;
+	}
+
+	.provider-note {
+		margin: -10px 0 0;
+		color: rgba(224, 255, 255, 0.78);
+		font-size: 0.92rem;
+		line-height: 1.6;
+		overflow-wrap: anywhere;
+	}
+
+	.article-section {
+		padding-top: 4px;
+	}
+
+	.article-section h3 {
+		margin: 0 0 10px;
+		color: #00f0ff;
+		font-size: 1.1rem;
+		font-weight: 500;
+	}
+
+	.download-link {
+		justify-self: start;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 40px;
+		padding: 8px 18px;
+		border: 1px solid rgba(0, 240, 255, 0.68);
+		color: #30da96;
+		background: rgba(0, 240, 255, 0.08);
+		text-decoration: none;
+		box-shadow: inset 0 0 14px rgba(0, 240, 255, 0.08);
+	}
+
+	.download-link:hover {
+		color: #fff;
+		border-color: #00f0ff;
+	}
+
+	ul {
+		list-style-type: none;
+		padding-left: 24px;
+		margin: 0;
+	}
+
+	ul li {
+		margin-bottom: 8px;
+		color: #e0ffff;
+		position: relative;
+	}
+
+	ul li::before {
+		content: "▶";
+		position: absolute;
+		left: -16px;
+		top: 2px;
+		color: #00f0ff;
+		font-size: 0.8rem;
+	}
+
+	.steps-list {
+		margin: 0;
+		padding-left: 24px;
+		color: #e0ffff;
+	}
+
+	.steps-list li {
+		margin-bottom: 10px;
+		padding-left: 4px;
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	.steps-list li::marker {
+		color: #00f0ff;
+		font-weight: 700;
+	}
+
+	.step-images {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 14px;
+		margin-top: 18px;
+	}
+
+	.step-images img {
+		width: 100%;
+		display: block;
+		border: 1px solid rgba(0, 240, 255, 0.32);
+		background: rgba(0, 0, 0, 0.24);
+	}
+
+	.back-link {
+		justify-self: start;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 36px;
+		padding: 7px 16px;
+		border: 1px solid rgba(0, 240, 255, 0.6);
+		color: #30da96;
+		background: rgba(0, 240, 255, 0.06);
+		text-decoration: none;
+	}
+
+	.back-link:hover {
+		color: #fff;
+		border-color: #00f0ff;
+	}
+
+	@media (max-width: 640px) {
+		.container {
+			padding: 20px 10px;
+		}
+
+		.save-article {
+			gap: 18px;
+		}
+
+		.feature-image {
+			aspect-ratio: 4 / 3;
+		}
+
+		.lead {
+			font-size: 1rem;
+			line-height: 1.65;
+		}
+
+		.step-images {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
