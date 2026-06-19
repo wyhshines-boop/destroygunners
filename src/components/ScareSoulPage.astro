@@ -13,6 +13,13 @@ const copy = {
 		title: 'ScareSoul Offline Cracked Edition',
 		description:
 			'A preserved offline build of SHADE Inc.\'s gothic action RPG. Explore cursed arenas, collect weapons, and keep this lost mobile title playable. Fan-made cracked edition for preservation and offline play. Recommended for Android devices with legacy 32-bit compatibility.',
+		updateTitle: 'Update notes',
+		updateNotes: [
+			'Current version: 1.5.1b.',
+			'Added unlimited coins. You can now use coins to purchase items.',
+			'Fixed a crash when starting the game after the first installation.',
+			'This version can be installed directly over version 1.5.1a.',
+		],
 		download: 'Download',
 		gallery: 'Screenshots',
 		home: 'HomePage',
@@ -22,6 +29,13 @@ const copy = {
 		title: 'ScareSoul Offline Cracked Edition',
 		description:
 			'SHADE Inc. 哥特暗黑动作 RPG 的离线版本。进入被诅咒的竞技场，收集武器，让这款消失的移动端作品继续可玩。这是粉丝自制的破解版，用于游戏离线游玩。建议使用仍支持 32 位应用的 Android 设备。联系：wyhshines@gmail.com',
+		updateTitle: '更新日志',
+		updateNotes: [
+			'当前版本：1.5.1b。',
+			'更新了无限金币，现在你可以使用金币购买道具了。',
+			'解决了首次安装开始游戏时闪退的问题。',
+			'此版本可直接覆盖安装 1.5.1a 版本。',
+		],
 		download: '下载',
 		gallery: '游戏截图',
 		home: '首页',
@@ -31,6 +45,13 @@ const copy = {
 		title: 'ScareSoul Offline Cracked Edition',
 		description:
 			'SHADE Inc. のゴシックアクション RPG を保存するためのオフライン版です。呪われた闘技場を探索し、武器を集め、失われたモバイル作品を遊べる形で残します。保存とオフラインプレイのためのファンメイド版です。32-bit アプリ互換環境のある Android 端末を推奨します。',
+		updateTitle: '更新履歴',
+		updateNotes: [
+			'現在のバージョン：1.5.1b。',
+			'コインを無制限にしました。コインでアイテムを購入できるようになりました。',
+			'初回インストール後、ゲーム開始時にクラッシュする問題を修正しました。',
+			'このバージョンは 1.5.1a に直接上書きインストールできます。',
+		],
 		download: 'Download',
 		gallery: 'Screenshots',
 		home: 'HomePage',
@@ -64,6 +85,12 @@ const screenshots = [
 		<div class="content-frame">
 			<h1 id="scaresoul-title">{copy.title}</h1>
 			<p class="lead">{copy.description}</p>
+			<div class="update-notes">
+				<h2>{copy.updateTitle}</h2>
+				<ul>
+					{copy.updateNotes.map(note => <li>{note}</li>)}
+				</ul>
+			</div>
 
 			<div class="screenshot-carousel" aria-label={copy.gallery}>
 				<button class="carousel-control prev" type="button" aria-label="Previous screenshot">‹</button>
@@ -130,7 +157,8 @@ const screenshots = [
 		--muted: rgba(255, 244, 239, 0.74);
 		height: 100vh;
 		height: 100svh;
-		overflow: hidden;
+		overflow-x: hidden;
+		overflow-y: auto;
 		color: var(--paper);
 		font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
 		letter-spacing: 0;
@@ -145,8 +173,8 @@ const screenshots = [
 	}
 
 	.hero {
-		height: 100vh;
-		height: 100svh;
+		min-height: 100vh;
+		min-height: 100svh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -290,6 +318,27 @@ const screenshots = [
 		font-size: clamp(0.98rem, 1.45vw, 1.28rem);
 		line-height: 1.55;
 		text-shadow: 0 2px 10px #000;
+	}
+
+	.update-notes {
+		max-width: 980px;
+		margin: clamp(12px, 1.8vh, 18px) auto 0;
+		color: rgba(255, 244, 239, 0.88);
+		text-align: left;
+	}
+
+	.update-notes h2 {
+		margin: 0 0 6px;
+		color: var(--paper);
+		font-size: clamp(0.9rem, 1.2vw, 1.08rem);
+		font-weight: 700;
+	}
+
+	.update-notes ul {
+		margin: 0;
+		padding-left: 1.25rem;
+		font-size: clamp(0.78rem, 1vw, 0.95rem);
+		line-height: 1.45;
 	}
 
 	.screenshot-carousel {
@@ -569,6 +618,21 @@ const screenshots = [
 			line-height: 1.2;
 		}
 
+		.update-notes {
+			margin-top: 10px;
+		}
+
+		.update-notes h2 {
+			margin-bottom: 4px;
+			font-size: 0.72rem;
+		}
+
+		.update-notes ul {
+			padding-left: 1rem;
+			font-size: 0.62rem;
+			line-height: 1.35;
+		}
+
 		.screenshot-carousel {
 			width: min(84vw, 420px);
 			margin-top: 14px;
@@ -697,6 +761,14 @@ const screenshots = [
 		.lead {
 			font-size: 0.58rem;
 			margin-top: 10px;
+		}
+
+		.update-notes h2 {
+			font-size: 0.66rem;
+		}
+
+		.update-notes ul {
+			font-size: 0.56rem;
 		}
 
 		.screenshot-carousel {
@@ -850,7 +922,7 @@ const screenshots = [
 					// @ts-ignore
 					gtag('event', 'download', {
 						event_category: 'apk',
-						event_label: 'scaresoul_offline_v8',
+						event_label: 'scaresoul_offline_v1.5.1b',
 						file_name: 'scaresoul_offline.apk',
 						game: 'scaresoul',
 					});
