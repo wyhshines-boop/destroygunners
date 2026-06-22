@@ -1,5 +1,7 @@
 ---
 import type { Lang } from '../i18n/translations';
+import { createMarkdownProcessor } from '@astrojs/markdown-remark';
+import novelSource from '../../public/scaresoul/scaresoul_novel.md?raw';
 
 interface Props {
 	lang: Lang;
@@ -23,6 +25,8 @@ const copy = {
 		download: 'Download',
 		gallery: 'Screenshots',
 		home: 'HomePage',
+		story: 'Story',
+		closeStory: 'Close story',
 	},
 	zh: {
 		kicker: '离线破解版',
@@ -39,6 +43,8 @@ const copy = {
 		download: '下载',
 		gallery: '游戏截图',
 		home: '首页',
+		story: '故事',
+		closeStory: '关闭故事',
 	},
 	ja: {
 		kicker: 'オフライン改造版',
@@ -55,8 +61,13 @@ const copy = {
 		download: 'Download',
 		gallery: 'Screenshots',
 		home: 'HomePage',
+		story: 'ストーリー',
+		closeStory: 'ストーリーを閉じる',
 	},
 }[lang];
+
+const markdownProcessor = await createMarkdownProcessor();
+const { code: novelHtml } = await markdownProcessor.render(novelSource);
 
 const screenshots = [
 	'/scaresoul/shot1.jpg',
@@ -83,6 +94,9 @@ const screenshots = [
 		<img class="game-logo" src="/scaresoul/scaresoul_logo.webp" alt="ScareSoul" />
 
 		<div class="content-frame">
+			<nav class="feature-actions" aria-label="ScareSoul content">
+				<button class="feature-button story-open" type="button">{copy.story}</button>
+			</nav>
 			<h1 id="scaresoul-title">{copy.title}</h1>
 			<p class="lead">{copy.description}</p>
 			<div class="update-notes">
@@ -123,6 +137,16 @@ const screenshots = [
 		<button class="lightbox-nav lightbox-prev" type="button" aria-label="Previous screenshot">‹</button>
 		<img class="lightbox-image" src="" alt="ScareSoul enlarged screenshot" />
 		<button class="lightbox-nav lightbox-next" type="button" aria-label="Next screenshot">›</button>
+	</div>
+
+	<div class="story-modal" aria-hidden="true">
+		<section class="story-dialog" role="dialog" aria-modal="true" aria-labelledby="story-dialog-title">
+			<header class="story-dialog-header">
+				<h2 id="story-dialog-title">{copy.story}</h2>
+				<button class="story-close" type="button" aria-label={copy.closeStory}>×</button>
+			</header>
+			<article class="story-content" set:html={novelHtml} />
+		</section>
 	</div>
 </main>
 
@@ -309,6 +333,33 @@ const screenshots = [
 		font-weight: 400;
 		line-height: 1.12;
 		text-shadow: 0 4px 18px rgba(0, 0, 0, 0.9), 0 0 12px rgba(255, 255, 255, 0.24);
+	}
+
+	.feature-actions {
+		display: flex;
+		justify-content: center;
+		gap: 10px;
+		margin: 0 auto clamp(10px, 1.5vh, 16px);
+	}
+
+	.feature-button {
+		min-width: 112px;
+		padding: 8px 22px;
+		border: 1px solid rgba(255, 244, 239, 0.72);
+		background: linear-gradient(180deg, rgba(104, 0, 18, 0.72), rgba(10, 0, 2, 0.88));
+		color: var(--paper);
+		font: inherit;
+		font-size: clamp(0.82rem, 1.1vw, 1rem);
+		cursor: pointer;
+		box-shadow: inset 0 0 12px rgba(255, 0, 45, 0.24), 0 0 10px rgba(255, 0, 45, 0.2);
+		transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+	}
+
+	.feature-button:hover,
+	.feature-button:focus-visible {
+		border-color: #fff;
+		box-shadow: inset 0 0 16px rgba(255, 0, 45, 0.38), 0 0 14px rgba(255, 0, 45, 0.42);
+		transform: translateY(-1px);
 	}
 
 	.lead {
@@ -500,6 +551,100 @@ const screenshots = [
 		right: 24px;
 	}
 
+	.story-modal {
+		position: fixed;
+		inset: 0;
+		z-index: 110;
+		display: grid;
+		place-items: center;
+		padding: clamp(16px, 4vw, 48px);
+		background: rgba(0, 0, 0, 0.88);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.2s ease;
+	}
+
+	.story-modal.active {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.story-dialog {
+		width: min(880px, 94vw);
+		max-height: min(86vh, 920px);
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		background:
+			linear-gradient(rgba(7, 0, 2, 0.94), rgba(0, 0, 0, 0.97)),
+			url('/scaresoul/scaresoul_bg.png') center / cover;
+		border: 1px solid rgba(255, 244, 239, 0.72);
+		box-shadow: 0 0 28px rgba(255, 0, 45, 0.32), 0 24px 80px rgba(0, 0, 0, 0.9);
+	}
+
+	.story-dialog-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 14px 16px 12px 22px;
+		border-bottom: 1px solid rgba(255, 0, 45, 0.38);
+		background: rgba(55, 0, 10, 0.54);
+	}
+
+	.story-dialog-header h2 {
+		margin: 0;
+		font-size: clamp(1.1rem, 2vw, 1.45rem);
+		font-weight: 500;
+	}
+
+	.story-close {
+		width: 38px;
+		height: 38px;
+		border: 1px solid rgba(255, 244, 239, 0.62);
+		background: rgba(0, 0, 0, 0.58);
+		color: #fff;
+		font-size: 1.8rem;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	.story-content {
+		overflow-y: auto;
+		padding: clamp(22px, 4vw, 42px);
+		color: rgba(255, 244, 239, 0.9);
+		font-size: clamp(0.92rem, 1.25vw, 1.08rem);
+		line-height: 1.9;
+		text-align: left;
+	}
+
+	.story-content :global(h1) {
+		margin: 0 0 1.4em;
+		font-size: clamp(1.55rem, 3vw, 2.25rem);
+		text-align: center;
+	}
+
+	.story-content :global(h2) {
+		margin: 2em 0 0.75em;
+		color: #fff;
+		font-size: clamp(1.15rem, 2vw, 1.45rem);
+		font-weight: 500;
+	}
+
+	.story-content :global(p) {
+		margin: 0 0 1.1em;
+	}
+
+	.story-content :global(strong) {
+		color: #fff;
+		text-shadow: 0 0 8px rgba(255, 0, 45, 0.48);
+	}
+
+	.story-content :global(hr) {
+		margin: 2em 0;
+		border: 0;
+		border-top: 1px solid rgba(255, 0, 45, 0.38);
+	}
+
 	.download-button {
 		width: fit-content;
 		min-width: min(360px, 82vw);
@@ -612,6 +757,16 @@ const screenshots = [
 			line-height: 1.06;
 		}
 
+		.feature-actions {
+			margin-bottom: 10px;
+		}
+
+		.feature-button {
+			min-width: 92px;
+			padding: 6px 16px;
+			font-size: 0.72rem;
+		}
+
 		.lead {
 			margin-top: 12px;
 			font-size: clamp(0.62rem, 2.9vw, 0.76rem);
@@ -689,6 +844,25 @@ const screenshots = [
 
 		.lightbox-next {
 			right: 10px;
+		}
+
+		.story-modal {
+			padding: 12px;
+		}
+
+		.story-dialog {
+			width: 100%;
+			max-height: 90vh;
+		}
+
+		.story-dialog-header {
+			padding: 10px 10px 9px 15px;
+		}
+
+		.story-content {
+			padding: 20px 17px 28px;
+			font-size: 0.82rem;
+			line-height: 1.75;
 		}
 
 		.carousel-dots {
@@ -911,6 +1085,42 @@ const screenshots = [
 
 	initScareSoulLightbox();
 	document.addEventListener('astro:page-load', initScareSoulLightbox);
+
+	function initScareSoulStory() {
+		const modal = document.querySelector('.story-modal');
+		const dialog = document.querySelector('.story-dialog');
+		const openButton = document.querySelector('.story-open') as HTMLElement | null;
+		const closeButton = document.querySelector('.story-close') as HTMLElement | null;
+		if (!modal || !dialog || !openButton || !closeButton || openButton.dataset.storyInit) return;
+
+		let previousFocus: HTMLElement | null = null;
+
+		function open() {
+			previousFocus = document.activeElement as HTMLElement | null;
+			modal.classList.add('active');
+			modal.setAttribute('aria-hidden', 'false');
+			closeButton.focus();
+		}
+
+		function close() {
+			modal.classList.remove('active');
+			modal.setAttribute('aria-hidden', 'true');
+			previousFocus?.focus();
+		}
+
+		openButton.dataset.storyInit = 'true';
+		openButton.addEventListener('click', open);
+		closeButton.addEventListener('click', close);
+		modal.addEventListener('click', (event) => {
+			if (event.target === modal) close();
+		});
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && modal.classList.contains('active')) close();
+		});
+	}
+
+	initScareSoulStory();
+	document.addEventListener('astro:page-load', initScareSoulStory);
 
 	function initScareSoulDownloadTracking() {
 		document.querySelectorAll('.scaresoul-download-track').forEach(link => {
