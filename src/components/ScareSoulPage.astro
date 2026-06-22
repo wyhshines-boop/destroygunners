@@ -15,10 +15,10 @@ const copy = {
 			'A preserved offline build of SHADE Inc.\'s gothic action RPG. Explore cursed arenas, collect weapons, and keep this lost mobile title playable. Fan-made cracked edition for preservation and offline play. Recommended for Android devices with legacy 32-bit compatibility.',
 		updateTitle: 'Update notes',
 		updateNotes: [
-			'Current version: 1.5.1b.',
-			'Added unlimited coins. You can now use coins to purchase items.',
-			'Fixed a crash when starting the game after the first installation.',
-			'This version can be installed directly over version 1.5.1a.',
+			'Current version: 1.5.1c.',
+			'Fixed the lottery and reward-claim systems. You can now draw elemental enchantment materials without limit from the Common pool and obtain rare weapons from the Legend pool.',
+			'Removed the disruptive daily login reward flow.',
+			'Added support for hiding the gesture navigation bar by default for a more immersive gameplay experience.',
 		],
 		download: 'Download',
 		gallery: 'Screenshots',
@@ -31,10 +31,10 @@ const copy = {
 			'SHADE Inc. 哥特暗黑动作 RPG 的离线版本。进入被诅咒的竞技场，收集武器，让这款消失的移动端作品继续可玩。这是粉丝自制的破解版，用于游戏离线游玩。建议使用仍支持 32 位应用的 Android 设备。联系：wyhshines@gmail.com',
 		updateTitle: '更新日志',
 		updateNotes: [
-			'当前版本：1.5.1b。',
-			'更新了无限金币，现在你可以使用金币购买道具了。',
-			'解决了首次安装开始游戏时闪退的问题。',
-			'此版本可直接覆盖安装 1.5.1a 版本。',
+			'当前版本：1.5.1c。',
+			'修复了抽奖和领取奖励系统。现在你可以通过 Common 池无限抽取元素附魔材料，通过 Legend 池获取稀有武器！',
+			'移除了扰人的每日登录奖励流程。',
+			'新增支持手势导航条默认隐藏，带来沉浸式的游戏体验。',
 		],
 		download: '下载',
 		gallery: '游戏截图',
@@ -47,10 +47,10 @@ const copy = {
 			'SHADE Inc. のゴシックアクション RPG を保存するためのオフライン版です。呪われた闘技場を探索し、武器を集め、失われたモバイル作品を遊べる形で残します。保存とオフラインプレイのためのファンメイド版です。32-bit アプリ互換環境のある Android 端末を推奨します。',
 		updateTitle: '更新履歴',
 		updateNotes: [
-			'現在のバージョン：1.5.1b。',
-			'コインを無制限にしました。コインでアイテムを購入できるようになりました。',
-			'初回インストール後、ゲーム開始時にクラッシュする問題を修正しました。',
-			'このバージョンは 1.5.1a に直接上書きインストールできます。',
+			'現在のバージョン：1.5.1c。',
+			'ガチャと報酬受取システムを修正しました。Common プールから属性付与素材を無制限に引けるようになり、Legend プールからレア武器を入手できます。',
+			'煩わしいデイリーログイン報酬のフローを削除しました。',
+			'ジェスチャーナビゲーションバーをデフォルトで非表示にする機能を追加し、より没入感のあるゲーム体験を実現しました。',
 		],
 		download: 'Download',
 		gallery: 'Screenshots',
@@ -922,7 +922,7 @@ const screenshots = [
 					// @ts-ignore
 					gtag('event', 'download', {
 						event_category: 'apk',
-						event_label: 'scaresoul_offline_v1.5.1b',
+						event_label: 'scaresoul_offline_v1.5.1c',
 						file_name: 'scaresoul_offline.apk',
 						game: 'scaresoul',
 					});
