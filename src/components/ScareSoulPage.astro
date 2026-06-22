@@ -2,6 +2,7 @@
 import type { Lang } from '../i18n/translations';
 import { createMarkdownProcessor } from '@astrojs/markdown-remark';
 import novelSource from '../../public/scaresoul/scaresoul_novel.md?raw';
+import itemsSource from '../../public/scaresoul/scaresoul_items.md?raw';
 
 interface Props {
 	lang: Lang;
@@ -27,6 +28,10 @@ const copy = {
 		home: 'HomePage',
 		story: 'Story',
 		closeStory: 'Close story',
+		weapons: 'Weapons',
+		materials: 'Items & Materials',
+		closeWeapons: 'Close weapons',
+		closeMaterials: 'Close items and materials',
 	},
 	zh: {
 		kicker: '离线破解版',
@@ -45,6 +50,10 @@ const copy = {
 		home: '首页',
 		story: '故事',
 		closeStory: '关闭故事',
+		weapons: '武器',
+		materials: '材料',
+		closeWeapons: '关闭武器表格',
+		closeMaterials: '关闭道具和材料表格',
 	},
 	ja: {
 		kicker: 'オフライン改造版',
@@ -63,11 +72,21 @@ const copy = {
 		home: 'HomePage',
 		story: 'ストーリー',
 		closeStory: 'ストーリーを閉じる',
+		weapons: '武器',
+		materials: 'アイテム・素材',
+		closeWeapons: '武器一覧を閉じる',
+		closeMaterials: 'アイテムと素材一覧を閉じる',
 	},
 }[lang];
 
 const markdownProcessor = await createMarkdownProcessor();
 const { code: novelHtml } = await markdownProcessor.render(novelSource);
+const weaponsStart = itemsSource.indexOf('## ⚔️ 武器');
+const materialsStart = itemsSource.indexOf('## 🧪 道具 / 材料');
+const weaponsSource = itemsSource.slice(weaponsStart, materialsStart).trim();
+const materialsSource = itemsSource.slice(materialsStart).trim();
+const { code: weaponsHtml } = await markdownProcessor.render(weaponsSource);
+const { code: materialsHtml } = await markdownProcessor.render(materialsSource);
 
 const screenshots = [
 	'/scaresoul/shot1.jpg',
@@ -95,7 +114,9 @@ const screenshots = [
 
 		<div class="content-frame">
 			<nav class="feature-actions" aria-label="ScareSoul content">
-				<button class="feature-button story-open" type="button">{copy.story}</button>
+				<button class="feature-button content-open" type="button" data-modal-target="story-modal">{copy.story}</button>
+				<button class="feature-button content-open" type="button" data-modal-target="weapons-modal">{copy.weapons}</button>
+				<button class="feature-button content-open" type="button" data-modal-target="materials-modal">{copy.materials}</button>
 			</nav>
 			<h1 id="scaresoul-title">{copy.title}</h1>
 			<p class="lead">{copy.description}</p>
@@ -139,13 +160,33 @@ const screenshots = [
 		<button class="lightbox-nav lightbox-next" type="button" aria-label="Next screenshot">›</button>
 	</div>
 
-	<div class="story-modal" aria-hidden="true">
+	<div class="story-modal content-modal" id="story-modal" aria-hidden="true">
 		<section class="story-dialog" role="dialog" aria-modal="true" aria-labelledby="story-dialog-title">
 			<header class="story-dialog-header">
 				<h2 id="story-dialog-title">{copy.story}</h2>
 				<button class="story-close" type="button" aria-label={copy.closeStory}>×</button>
 			</header>
 			<article class="story-content" set:html={novelHtml} />
+		</section>
+	</div>
+
+	<div class="story-modal content-modal" id="weapons-modal" aria-hidden="true">
+		<section class="story-dialog catalog-dialog" role="dialog" aria-modal="true" aria-labelledby="weapons-dialog-title">
+			<header class="story-dialog-header">
+				<h2 id="weapons-dialog-title">{copy.weapons}</h2>
+				<button class="story-close content-close" type="button" aria-label={copy.closeWeapons}>×</button>
+			</header>
+			<article class="story-content catalog-content" set:html={weaponsHtml} />
+		</section>
+	</div>
+
+	<div class="story-modal content-modal" id="materials-modal" aria-hidden="true">
+		<section class="story-dialog catalog-dialog" role="dialog" aria-modal="true" aria-labelledby="materials-dialog-title">
+			<header class="story-dialog-header">
+				<h2 id="materials-dialog-title">{copy.materials}</h2>
+				<button class="story-close content-close" type="button" aria-label={copy.closeMaterials}>×</button>
+			</header>
+			<article class="story-content catalog-content" set:html={materialsHtml} />
 		</section>
 	</div>
 </main>
@@ -337,6 +378,7 @@ const screenshots = [
 
 	.feature-actions {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: center;
 		gap: 10px;
 		margin: 0 auto clamp(10px, 1.5vh, 16px);
@@ -645,6 +687,61 @@ const screenshots = [
 		border-top: 1px solid rgba(255, 0, 45, 0.38);
 	}
 
+	.catalog-dialog {
+		width: min(1040px, 96vw);
+	}
+
+	.catalog-content {
+		overflow-x: auto;
+	}
+
+	.catalog-content :global(h2) {
+		margin-top: 0;
+	}
+
+	.catalog-content :global(h3) {
+		margin: 1.8em 0 0.65em;
+		color: #fff;
+		font-size: clamp(1rem, 1.7vw, 1.25rem);
+		font-weight: 500;
+	}
+
+	.catalog-content :global(table) {
+		width: 100%;
+		min-width: 560px;
+		margin: 0 0 1.6em;
+		border-collapse: collapse;
+		background: rgba(0, 0, 0, 0.34);
+		font-size: 0.92em;
+	}
+
+	.catalog-content :global(th),
+	.catalog-content :global(td) {
+		padding: 9px 12px;
+		border: 1px solid rgba(255, 244, 239, 0.2);
+		text-align: left;
+		vertical-align: top;
+	}
+
+	.catalog-content :global(th) {
+		background: rgba(109, 0, 13, 0.62);
+		color: #fff;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+
+	.catalog-content :global(tr:nth-child(even) td) {
+		background: rgba(255, 255, 255, 0.035);
+	}
+
+	.catalog-content :global(blockquote) {
+		margin: 0 0 1.4em;
+		padding: 10px 14px;
+		border-left: 3px solid rgba(255, 0, 45, 0.72);
+		background: rgba(109, 0, 13, 0.2);
+		color: var(--muted);
+	}
+
 	.download-button {
 		width: fit-content;
 		min-width: min(360px, 82vw);
@@ -762,7 +859,7 @@ const screenshots = [
 		}
 
 		.feature-button {
-			min-width: 92px;
+			min-width: 80px;
 			padding: 6px 16px;
 			font-size: 0.72rem;
 		}
@@ -863,6 +960,10 @@ const screenshots = [
 			padding: 20px 17px 28px;
 			font-size: 0.82rem;
 			line-height: 1.75;
+		}
+
+		.catalog-content :global(table) {
+			min-width: 520px;
 		}
 
 		.carousel-dots {
@@ -1086,41 +1187,46 @@ const screenshots = [
 	initScareSoulLightbox();
 	document.addEventListener('astro:page-load', initScareSoulLightbox);
 
-	function initScareSoulStory() {
-		const modal = document.querySelector('.story-modal');
-		const dialog = document.querySelector('.story-dialog');
-		const openButton = document.querySelector('.story-open') as HTMLElement | null;
-		const closeButton = document.querySelector('.story-close') as HTMLElement | null;
-		if (!modal || !dialog || !openButton || !closeButton || openButton.dataset.storyInit) return;
+	function initScareSoulContentModals() {
+		const openButtons = Array.from(document.querySelectorAll('.content-open')) as HTMLElement[];
+		if (openButtons.length === 0) return;
 
-		let previousFocus: HTMLElement | null = null;
+		openButtons.forEach((openButton) => {
+			if (openButton.dataset.modalInit) return;
+			const targetId = openButton.dataset.modalTarget;
+			const modal = targetId ? document.getElementById(targetId) : null;
+			const closeButton = modal?.querySelector('.story-close') as HTMLElement | null;
+			if (!modal || !closeButton) return;
 
-		function open() {
-			previousFocus = document.activeElement as HTMLElement | null;
-			modal.classList.add('active');
-			modal.setAttribute('aria-hidden', 'false');
-			closeButton.focus();
-		}
+			let previousFocus: HTMLElement | null = null;
 
-		function close() {
-			modal.classList.remove('active');
-			modal.setAttribute('aria-hidden', 'true');
-			previousFocus?.focus();
-		}
+			function open() {
+				previousFocus = document.activeElement as HTMLElement | null;
+				modal.classList.add('active');
+				modal.setAttribute('aria-hidden', 'false');
+				closeButton.focus();
+			}
 
-		openButton.dataset.storyInit = 'true';
-		openButton.addEventListener('click', open);
-		closeButton.addEventListener('click', close);
-		modal.addEventListener('click', (event) => {
-			if (event.target === modal) close();
-		});
-		document.addEventListener('keydown', (event) => {
-			if (event.key === 'Escape' && modal.classList.contains('active')) close();
+			function close() {
+				modal.classList.remove('active');
+				modal.setAttribute('aria-hidden', 'true');
+				previousFocus?.focus();
+			}
+
+			openButton.dataset.modalInit = 'true';
+			openButton.addEventListener('click', open);
+			closeButton.addEventListener('click', close);
+			modal.addEventListener('click', (event) => {
+				if (event.target === modal) close();
+			});
+			document.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape' && modal.classList.contains('active')) close();
+			});
 		});
 	}
 
-	initScareSoulStory();
-	document.addEventListener('astro:page-load', initScareSoulStory);
+	initScareSoulContentModals();
+	document.addEventListener('astro:page-load', initScareSoulContentModals);
 
 	function initScareSoulDownloadTracking() {
 		document.querySelectorAll('.scaresoul-download-track').forEach(link => {
