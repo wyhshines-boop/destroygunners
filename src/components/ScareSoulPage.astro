@@ -101,12 +101,11 @@ const screenshots = [
 
 <main class="scaresoul-page">
 	<section class="hero" aria-labelledby="scaresoul-title">
-		<a href="/" class="home-button">{copy.home}</a>
-
 		<img class="game-logo" src="/scaresoul/scaresoul_logo.webp" alt="ScareSoul" />
 
 		<div class="content-frame">
 			<nav class="feature-actions" aria-label="ScareSoul content">
+				<a class="feature-button" href="/">{copy.home}</a>
 				<button class="feature-button content-open" type="button" data-modal-target="story-modal">{copy.story}</button>
 				<button class="feature-button content-open" type="button" data-modal-target="weapons-modal">{copy.weapons}</button>
 				<button class="feature-button content-open" type="button" data-modal-target="materials-modal">{copy.materials}</button>
@@ -251,32 +250,6 @@ const screenshots = [
 		pointer-events: none;
 	}
 
-	.home-button {
-		min-width: 112px;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		margin: 0 auto clamp(6px, 1vh, 10px);
-		padding: 8px 24px;
-		position: relative;
-		border: 1px solid rgba(255, 244, 239, 0.72);
-		background: linear-gradient(180deg, rgba(104, 0, 18, 0.72), rgba(10, 0, 2, 0.88));
-		color: #fff;
-		text-decoration: none;
-		font-size: clamp(0.82rem, 1.1vw, 1rem);
-		line-height: 1;
-		box-shadow: inset 0 0 12px rgba(255, 0, 45, 0.24), 0 0 10px rgba(255, 0, 45, 0.2);
-		transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
-	}
-
-	.home-button:hover,
-	.home-button:focus-visible {
-		color: #fff;
-		border-color: #fff;
-		box-shadow: inset 0 0 16px rgba(255, 0, 45, 0.38), 0 0 14px rgba(255, 0, 45, 0.42);
-		transform: translateY(-1px);
-	}
-
 	.content-frame {
 		width: min(1500px, 100%);
 		position: relative;
@@ -333,14 +306,19 @@ const screenshots = [
 
 	.feature-actions {
 		display: flex;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 		justify-content: center;
 		gap: 10px;
 		margin: 0 auto clamp(10px, 1.5vh, 16px);
 	}
 
 	.feature-button {
+		flex: 1 1 0;
+		max-width: 150px;
 		min-width: 112px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		padding: 8px 22px;
 		border: 1px solid rgba(255, 244, 239, 0.72);
 		background: linear-gradient(180deg, rgba(104, 0, 18, 0.72), rgba(10, 0, 2, 0.88));
@@ -348,15 +326,16 @@ const screenshots = [
 		font: inherit;
 		font-size: clamp(0.82rem, 1.1vw, 1rem);
 		cursor: pointer;
+		text-decoration: none;
+		white-space: nowrap;
 		box-shadow: inset 0 0 12px rgba(255, 0, 45, 0.24), 0 0 10px rgba(255, 0, 45, 0.2);
-		transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+		transition: border-color 0.18s ease, box-shadow 0.18s ease;
 	}
 
 	.feature-button:hover,
 	.feature-button:focus-visible {
 		border-color: #fff;
 		box-shadow: inset 0 0 16px rgba(255, 0, 45, 0.38), 0 0 14px rgba(255, 0, 45, 0.42);
-		transform: translateY(-1px);
 	}
 
 	.lead {
@@ -755,23 +734,7 @@ const screenshots = [
 		.hero {
 			height: 100svh;
 			justify-content: center;
-			padding: 70px 10px max(8px, env(safe-area-inset-bottom));
-		}
-
-		.home-button {
-			position: absolute;
-			top: max(14px, env(safe-area-inset-top));
-			left: 50%;
-			transform: translateX(-50%);
-			min-width: 88px;
-			margin: 0;
-			padding: 7px 18px;
-			font-size: 0.72rem;
-		}
-
-		.home-button:hover,
-		.home-button:focus-visible {
-			transform: translateX(-50%) translateY(-1px);
+			padding: 12px 10px max(8px, env(safe-area-inset-bottom));
 		}
 
 		.content-frame {
@@ -790,12 +753,13 @@ const screenshots = [
 		}
 
 		.feature-actions {
+			gap: 6px;
 			margin-bottom: 10px;
 		}
 
 		.feature-button {
-			min-width: 80px;
-			padding: 6px 16px;
+			min-width: 0;
+			padding: 6px 8px;
 			font-size: 0.72rem;
 		}
 
@@ -929,16 +893,6 @@ const screenshots = [
 	}
 
 	@media (max-width: 380px) {
-		.hero {
-			padding-top: 66px;
-		}
-
-		.home-button {
-			min-width: 80px;
-			padding: 6px 15px;
-			font-size: 0.62rem;
-		}
-
 		.game-logo {
 			width: min(205px, 56vw);
 			margin-bottom: 8px;
@@ -946,6 +900,11 @@ const screenshots = [
 
 		.content-frame {
 			padding: 14px 11px 15px;
+		}
+
+		.feature-button {
+			padding: 6px 4px;
+			font-size: 0.62rem;
 		}
 
 		h1 {
