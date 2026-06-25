@@ -52,6 +52,29 @@ const allMechaSaveCopy = {
 		action: '読む',
 	},
 }[lang];
+const communityUpdateCopy = {
+	en: {
+		kicker: 'Community Update',
+		title: 'New private-server community build coming soon',
+		description:
+			'The next community version is planned to bring player friend lists, wingman support assignments, and possible PvP access. Boss units can now be piloted as new playable mecha.',
+		imageAlt: 'Boss mecha playable preview in Destroy Gunners ZZ',
+	},
+	zh: {
+		kicker: '社区版本预告',
+		title: '全新的私服社区版本即将发布',
+		description:
+			'新版本将支持玩家互相添加好友，并可指派僚机助战；PvP 模式也有望开放。现在，部分 Boss 机体已可作为全新机甲驾驶。',
+		imageAlt: 'Destroy Gunners ZZ Boss 机体可驾驶预览',
+	},
+	ja: {
+		kicker: 'コミュニティ更新',
+		title: '新しいプライベートサーバー版を近日公開予定',
+		description:
+			'次期コミュニティ版では、フレンド追加、僚機支援の指定、PvP モードの開放が予定されています。さらに一部のボス機体も、新たなプレイアブルメカとして操縦可能になります。',
+		imageAlt: 'Destroy Gunners ZZ ボス機体プレイアブル化プレビュー',
+	},
+}[lang];
 ---
 
 <div class="container">
@@ -81,6 +104,15 @@ const allMechaSaveCopy = {
 					</button>
 				))}
 			</div>
+
+			<article class="community-update-card">
+				<img src="/news/private-server-boss-mecha.jpg" alt={communityUpdateCopy.imageAlt} loading="lazy" />
+				<div class="community-update-copy">
+					<span>{communityUpdateCopy.kicker}</span>
+					<strong>{communityUpdateCopy.title}</strong>
+					<p>{communityUpdateCopy.description}</p>
+				</div>
+			</article>
 
 			<a class="article-card" href={allMechaSaveHref}>
 				<img src="/save/all-mecha-save.png" alt={allMechaSaveCopy.title} loading="lazy" />
@@ -534,6 +566,68 @@ const allMechaSaveCopy = {
 		white-space: nowrap;
 	}
 
+	.community-update-card {
+		display: grid;
+		grid-template-columns: minmax(180px, 34%) minmax(0, 1fr);
+		align-items: stretch;
+		gap: 18px;
+		margin: 0 0 18px;
+		padding: 12px;
+		background:
+			linear-gradient(135deg, rgba(48, 218, 150, 0.16), rgba(0, 240, 255, 0.04) 48%, rgba(3, 20, 24, 0.9)),
+			rgba(3, 20, 24, 0.82);
+		border: 1px solid rgba(48, 218, 150, 0.45);
+		color: #e0ffff;
+		clip-path: polygon(
+			0 0,
+			calc(100% - 14px) 0,
+			100% 14px,
+			100% 100%,
+			14px 100%,
+			0 calc(100% - 14px)
+		);
+	}
+
+	.community-update-card img {
+		width: 100%;
+		height: 100%;
+		min-height: 150px;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+		display: block;
+		border: 1px solid rgba(224, 255, 255, 0.34);
+	}
+
+	.community-update-copy {
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 8px;
+		padding: 6px 8px 6px 0;
+	}
+
+	.community-update-copy span {
+		color: rgba(48, 218, 150, 0.92);
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	.community-update-copy strong {
+		color: #00f0ff;
+		font-size: clamp(1.08rem, 2.2vw, 1.55rem);
+		line-height: 1.18;
+		font-weight: 500;
+	}
+
+	.community-update-copy p {
+		margin: 0;
+		color: rgba(224, 255, 255, 0.84);
+		font-size: 0.92rem;
+		line-height: 1.55;
+	}
+
 	.version-content {
 		display: none;
 	}
@@ -740,9 +834,19 @@ const allMechaSaveCopy = {
 	}
 
 	@media (max-width: 700px) {
+		.community-update-card,
 		.article-card {
 			grid-template-columns: 1fr;
 			gap: 12px;
+		}
+
+		.community-update-card img {
+			height: auto;
+			min-height: 0;
+		}
+
+		.community-update-copy {
+			padding: 0;
 		}
 
 		.article-card-action {
