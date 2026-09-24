@@ -1,8 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import HomePage from '../../components/HomePage.astro';
+import { seo, DESTROY_GUNNERS_JSON_LD } from '../../i18n/seo';
 ---
 
-<Layout>
+<Layout seo={seo.home.ja} jsonLd={DESTROY_GUNNERS_JSON_LD}>
 	<HomePage lang="ja" />
 </Layout>

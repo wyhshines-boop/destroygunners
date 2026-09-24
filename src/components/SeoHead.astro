@@ -1,0 +1,46 @@
+---
+import { SITE_URL, type PageSeo } from '../i18n/seo';
+import type { Lang } from '../i18n/translations';
+
+interface Props extends PageSeo {
+	jsonLd?: object;
+}
+
+const { title, description, image, noindex, jsonLd } = Astro.props;
+
+const langs: Lang[] = ['en', 'zh', 'ja'];
+const hreflang: Record<Lang, string> = { en: 'en', zh: 'zh-CN', ja: 'ja-JP' };
+const ogLocale: Record<Lang, string> = { en: 'en_US', zh: 'zh_CN', ja: 'ja_JP' };
+
+// Strip the locale prefix and trailing slash to get the language-neutral path.
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const match = pathname.match(/^\/(zh|ja)(\/.*)?$/);
+const lang: Lang = (match?.[1] as Lang) ?? 'en';
+const basePath = match ? match[2] || '/' : pathname;
+const urlFor = (l: Lang) => {
+	const localized = l === 'en' ? basePath : `/${l}${basePath === '/' ? '' : basePath}`;
+	return `${SITE_URL}${localized === '/' ? '/' : localized}`;
+};
+const canonical = urlFor(lang);
+const imageUrl = image ? `${SITE_URL}${image}` : undefined;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, follow" />}
+{!noindex && langs.map(l => <link rel="alternate" hreflang={hreflang[l]} href={urlFor(l)} />)}
+{!noindex && <link rel="alternate" hreflang="x-default" href={urlFor('en')} />}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Destroy Gunners" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={ogLocale[lang]} />
+{imageUrl && <meta property="og:image" content={imageUrl} />}
+<meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{imageUrl && <meta name="twitter:image" content={imageUrl} />}
+{jsonLd && <script type="application/ld+json" set:html={JSON.stringify({ ...jsonLd, url: canonical })} />}

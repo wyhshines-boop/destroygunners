@@ -1,8 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import StoryPage from '../components/StoryPage.astro';
+import { seo } from '../i18n/seo';
 ---
 
-<Layout>
+<Layout seo={seo.story.en}>
 	<StoryPage lang="en" />
 </Layout>

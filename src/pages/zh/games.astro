@@ -1,8 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PlaceholderPage from '../../components/PlaceholderPage.astro';
+import { seo } from '../../i18n/seo';
 ---
 
-<Layout>
+<Layout seo={seo.games.zh}>
 	<PlaceholderPage lang="zh" title="游戏" />
 </Layout>

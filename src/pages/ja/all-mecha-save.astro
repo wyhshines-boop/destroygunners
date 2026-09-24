@@ -1,8 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import AllMechaSavePage from '../../components/AllMechaSavePage.astro';
+import { seo } from '../../i18n/seo';
 ---
 
-<Layout>
+<Layout seo={seo.allMechaSave.ja}>
 	<AllMechaSavePage lang="ja" />
 </Layout>
