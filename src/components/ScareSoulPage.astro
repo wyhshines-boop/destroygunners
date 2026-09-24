@@ -15,7 +15,7 @@ const copy = {
 		kicker: 'Offline cracked edition',
 		title: 'ScareSoul Offline Cracked Edition',
 		description:
-			'A preserved offline build of SHADE Inc.\'s gothic action RPG. Explore cursed arenas, collect weapons, and keep this lost mobile title playable. Fan-made cracked edition for preservation and offline play. Recommended for Android devices with legacy 32-bit compatibility.',
+			'A preserved offline build of SHADE Inc.\'s gothic action RPG. Explore cursed arenas, collect weapons, and keep this lost mobile title playable. Fan-made cracked edition for preservation and offline play. Recommended for Android devices with legacy 32-bit compatibility. Supports Chinese, Japanese, and English.',
 		updateTitle: 'Update notes',
 		updateNotes: [
 			'Current version: 1.5.1c.',
@@ -25,6 +25,11 @@ const copy = {
 			'Added support for hiding the gesture navigation bar by default for a more immersive gameplay experience.',
 		],
 		download: 'Download',
+		downloadTitle: 'Choose a version',
+		downloadEnJa: 'English / Japanese',
+		downloadZh: 'Chinese',
+		downloadZhNote: 'Password: 6ng5',
+		closeDownload: 'Close download options',
 		gallery: 'Screenshots',
 		home: 'HomePage',
 		story: 'Story',
@@ -38,7 +43,7 @@ const copy = {
 		kicker: '离线破解版',
 		title: '恐惧之魂离线破解版',
 		description:
-			'SHADE Inc. 哥特暗黑动作 RPG 的离线版本。进入被诅咒的竞技场，收集武器，让这款消失的移动端作品继续可玩。这是粉丝自制的破解版，用于游戏离线游玩。建议使用仍支持 32 位应用的 Android 设备。',
+			'SHADE Inc. 哥特暗黑动作 RPG 的离线版本。进入被诅咒的竞技场，收集武器，让这款消失的移动端作品继续可玩。这是粉丝自制的破解版，用于游戏离线游玩。建议使用仍支持 32 位应用的 Android 设备。支持中日英三语。',
 		updateTitle: '更新日志',
 		updateNotes: [
 			'当前版本：1.5.1c。',
@@ -48,6 +53,11 @@ const copy = {
 			'新增支持手势导航条默认隐藏，带来沉浸式的游戏体验。',
 		],
 		download: '下载',
+		downloadTitle: '选择下载版本',
+		downloadEnJa: '英文 / 日文版',
+		downloadZh: '中文版',
+		downloadZhNote: '密码：6ng5',
+		closeDownload: '关闭下载选项',
 		gallery: '游戏截图',
 		home: '首页',
 		story: '故事',
@@ -61,7 +71,7 @@ const copy = {
 		kicker: 'オフライン改造版',
 		title: 'ScareSoul Offline Cracked Edition',
 		description:
-			'SHADE Inc. のゴシックアクション RPG を保存するためのオフライン版です。呪われた闘技場を探索し、武器を集め、失われたモバイル作品を遊べる形で残します。保存とオフラインプレイのためのファンメイド版です。32-bit アプリ互換環境のある Android 端末を推奨します。',
+			'SHADE Inc. のゴシックアクション RPG を保存するためのオフライン版です。呪われた闘技場を探索し、武器を集め、失われたモバイル作品を遊べる形で残します。保存とオフラインプレイのためのファンメイド版です。32-bit アプリ互換環境のある Android 端末を推奨します。日本語・英語・中国語の3言語に対応しています。',
 		updateTitle: '更新履歴',
 		updateNotes: [
 			'現在のバージョン：1.5.1c。',
@@ -71,6 +81,11 @@ const copy = {
 			'ジェスチャーナビゲーションバーをデフォルトで非表示にする機能を追加し、より没入感のあるゲーム体験を実現しました。',
 		],
 		download: 'Download',
+		downloadTitle: 'バージョンを選択',
+		downloadEnJa: '英語 / 日本語版',
+		downloadZh: '中国語版',
+		downloadZhNote: 'パスワード：6ng5',
+		closeDownload: 'ダウンロード選択を閉じる',
 		gallery: 'Screenshots',
 		home: 'HomePage',
 		story: 'ストーリー',
@@ -143,9 +158,9 @@ const screenshots = [
 			</div>
 		</div>
 
-		<a class="download-button scaresoul-download-track" href="/downloads/scaresoul_offline.apk" download>
+		<button class="download-button content-open" type="button" data-modal-target="download-modal">
 			<span>{copy.download}</span>
-		</a>
+		</button>
 	</section>
 
 	<div class="lightbox" aria-hidden="true">
@@ -182,6 +197,38 @@ const screenshots = [
 				<button class="story-close content-close" type="button" aria-label={copy.closeMaterials}>×</button>
 			</header>
 			<article class="story-content catalog-content" set:html={materialsHtml} />
+		</section>
+	</div>
+
+	<div class="story-modal content-modal" id="download-modal" aria-hidden="true">
+		<section class="story-dialog download-dialog" role="dialog" aria-modal="true" aria-labelledby="download-dialog-title">
+			<header class="story-dialog-header">
+				<h2 id="download-dialog-title">{copy.downloadTitle}</h2>
+				<button class="story-close content-close" type="button" aria-label={copy.closeDownload}>×</button>
+			</header>
+			<div class="download-options">
+				<a
+					class="download-option scaresoul-download-track"
+					href="/downloads/scaresoul_offline.apk"
+					download
+					data-event-label="scaresoul_offline_v1.5.1c"
+					data-file-name="scaresoul_offline.apk"
+				>
+					<span class="download-option-title">{copy.downloadEnJa}</span>
+					<span class="download-option-note">APK</span>
+				</a>
+				<a
+					class="download-option scaresoul-download-track"
+					href="https://wwbdr.lanzout.com/i9EQV49qm6wf"
+					target="_blank"
+					rel="noopener noreferrer"
+					data-event-label="scaresoul_offline_v1.5.1c_zh"
+					data-file-name="lanzou:i9EQV49qm6wf"
+				>
+					<span class="download-option-title">{copy.downloadZh}</span>
+					<span class="download-option-note">{copy.downloadZhNote}</span>
+				</a>
+			</div>
 		</section>
 	</div>
 </main>
@@ -679,7 +726,49 @@ const screenshots = [
 		color: var(--muted);
 	}
 
+	.download-dialog {
+		width: min(520px, 92vw);
+	}
+
+	.download-options {
+		display: grid;
+		gap: 14px;
+		padding: clamp(18px, 4vw, 28px);
+	}
+
+	.download-option {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 4px;
+		padding: 16px 18px;
+		border: 1px solid rgba(255, 244, 239, 0.62);
+		background: linear-gradient(180deg, rgba(104, 0, 18, 0.72), rgba(10, 0, 2, 0.88));
+		color: #fff;
+		text-decoration: none;
+		transition: filter 0.18s ease, box-shadow 0.18s ease;
+	}
+
+	.download-option:hover,
+	.download-option:focus-visible {
+		filter: brightness(1.2);
+		box-shadow: 0 0 16px rgba(255, 0, 45, 0.45);
+	}
+
+	.download-option-title {
+		font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+	}
+
+	.download-option-note {
+		color: rgba(255, 244, 239, 0.72);
+		font-size: 0.9rem;
+	}
+
 	.download-button {
+		border: 0;
+		background: none;
+		font-family: inherit;
+		cursor: pointer;
 		width: fit-content;
 		min-width: min(360px, 82vw);
 		display: inline-flex;
@@ -1119,8 +1208,8 @@ const screenshots = [
 					// @ts-ignore
 					gtag('event', 'download', {
 						event_category: 'apk',
-						event_label: 'scaresoul_offline_v1.5.1c',
-						file_name: 'scaresoul_offline.apk',
+						event_label: (link as HTMLElement).dataset.eventLabel,
+						file_name: (link as HTMLElement).dataset.fileName,
 						game: 'scaresoul',
 					});
 				}
