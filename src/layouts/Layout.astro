@@ -6,7 +6,16 @@ import bg3 from "../img/bg3.webp";
 import bg4 from "../img/bg4.webp";
 import bg5 from "../img/bg5.webp";
 import Header from "../components/Header.astro";
+import SeoHead from "../components/SeoHead.astro";
 import { getLangFromUrl } from "../i18n/translations";
+import type { PageSeo } from "../i18n/seo";
+
+interface Props {
+	seo: PageSeo;
+	jsonLd?: object;
+}
+
+const { seo, jsonLd } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
@@ -26,8 +35,7 @@ const fallbackBg = bgSrcs[0];
 			rel="stylesheet"
 		/>
 		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content="A fan-built hub for the Destroy Gunners mecha series by SHADE Inc. Offline patches, game archives, and a growing community." />
-		<title>Destroy Gunners — Offline Patch Download & Community</title>
+		<SeoHead {...seo} jsonLd={jsonLd} />
 		<script is:inline define:vars={{ bgSrcs, fallbackBg }}>
 			(function() {
 				var chosen = bgSrcs[Math.floor(Math.random() * bgSrcs.length)] || fallbackBg;

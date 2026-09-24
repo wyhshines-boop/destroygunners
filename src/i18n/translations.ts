@@ -510,7 +510,7 @@ export function getLangFromUrl(url: URL): Lang {
 
 export function getLocalizedPath(path: string, lang: Lang): string {
 	if (lang === 'en') return path;
-	return `/${lang}${path}`;
+	return path === '/' ? `/${lang}` : `/${lang}${path}`;
 }
 
 export function t(lang: Lang) {
