@@ -12,6 +12,23 @@ export const translations = {
 			title: 'Destroy Gunners ZZ Offline Cracked Edition',
 			versions: [
 				{
+					id: 'cx',
+					name: 'Version CX',
+					label: 'v3.0.0cx',
+					apk: '/downloads/DGunsZZ_3.0.0cx.apk',
+					hasMirror: false,
+					mirrors: { googleDrive: '', lanzou: '', lanzouPw: '' },
+					sections: [{
+						title: 'Destroy Gunners ZZ v3.0.0cx (2026-10-28)',
+						items: [
+							'All 23 original playable mecha are unlocked.',
+							'Based on v3.0.0b; retains its offline play and free in-app purchases.',
+							'Existing progress, equipment and currency are preserved.',
+							'Includes a shop memory fix for the full mecha roster.',
+						],
+					}],
+				},
+				{
 					id: 'b',
 					name: 'Version B',
 					label: 'v3.0.0b',
@@ -178,6 +195,23 @@ export const translations = {
 			title: '毁灭枪手 ZZ 离线破解版',
 			versions: [
 				{
+					id: 'cx',
+					name: '版本 CX',
+					label: 'v3.0.0cx',
+					apk: '/downloads/DGunsZZ_3.0.0cx.apk',
+					hasMirror: false,
+					mirrors: { googleDrive: '', lanzou: '', lanzouPw: '' },
+					sections: [{
+						title: 'Destroy Gunners ZZ v3.0.0cx (2026-10-28)',
+						items: [
+							'解锁原版全部 23 台可玩机甲。',
+							'基于 v3.0.0b，保留离线游玩和免费内购功能。',
+							'保留已有进度、配装和货币。',
+							'包含全机甲解锁后的商店内存修复。',
+						],
+					}],
+				},
+				{
 					id: 'b',
 					name: '版本 B',
 					label: 'v3.0.0b',
@@ -343,6 +377,23 @@ export const translations = {
 		notifications: {
 			title: 'Destroy Gunners ZZ オフラインクラック版',
 			versions: [
+				{
+					id: 'cx',
+					name: 'バージョン CX',
+					label: 'v3.0.0cx',
+					apk: '/downloads/DGunsZZ_3.0.0cx.apk',
+					hasMirror: false,
+					mirrors: { googleDrive: '', lanzou: '', lanzouPw: '' },
+					sections: [{
+						title: 'Destroy Gunners ZZ v3.0.0cx (2026-10-28)',
+						items: [
+							'オリジナルのプレイアブル機体 23 体をすべて解放。',
+							'v3.0.0b をベースに、オフラインプレイと無料のゲーム内購入を維持。',
+							'既存の進行状況、装備、通貨を保持。',
+							'全機体解放時のショップ用メモリを修正。',
+						],
+					}],
+				},
 				{
 					id: 'b',
 					name: 'バージョン B',
