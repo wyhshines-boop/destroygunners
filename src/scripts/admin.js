@@ -9,7 +9,7 @@ const selected = new Set();   // 批量发放目标 uid 集合
 $("#base").value = BASE; $("#token").value = TOKEN;
 
 function toast(msg, kind){ const t=$("#toast"); t.textContent=msg; t.className="show "+(kind||""); setTimeout(()=>t.className="",2200); }
-function setConn(on){ $("#conn").classList.toggle("on", !!on); $("#connection-status").textContent=on?"已连接":"未连接";$("#connection-settings").open=!on; }
+function setConn(on){ $("#conn").classList.toggle("on", !!on); $("#connection-status").textContent=on?"已连接":"未连接";$("#connection-settings").open=!on;showGiftBatch(); }
 async function api(ep, body){
   if(!BASE||!TOKEN){ toast("先填服务器地址和 Token","bad"); throw new Error("no config"); }
   const r = await fetch(BASE.replace(/\/$/,"")+"/"+ep, {
@@ -157,17 +157,15 @@ function buildItemBody(){
  const blocked=codes.filter(code=>CODES.find(c=>c.code===code)?.blocked);if(blocked.length){toast('没有有效物品映射：'+blocked.join(', '),'bad');return null;}
  const unknown=codes.filter(code=>!CODES.find(c=>c.code===code)?.sendable);
  if(unknown.length&&!$('#allow-unverified').checked){$('#advanced-rewards').open=true;$('#allow-unverified').focus();toast('包含待确认物品，请先确认高级选码选项','bad');return null;}
- return {codes,note:$('#note').value.trim(),allow_unverified:unknown.length>0};
+ const note=$('#note').value.trim();if(note.length>1000||codes.length>256){toast('备注最多1000字，单笔最多256个礼物项目','bad');return null;}
+ return {codes,note,allow_unverified:unknown.length>0};
 }
-$("#grant").onclick = async () => {
-  if(!selected.size) return toast("先选玩家","bad");
-  const base=buildItemBody(); if(!base) return;
-  if((selected.size>1||base.allow_unverified)&&!confirm('向 '+selected.size+' 名玩家发放 '+base.codes.length+' 项道具？'+(base.allow_unverified?'\n含待确认物品，请使用测试账号。':'')))return;
-  const button=$('#grant');button.disabled=true;let ok=0,total=0;const failed=[];
-  try{for(const uid of selected){try{const j=await api('GrantPresent',{uid,...base});ok++;total+=j.queued||0;}catch(e){failed.push(uid+': '+(e.message||'发放失败'));}}
-   toast(ok===selected.size?'已加入 '+ok+' 名玩家礼物队列，共 '+total+' 项':'成功 '+ok+'/'+selected.size+' 名；'+failed.join('；'),ok===selected.size?'ok':'bad');loadPending();
-  }finally{button.disabled=false;}
-
+$('#grant').onclick=async()=>{
+ if(giftBatch){showGiftBatch();return toast('请先重试或查看待确认批次，避免重复发奖','bad');}
+ if(!selected.size)return toast('先选玩家','bad');const payload=buildItemBody();if(!payload)return;
+ if((selected.size>1||payload.allow_unverified)&&!confirm('向 '+selected.size+' 名玩家发放 '+payload.codes.length+' 项道具？'+(payload.allow_unverified?'\n含待确认物品，请使用测试账号。':'')))return;
+ giftBatch={server:BASE,payload,entries:Object.fromEntries([...selected].sort().map(uid=>[uid,{id:coinRequestId(),done:false}]))};
+ try{saveGiftBatch();}catch(_){giftBatch=null;return toast('无法保存发奖流水，请释放浏览器存储后重试','bad');}showGiftBatch();await runGiftBatch();
 };
 let coinBatch=null;
 try{coinBatch=JSON.parse(localStorage.getItem('dgzz_pending_coins')||'null');}catch(_){}
@@ -192,6 +190,56 @@ $("#grantCash").onclick = async () => {
   toast(ok===uids.length?(uids.length===1?"已更新，账户金币 "+balance:"已更新 "+ok+" 名玩家"):"成功 "+ok+"/"+uids.length+"；"+error+"。可重试",ok===uids.length?"ok":"bad");
   }finally{button.disabled=false;}
 };
+
+const historyStates={pending:'待下发',prepared:'已生成下发数据',revoked:'已撤销',partial:'部分处理',posted:'账户已记账'};
+let historyCursor=null,historyBusy=false,historyEpoch=0;
+function historyFilters(){const since=$('#history-since').value,until=$('#history-until').value;let end=null;if(until){const d=new Date(until+'T00:00:00');d.setDate(d.getDate()+1);end=d.toISOString();}return {uid:$('#history-uid').value.trim(),kind:$('#history-kind').value,state:$('#history-state').value,since:since?new Date(since+'T00:00:00').toISOString():null,until:end};}
+function historyTime(value){return value?new Date(value).toLocaleString('zh-CN',{hour12:false}):'—';}
+function historySummary(row){if(row.kind==='coin')return '账户金币 '+(row.amount>0?'+':'')+row.amount+'；变更后余额 '+row.balance_after;const items=row.snapshot||[];return items.slice(0,2).map(x=>(x.name||'礼物码 '+x.code)+(x.quantity>1?' ×'+x.quantity:'')).join('、')+(items.length>2?' 等 '+items.length+' 项':'');}
+function appendHistoryRecord(row){
+ const card=document.createElement('details');card.className='history-card';const summary=document.createElement('summary');
+ const head=document.createElement('div');head.className='history-record-head';head.appendChild(rewardText('strong',row.uid));head.appendChild(rewardText('time',historyTime(row.created_at),'mut'));summary.appendChild(head);
+ summary.appendChild(rewardText('p',historySummary(row),'history-summary'));summary.appendChild(rewardText('span',historyStates[row.state]||row.state,'history-state '+row.state));card.appendChild(summary);
+ const body=document.createElement('div');body.className='history-record-body';body.appendChild(rewardText('p','流水 ID：'+row.request_id,'history-request'));if(row.dgid)body.appendChild(rewardText('p','DGID：'+row.dgid,'mut'));if(row.note)body.appendChild(rewardText('p','备注：'+row.note));
+ if(row.kind==='gift'){
+  body.appendChild(rewardText('p','待下发 '+row.pending_count+' · 已生成下发数据 '+row.prepared_count+' · 已撤销 '+row.revoked_count,'hint'));
+  const list=document.createElement('ul');(row.items||[]).forEach((item,i)=>{const snapshot=row.snapshot?.[i],li=document.createElement('li');li.appendChild(rewardText('strong',snapshot?.name||'礼物码 '+item.code));li.appendChild(rewardText('span',' · '+(snapshot?.quantity_label||'数量待确认')+' · '+(historyStates[item.state]||item.state)));if(item.prepared_at)li.appendChild(rewardText('small','生成下发数据：'+historyTime(item.prepared_at)));if(item.revoked_at)li.appendChild(rewardText('small','撤销：'+historyTime(item.revoked_at)));list.appendChild(li);});body.appendChild(list);
+  body.appendChild(rewardText('p','客户端接收与领取：未确认。','hint'));
+ }else body.appendChild(rewardText('p',row.amount<0?'金币已从账户余额回收。':'金币已计入账户余额。','hint'));
+ card.appendChild(body);$('#history-list').appendChild(card);
+}
+async function loadRewardHistory(reset=true){
+ if(historyBusy&&!reset)return;if(!BASE||!TOKEN){$('#history-status').textContent='连接服务器后查看记录';return;}
+ let filters;try{filters=historyFilters();}catch(_){toast('时间范围无效','bad');return;}
+ const epoch=++historyEpoch;historyBusy=true;$('#history-more').disabled=true;$('#history-status').textContent='正在读取…';
+ if(reset){historyCursor=null;$('#history-list').replaceChildren();$('#history-more').hidden=true;}
+ try{const r=await api('RewardHistory',{...filters,cursor:historyCursor,limit:30});if(epoch!==historyEpoch)return;r.records.forEach(appendHistoryRecord);historyCursor=r.next_cursor;$('#history-more').hidden=!r.has_more;$('#history-status').textContent=$('#history-list').children.length+' 条记录';if(!$('#history-list').children.length)$('#history-status').textContent='暂无符合条件的记录';}
+ catch(e){if(epoch===historyEpoch)$('#history-status').textContent=e.message||'读取失败，请重试';}
+ finally{if(epoch===historyEpoch){historyBusy=false;$('#history-more').disabled=false;}}
+}
+$('#history-search').onclick=()=>loadRewardHistory(true);$('#history-more').onclick=()=>loadRewardHistory(false);$('#history-uid').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();loadRewardHistory(true);}};
+$('#history-selected').onclick=()=>{if(selected.size!==1)return toast('请选择一名玩家','bad');$('#history-uid').value=[...selected][0];loadRewardHistory(true);};
+let giftBatch=null;try{giftBatch=JSON.parse(localStorage.getItem('dgzz_pending_gifts_v1')||'null');if(giftBatch&&(!giftBatch.payload||!Array.isArray(giftBatch.payload.codes)||!giftBatch.entries||typeof giftBatch.server!=='string'))giftBatch=null;}catch(_){}
+function saveGiftBatch(){if(giftBatch)localStorage.setItem('dgzz_pending_gifts_v1',JSON.stringify(giftBatch));else localStorage.removeItem('dgzz_pending_gifts_v1');}
+function showGiftBatch(){const box=$('#gift-retry-banner');box.hidden=!giftBatch;if(!giftBatch)return;const entries=Object.values(giftBatch.entries||{});$('#gift-retry-status').textContent='有待确认发奖批次：'+entries.filter(e=>e.done).length+'/'+entries.length+' 名玩家已确认，'+giftBatch.payload.codes.length+' 项道具。';$('#gift-retry').disabled=giftBatch.server!==BASE;}
+async function runGiftBatch(){
+ if(!giftBatch||giftBatch.server!==BASE)return toast('请连接原批次使用的服务器后再重试','bad');
+ const button=$('#grant');button.disabled=true;$('#gift-retry').disabled=true;$('#gift-abandon').disabled=true;let failures=[];let duplicates=0;
+ try{for(const [uid,entry] of Object.entries(giftBatch.entries)){
+   if(entry.done)continue;
+   try{const r=await api('GrantPresent',{uid,...giftBatch.payload,request_id:entry.id});entry.done=true;entry.grant_id=r.grant_id;entry.queued=r.queued;if(r.duplicate)duplicates++;saveGiftBatch();}catch(e){failures.push(uid+': '+(e.message||'发奖未确认'));}
+  }
+  const total=Object.keys(giftBatch.entries).length,done=Object.values(giftBatch.entries).filter(e=>e.done).length;
+  if(done===total){giftBatch=null;saveGiftBatch();toast('已确认 '+total+' 名玩家的发奖记录'+(duplicates?'，重试未重复入队':''),'ok');}
+  else toast('已确认 '+done+'/'+total+' 名；原流水已保留，可重试。'+failures.join('；'),'bad');
+  loadPending();
+ }catch(e){toast('流水保存失败，请保留页面并重试原批次','bad');}
+ finally{button.disabled=false;$('#gift-abandon').disabled=false;showGiftBatch();if(!giftBatch)$('#gift-retry').disabled=false;}
+}
+$('#gift-retry').onclick=runGiftBatch;
+$('#gift-records').onclick=()=>{$('#history-uid').value=giftBatch&&Object.keys(giftBatch.entries).length===1?Object.keys(giftBatch.entries)[0]:'';openWorkspace('history');};
+$('#gift-abandon').onclick=()=>{if(!confirm('结束重试不会撤销可能已提交的奖励。请先查看记录确认，确定结束此批次重试吗？'))return;giftBatch=null;saveGiftBatch();showGiftBatch();};
+showGiftBatch();
 
 /* 备注展开/收起 */
 document.querySelectorAll(".notetog").forEach(a=>{
@@ -335,9 +383,10 @@ async function openWorkspace(name){
  }
  document.querySelectorAll('[data-workspace]').forEach(el=>{const on=el.dataset.workspace===name;el.classList.toggle('active',on);if(on)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});
  document.querySelectorAll('[data-view]').forEach(el=>{el.hidden=el.dataset.view!==(article?'content':name);});
- const headings={rewards:'玩家与奖励',notice:'公告管理',event:'活动图文',devil:'Devil 活动'};
+ const headings={rewards:'玩家与奖励',history:'发奖记录',notice:'公告管理',event:'活动图文',devil:'Devil 活动'};
  $('#workspace-title').textContent=headings[name]||headings.rewards;
  history.replaceState(null,'','#'+name);
+ if(name==='history')loadRewardHistory(true);
 }
 document.querySelectorAll('[data-workspace]').forEach(el=>el.onclick=()=>openWorkspace(el.dataset.workspace));
-const initialWorkspace=location.hash.slice(1);if(['rewards','notice','event','devil'].includes(initialWorkspace))openWorkspace(initialWorkspace);
+const initialWorkspace=location.hash.slice(1);if(['rewards','history','notice','event','devil'].includes(initialWorkspace))openWorkspace(initialWorkspace);

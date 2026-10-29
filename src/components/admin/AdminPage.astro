@@ -19,6 +19,7 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
   <div class="admin-workspace">
    <aside class="admin-sidebar"><nav aria-label="后台功能">
     <button data-workspace="rewards" class="active" aria-current="page">玩家与奖励</button>
+    <button data-workspace="history">发奖记录</button>
     <button data-workspace="notice">公告管理</button>
     <button data-workspace="event">活动图文</button>
     <button data-workspace="devil">Devil 活动</button>
@@ -26,7 +27,7 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
    <div class="workspace-main">
     <h2 id="workspace-title" class="sr-only">玩家与奖励</h2>
     <ContentBox>
-     <div data-view="rewards">
+     <div data-view="rewards"><div id="gift-retry-banner" class="gift-retry-banner" hidden><p id="gift-retry-status" role="status"></p><div class="inline-actions"><button id="gift-retry">重试原批次</button><button id="gift-records">查看记录</button><button id="gift-abandon" class="text-button">结束重试</button></div></div>
       <div class="reward-grid">
        <section aria-labelledby="players-title">
         <div class="section-heading"><h3 id="players-title">选择玩家</h3><span class="mut" id="userCount"></span></div>
@@ -42,7 +43,7 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
          <div class="row noterow" id="cashNoteRow" hidden><label for="cashNote" class="sr-only">金币备注</label><input id="cashNote" class="grow" placeholder="金币备注（可选）" /></div>
          <div class="field-heading"><label for="preset">道具礼包</label><button class="notetog text-button" data-row="noteRow">添加备注</button></div>
          <div class="row"><select id="preset" class="grow"><option value="">选择礼包，或在下方逐项勾选</option></select></div>
-         <div class="row noterow" id="noteRow" hidden><label for="note" class="sr-only">道具备注</label><input id="note" class="grow" placeholder="道具备注（可选）" /></div>
+         <div class="row noterow" id="noteRow" hidden><label for="note" class="sr-only">道具备注</label><input id="note" maxlength="1000" class="grow" placeholder="道具备注（可选）" /></div>
          <div class="reward-picker">
           <label for="item-search" class="sr-only">搜索物品</label><input id="item-search" type="search" placeholder="搜索中文名、英文名或礼物码" />
           <div class="reward-filters"><label for="item-category" class="sr-only">物品分类</label><select id="item-category"><option value="">全部分类</option><option value="weapon">武器</option><option value="shield">护盾</option><option value="upgrade">强化零件</option><option value="support">支援消耗品</option><option value="ticket">入场券</option><option value="unknown">待确认</option></select><label for="item-evidence" class="sr-only">确认状态</label><select id="item-evidence"><option value="confirmed">已确认</option><option value="device">仅实机确认</option><option value="data">仅数据确认</option><option value="unverified">待实测</option><option value="all">全部条目</option></select></div>
@@ -59,6 +60,12 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
       </div>
       <details class="reference"><summary>完整物品对照表</summary><div class="reference-toolbar"><label for="reference-search" class="sr-only">搜索对照表</label><input id="reference-search" type="search" placeholder="搜索名称、礼物码、原生 ID 或商品号" /><button id="export-rewards">导出 CSV</button></div><p id="reference-stats" class="hint"></p><div class="box"><table><thead><tr><th>物品</th><th>分类</th><th>礼物码</th><th>领取数量</th><th>确认状态</th><th>原生 ID</th><th>商店商品号</th></tr></thead><tbody id="table"><tr><td colspan="7" class="mut">连接后读取</td></tr></tbody></table></div></details>
      </div>
+     <section data-view="history" hidden>
+      <div class="section-heading"><h3>发奖记录</h3><button id="history-selected" class="text-button">查看所选玩家</button></div>
+      <div class="history-filters"><label for="history-uid">玩家 UID / DGID<input id="history-uid" placeholder="留空查看全部玩家" /></label><label for="history-kind">类型<select id="history-kind"><option value="all">全部类型</option><option value="gift">道具发奖</option><option value="coin">账户金币调整</option></select></label><label for="history-state">状态<select id="history-state"><option value="all">全部状态</option><option value="pending">含待下发</option><option value="prepared">含已生成下发数据</option><option value="revoked">含已撤销</option><option value="partial">部分处理</option><option value="posted">金币已记账</option></select></label><label for="history-since">开始日期<input id="history-since" type="date" /></label><label for="history-until">结束日期<input id="history-until" type="date" /></label><button id="history-search" class="go">查询记录</button></div>
+      <p class="hint">道具“已生成下发数据”不代表客户端已收到或已领取；当前没有领取回执。金币状态以账户账本为准。日期使用本机时区。</p>
+      <p id="history-status" class="hint" role="status">连接后读取</p><div id="history-list"></div><button id="history-more" hidden>加载更多</button>
+     </section>
      <section data-view="content" hidden id="article-tools">
       <select id="article-kind" hidden aria-hidden="true" tabindex="-1"><option value="notice">公告</option><option value="event">活动</option></select>
       <div class="section-heading"><h3 id="article-heading">公告编辑</h3><span id="article-status" class="status-badge" role="status">连接后读取</span></div>
