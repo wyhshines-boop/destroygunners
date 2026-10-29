@@ -169,9 +169,10 @@
 
 
 <section id="article-tools" style="margin-top:28px">
-<h2>公告与活动编辑 <span class="side" id="article-status" role="status">连接后读取</span></h2>
-<div class="row"><label for="article-kind">内容</label><select id="article-kind"><option value="notice">公告</option><option value="event">活动</option></select><label for="article-locale">语言</label><select id="article-locale"><option value="zh">中文</option><option value="en">English</option></select></div>
-<div class="row"><button id="article-add" disabled>新增图文</button><button id="article-reload">重新读取</button><label><input type="checkbox" id="article-deleted"> 已删除</label></div>
+<h2><span id="article-heading">公告编辑</span> <span class="side" id="article-status" role="status">连接后读取</span></h2>
+<div class="row"><label for="article-kind">发布栏目</label><select id="article-kind"><option value="notice">公告</option><option value="event">活动</option></select><label for="article-locale">语言</label><select id="article-locale"><option value="zh">中文</option><option value="en">English</option></select></div>
+<div class="row"><button id="article-add" disabled>新增公告</button><button id="article-reload">重新读取</button><label><input type="checkbox" id="article-deleted"> 已删除</label></div>
+<p id="article-context" class="hint">正在编辑：公告 · 中文；发布后显示在游戏面板的“公告”区域。</p>
 <p class="hint">每篇可折叠，独立编辑与发布；中英文分别保存。删除后可恢复。</p><div id="article-list"></div>
 </section>
 
@@ -423,6 +424,9 @@ async function prepareEventImage(file){
 let articleCards=[],articleBusy=false,editingKind='notice',editingLocale='zh',editingDeleted=false;
 const pendingCreates={};
 const articleList=$('#article-list'),articleStatus=$('#article-status');
+function contentName(kind=editingKind){return kind==='event'?'活动':'公告';}
+function updateEditingContext(){const name=contentName(),locale=editingLocale==='zh'?'中文':'English';$('#article-heading').textContent=name+'编辑';$('#article-add').textContent='新增'+name;$('#article-context').textContent='正在编辑：'+name+' · '+locale+'；发布后显示在游戏面板的“'+name+'”区域。';}
+updateEditingContext();
 function hasArticleChanges(){return articleCards.some(c=>c.dirty||c.busy);}
 function updateArticleSummary(card){card.label.textContent=(card.row.draft?.title||card.row.published?.title||'未命名图文')+' · '+(card.row.deleted_at?'已删除':card.row.published?'已发布':'草稿');}
 function makeArticleCard(row,deleted){
@@ -443,11 +447,11 @@ function makeArticleCard(row,deleted){
  el.ontoggle=()=>{if(el.open&&!card.editor)setupCard();};
  function setupCard(){
   if(typeof Quill==='undefined'){message.textContent='编辑器加载失败，请刷新';return;}
-  const titleLabel=document.createElement('label');titleLabel.textContent='标题';const title=document.createElement('input');title.type='text';title.maxLength=80;title.value=row.draft?.title||'';title.placeholder='图文标题';titleLabel.appendChild(title);body.appendChild(titleLabel);
+  const titleLabel=document.createElement('label');titleLabel.textContent='标题';const title=document.createElement('input');title.type='text';title.maxLength=80;title.value=row.draft?.title||'';title.placeholder=contentName(row.kind)+'标题';titleLabel.appendChild(title);body.appendChild(titleLabel);
   const host=document.createElement('div');body.appendChild(host);
   const editor=new Quill(host,{theme:'snow',placeholder:'输入正文…',formats:['bold','italic','underline','header','list','image'],modules:{toolbar:{container:[[{header:[1,2,3,false]}],['bold','italic','underline'],[{list:'ordered'},{list:'bullet'}],['image','clean']],handlers:{image:()=>upload.click()}}}});card.editor=editor;
   editor.root.setAttribute('aria-label','图文正文');editor.root.setAttribute('role','textbox');editor.root.setAttribute('aria-multiline','true');editor.setContents(row.draft?.ops||[{insert:'\n'}]);
-  const hint=document.createElement('p');hint.className='hint';hint.textContent='最多 20000 字、12 张图片。草稿仅后台可见；中英文分别发布。';body.appendChild(hint);
+  const hint=document.createElement('p');hint.className='hint';hint.textContent='发布位置：游戏面板 → '+contentName(row.kind)+' · '+(row.locale==='zh'?'中文':'English')+'。草稿仅后台可见，中英文分别发布。';body.appendChild(hint);
   const actions=document.createElement('div');actions.className='article-actions';body.appendChild(actions);const preview=document.createElement('article');preview.className='event-article';preview.hidden=true;body.appendChild(preview);
   const value=()=>({title:title.value.trim(),ops:editor.getContents().ops});
   const dirty=()=>{card.dirty=true;message.textContent='有未保存的修改';};title.oninput=dirty;editor.on('text-change',(_,__,source)=>{if(source==='user')dirty();});
@@ -461,7 +465,7 @@ function makeArticleCard(row,deleted){
    try{const r=await api('EventAdminSave',{id:row.id,kind:editingKind,locale:editingLocale,revision:card.row.revision,action,article:value()});card.row=r;if(action!=='withdraw')card.dirty=false;updateArticleSummary(card);message.textContent=action==='publish'?'已发布':action==='draft'?'草稿已保存':'已撤下';}
    catch(e){message.textContent=e.message||'保存失败';}finally{lock(false);}
   }
-  button('保存草稿',()=>save('draft'));button('发布到游戏',()=>save('publish'));button('撤下',()=>save('withdraw'));
+  button('保存草稿',()=>save('draft'));button('发布到“'+contentName(row.kind)+'”',()=>save('publish'));button('撤下',()=>save('withdraw'));
   const upload=document.createElement('input');upload.type='file';upload.accept='image/jpeg,image/png,image/webp';upload.hidden=true;body.appendChild(upload);
   upload.onchange=async()=>{const file=upload.files[0];upload.value='';if(!file||card.busy)return;const index=editor.getSelection(true)?.index??Math.max(0,editor.getLength()-1);lock(true);message.textContent='正在上传图片…';
    try{const base64=await prepareEventImage(file),r=await api('EventImageUpload',{base64});editor.enable(true);editor.insertEmbed(index,'image',r.url,'user');editor.insertText(index+1,'\n','user');editor.setSelection(index+2,0);dirty();}catch(e){message.textContent=e.message||'图片上传失败';}finally{lock(false);}
@@ -474,7 +478,7 @@ async function loadEventArticle(){
  if(hasArticleChanges()&&!confirm('切换或重新读取会放弃未保存修改，继续吗？')){$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;$('#article-deleted').checked=editingDeleted;return;}
  const key={kind:$('#article-kind').value,locale:$('#article-locale').value},deleted=$('#article-deleted').checked;articleBusy=true;articleStatus.textContent='正在读取…';
  $('#article-add').disabled=true;$('#article-kind').disabled=true;$('#article-locale').disabled=true;$('#article-deleted').disabled=true;
- try{const r=await api('EventAdminList',{...key,deleted});editingKind=key.kind;editingLocale=key.locale;editingDeleted=deleted;articleList.replaceChildren();articleCards=(r.items||[]).map(row=>makeArticleCard(row,deleted));articleCards.forEach(c=>articleList.appendChild(c.element));articleStatus.textContent=articleCards.length+' 篇'+(deleted?'已删除':'');if(!articleCards.length){const empty=document.createElement('p');empty.className='hint';empty.textContent=deleted?'暂无已删除内容':'暂无图文，点击“新增图文”开始。';articleList.appendChild(empty);}}
+ try{const r=await api('EventAdminList',{...key,deleted});editingKind=key.kind;editingLocale=key.locale;editingDeleted=deleted;updateEditingContext();articleList.replaceChildren();articleCards=(r.items||[]).map(row=>makeArticleCard(row,deleted));articleCards.forEach(c=>articleList.appendChild(c.element));articleStatus.textContent=articleCards.length+' 篇'+(deleted?'已删除':'');if(!articleCards.length){const empty=document.createElement('p');empty.className='hint';empty.textContent=deleted?'暂无已删除内容':'暂无'+contentName()+'，点击“新增'+contentName()+'”开始。';articleList.appendChild(empty);}}
  catch(e){articleStatus.textContent=e.message||'读取失败';$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;$('#article-deleted').checked=editingDeleted;}
  finally{articleBusy=false;$('#article-add').disabled=deleted;$('#article-kind').disabled=false;$('#article-locale').disabled=false;$('#article-deleted').disabled=false;}
 }
