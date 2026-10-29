@@ -96,7 +96,10 @@
     opacity:0;transition:.16s;pointer-events:none;}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
   #toast.ok{background:var(--cash);color:#fff;} #toast.bad{background:var(--warn);color:#fff;}
+
+#article-fields{border:0;padding:0;margin:0;min-width:0}#article-title{width:100%;margin:8px 0 12px}#article-editor{height:300px;font-size:16px}#article-toolbar{background:var(--surface)}.ql-toolbar.ql-snow,.ql-container.ql-snow{border-color:var(--line)}.ql-editor{color:var(--fg)}.ql-editor.ql-blank::before{color:var(--mut)}.ql-snow .ql-stroke{stroke:var(--fg)}.ql-snow .ql-fill{fill:var(--fg)}.ql-snow .ql-picker{color:var(--fg)}.ql-snow .ql-picker-options{background:var(--surface)}.article-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.article-actions button{min-height:40px}.event-article{overflow-wrap:anywhere;line-height:1.6}.event-article img,.ql-editor img{display:block;max-width:100%;height:auto;margin:12px 0}.event-article h2,.event-article h3,.event-article h4{float:none;margin:12px 0}.event-article p{white-space:pre-wrap;margin:10px 0}#article-preview{border:1px solid var(--line);padding:20px;margin-top:16px;max-width:760px}.ql-toolbar button{min-width:28px}.ql-toolbar button:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 </style>
+<link rel="stylesheet" href="/vendor/quill/quill.snow.css">
 </head>
 <body>
 <div class="wrap">
@@ -164,6 +167,21 @@
   </div>
 
 
+<section id="article-tools" style="margin-top:28px">
+<h2>活动图文 <span class="side" id="article-status" role="status">连接后读取</span></h2>
+<fieldset id="article-fields" disabled>
+<label for="article-title">标题</label><input id="article-title" maxlength="80" placeholder="活动标题">
+<div id="article-toolbar" role="toolbar" aria-label="正文格式">
+<span class="ql-formats"><select class="ql-header" aria-label="标题层级"><option selected>正文</option><option value="1">标题 1</option><option value="2">标题 2</option><option value="3">标题 3</option></select></span>
+<span class="ql-formats"><button class="ql-bold" aria-label="加粗"></button><button class="ql-italic" aria-label="斜体"></button><button class="ql-underline" aria-label="下划线"></button></span>
+<span class="ql-formats"><button class="ql-list" value="ordered" aria-label="编号列表"></button><button class="ql-list" value="bullet" aria-label="项目列表"></button><button class="ql-image" aria-label="上传图片"></button><button class="ql-clean" aria-label="清除格式"></button></span>
+</div><div id="article-editor"></div>
+<input type="file" id="article-image" accept="image/jpeg,image/png,image/webp" hidden>
+<p class="hint">图片自动缩小，最多 12 张。草稿仅后台可见；发布后显示在游戏活动页，与 Devil 数值设置独立。</p>
+<div class="article-actions"><button id="article-preview-button">预览</button><button id="article-draft">保存草稿</button><button id="article-publish" class="primary">发布到游戏</button><button id="article-withdraw">撤下</button></div>
+</fieldset><p id="article-live" class="hint"></p><button id="article-reload">重新读取图文</button><article id="article-preview" class="event-article" hidden aria-label="活动预览"></article>
+</section>
+
   <section id="devil-tools" style="margin-top:28px">
     <h2>Devil 活动 <span class="side" id="devil-status" role="status">连接后加载</span></h2>
     <form id="devil-form"><fieldset id="devil-fields" disabled style="border:0;padding:0;margin:0">
@@ -189,6 +207,7 @@
 </div>
 
 <div id="toast"></div>
+<script src="/vendor/quill/quill.js"></script>
 <script>
 const $ = (s) => document.querySelector(s);
 let BASE = localStorage.getItem("dgzz_base") || "https://ttbuviubnrmjhhpsaygs.supabase.co/functions/v1/dgzz";
@@ -217,7 +236,7 @@ const ts = (s) => (s||"").slice(0,16).replace("T"," ");
 $("#save").onclick = async () => {
   BASE=$("#base").value.trim(); TOKEN=$("#token").value.trim();
   localStorage.setItem("dgzz_base",BASE); localStorage.setItem("dgzz_token",TOKEN);
-  try{ await loadCodes(); await loadUsers(""); setConn(true); await loadDevilConfig(); toast("已连接","ok"); }
+  try{ await loadCodes(); await loadUsers(""); setConn(true); await loadDevilConfig(); await loadEventArticle(); toast("已连接","ok"); }
   catch(e){ setConn(false); }
 };
 
@@ -380,6 +399,80 @@ $("#devil-form").onsubmit=async e=>{
  try{await api("DevilAdminSet",{enabled:$("#devil-enabled").checked,title:$("#devil-title").value.trim(),starts_at:start.toISOString(),ends_at:end.toISOString(),encounter_step:Number($("#devil-step").value),multiplier:Number($("#devil-multiplier").value),daily_bonus_limit:Number($("#devil-limit").value)});await loadDevilConfig();toast("活动设置已保存","ok");}catch(e){$("#devil-status").textContent="保存失败，请重试";}finally{button.disabled=false;}
 };
 
+function renderEventArticle(target,article){
+ target.replaceChildren();if(!article)return;
+ const title=document.createElement('h2');title.textContent=article.title;target.appendChild(title);
+ let line=document.createDocumentFragment(),list=null;
+ function flush(a){let block;
+  if(a&&['ordered','bullet'].includes(a.list)){const tag=a.list==='ordered'?'OL':'UL';if(!list||list.tagName!==tag){list=document.createElement(tag);target.appendChild(list);}block=document.createElement('li');list.appendChild(block);}
+  else{list=null;block=document.createElement(a&&[1,2,3].includes(a.header)?'h'+(a.header+1):'p');target.appendChild(block);}
+  if(!line.childNodes.length)line.appendChild(document.createElement('br'));block.appendChild(line);line=document.createDocumentFragment();
+ }
+ for(const op of article.ops||[]){const a=op.attributes||{};
+  if(typeof op.insert==='string'){const parts=op.insert.split('\n');parts.forEach((part,i)=>{if(part){let el=document.createTextNode(part);for(const [attr,tag] of [['bold','strong'],['italic','em'],['underline','u']])if(a[attr]){const wrap=document.createElement(tag);wrap.appendChild(el);el=wrap;}line.appendChild(el);}if(i<parts.length-1)flush(a);});}
+  else if(op.insert&&typeof op.insert.image==='string'){
+   try{const url=new URL(op.insert.image);if(url.origin!=='https://ttbuviubnrmjhhpsaygs.supabase.co'||!/^\/storage\/v1\/object\/public\/event-media\/[0-9a-f-]{36}\.(png|jpg|webp)$/.test(url.pathname)||url.search||url.hash)continue;
+   const img=document.createElement('img');img.src=url.href;img.alt='Activity image';img.loading='lazy';img.decoding='async';line.appendChild(img);}catch(_){}
+  }
+ }
+ if(line.childNodes.length)flush({});
+}
+
+let eventEditor=null,eventRevision=null,eventDirty=false,eventBusy=false,eventUploading=false;
+const eventFields=$('#article-fields');
+function setupEventEditor(){
+ if(eventEditor)return true;
+ if(typeof Quill==='undefined'){$('#article-status').textContent='编辑器加载失败，请刷新页面';return false;}
+ eventEditor=new Quill('#article-editor',{theme:'snow',placeholder:'输入活动正文…',formats:['bold','italic','underline','header','list','image'],modules:{toolbar:{container:'#article-toolbar',handlers:{image:()=>$('#article-image').click()}}}});
+ eventEditor.root.setAttribute('aria-label','活动正文');eventEditor.root.setAttribute('role','textbox');eventEditor.root.setAttribute('aria-multiline','true');
+ eventEditor.on('text-change',(_,__,source)=>{if(source==='user')markEventDirty();});
+ return true;
+}
+function markEventDirty(){eventDirty=true;$('#article-status').textContent='有未保存的修改';}
+$('#article-title').oninput=markEventDirty;
+function articleValue(){return {title:$('#article-title').value.trim(),ops:eventEditor.getContents().ops};}
+function showArticleState(r,replace){
+ eventRevision=r.revision;if(replace){$('#article-title').value=r.draft?.title||'';eventEditor.setContents(r.draft?.ops||[{insert:'\n'}]);eventDirty=false;}
+ $('#article-status').textContent=r.published?'已发布 · '+new Date(r.published_at).toLocaleString():'未发布';
+ $('#article-live').textContent=r.published?'线上标题：'+r.published.title:'游戏中暂无图文活动';
+ eventFields.disabled=false;eventEditor.enable(true);
+}
+async function loadEventArticle(){
+ if(eventDirty&&!confirm('重新读取会放弃未保存的修改，继续吗？'))return;
+ if(!setupEventEditor())return;$('#article-status').textContent='正在读取…';
+ try{showArticleState(await api('EventAdminGet',{}),true);}catch(_){$('#article-status').textContent='读取失败，请重试';}
+}
+$('#article-reload').onclick=loadEventArticle;
+$('#article-preview-button').onclick=()=>{if(!eventEditor)return;const preview=$('#article-preview');preview.hidden=!preview.hidden;if(!preview.hidden)renderEventArticle(preview,articleValue());};
+async function saveEventArticle(action){
+ if(eventBusy||eventUploading||eventRevision===null)return;
+ const article=articleValue();if(action!=='withdraw'&&(!article.title||article.title.length>80||eventEditor.getLength()>20001)){toast('请填写标题，正文不超过 20000 字','bad');return;}
+ if(action==='withdraw'&&!confirm('撤下后游戏不再显示这篇图文，草稿会保留。继续吗？'))return;
+ eventBusy=true;eventFields.disabled=true;eventEditor.enable(false);$('#article-status').textContent='正在保存…';
+ try{const r=await api('EventAdminSave',{revision:eventRevision,action,article});showArticleState(r,action!=='withdraw');toast(action==='publish'?'已发布':action==='draft'?'草稿已保存':'已撤下','ok');}
+ catch(e){$('#article-status').textContent=e.message||'保存失败，请重试';}
+ finally{eventBusy=false;eventFields.disabled=false;eventEditor.enable(true);}
+}
+$('#article-draft').onclick=()=>saveEventArticle('draft');$('#article-publish').onclick=()=>saveEventArticle('publish');$('#article-withdraw').onclick=()=>saveEventArticle('withdraw');
+async function prepareEventImage(file){
+ if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>20*1024*1024)throw Error('请选择 JPG、PNG 或 WebP，原图不超过 20 MB');
+ const image=new Image(),url=URL.createObjectURL(file);
+ try{await new Promise((ok,no)=>{image.onload=ok;image.onerror=()=>no(Error('无法读取图片'));image.src=url;});
+  const scale=Math.min(1,1600/Math.max(image.naturalWidth,image.naturalHeight));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
+  const blob=await new Promise(ok=>canvas.toBlob(ok,'image/webp',0.85));if(!blob||blob.size>2097152)throw Error('图片压缩后仍超过 2 MB，请缩小后重试');
+  return await new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(',')[1]);r.onerror=()=>no(Error('无法读取图片'));r.readAsDataURL(blob);});
+ }finally{URL.revokeObjectURL(url);}
+}
+$('#article-image').onchange=async e=>{
+ const file=e.target.files[0];e.target.value='';if(!file||eventBusy||eventUploading||!eventEditor)return;
+ const index=eventEditor.getSelection(true)?.index??Math.max(0,eventEditor.getLength()-1);
+ eventUploading=true;eventFields.disabled=true;eventEditor.enable(false);$('#article-status').textContent='正在上传图片…';
+ try{const base64=await prepareEventImage(file);const r=await api('EventImageUpload',{base64});eventEditor.enable(true);eventEditor.insertEmbed(index,'image',r.url,'user');eventEditor.insertText(index+1,'\n','user');eventEditor.setSelection(index+2,0);markEventDirty();}
+ catch(e){$('#article-status').textContent=e.message||'图片上传失败';}
+ finally{eventUploading=false;eventFields.disabled=false;eventEditor.enable(true);}
+};
+window.addEventListener('beforeunload',e=>{if(eventDirty||eventUploading){e.preventDefault();e.returnValue='';}});
+
 /* 黑白主题切换 */
 function applyTheme(t){
   document.documentElement.setAttribute("data-theme", t);
@@ -389,7 +482,7 @@ function applyTheme(t){
 $("#theme").onclick = () => applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light" : "dark");
 applyTheme(localStorage.getItem("dgzz_theme") || "light");
 
-if(BASE&&TOKEN){ loadCodes().then(()=>loadUsers("")).then(()=>{setConn(true);return loadDevilConfig();}).catch(()=>{}); }
+if(BASE&&TOKEN){ loadCodes().then(()=>loadUsers("")).then(()=>{setConn(true);return Promise.all([loadDevilConfig(),loadEventArticle()]);}).catch(()=>{}); }
 </script>
 </body>
 </html>
