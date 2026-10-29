@@ -1,0 +1,76 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ContentBox from '../ContentBox.astro';
+import './admin.css';
+const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunners 社区服管理后台',noindex:true};
+---
+<Layout seo={seo} admin>
+ <link rel="stylesheet" href="/vendor/quill/quill.snow.css" />
+ <main class="admin-shell" id="admin-app">
+  <header class="admin-heading"><div><p class="eyebrow">DESTROY GUNNERS / ADMIN</p><h1>社区服管理</h1></div><a href="/zh" class="back-link">返回主站 ↗</a></header>
+  <ContentBox>
+   <section class="connection" aria-labelledby="connection-title">
+    <div class="connection-copy"><h2 id="connection-title">服务器连接</h2><span class="connection-state"><span class="dot" id="conn"></span><span id="connection-status" role="status">未连接</span></span></div>
+    <div class="connection-controls"><label for="token">管理员 Token<input id="token" type="password" placeholder="输入 Token" autocomplete="off" /></label><button id="save" class="go">连接</button></div>
+    <details class="advanced"><summary>服务器地址</summary><label for="base" class="sr-only">服务器地址</label><input id="base" type="url" placeholder="服务器地址" /></details>
+   </section>
+  </ContentBox>
+  <div class="admin-workspace">
+   <aside class="admin-sidebar"><span class="sidebar-label">管理菜单</span><nav aria-label="后台功能">
+    <button data-workspace="rewards" class="active" aria-current="page"><span>01</span>玩家与奖励</button>
+    <button data-workspace="notice"><span>02</span>公告管理</button>
+    <button data-workspace="event"><span>03</span>活动图文</button>
+    <button data-workspace="devil"><span>04</span>Devil 活动</button>
+   </nav><p class="sidebar-note">DGZZ COMMUNITY SERVER</p></aside>
+   <div class="workspace-main">
+    <div class="workspace-heading"><h2 id="workspace-title">玩家与奖励</h2><span class="workspace-caption">SERVER MANAGEMENT</span></div>
+    <ContentBox>
+     <div data-view="rewards">
+      <div class="reward-grid">
+       <section aria-labelledby="players-title">
+        <div class="section-heading"><h3 id="players-title">选择玩家</h3><span class="mut" id="userCount"></span></div>
+        <div class="row"><label for="q" class="sr-only">搜索玩家</label><input id="q" class="grow" placeholder="搜索 UID / DGID" /><button id="search">搜索</button></div>
+        <div class="box user-table"><table><thead><tr><th class="pk"><input type="checkbox" id="checkAll" aria-label="全选玩家" /></th><th>UID</th><th>Lv</th><th>DGID</th><th>更新</th></tr></thead><tbody id="users"><tr><td colspan="5" class="mut">连接服务器后显示玩家</td></tr></tbody></table></div>
+       </section>
+       <div class="reward-column">
+        <section aria-labelledby="rewards-title">
+         <div class="section-heading"><h3 id="rewards-title">发放奖励</h3></div>
+         <div class="selected-target"><span>当前目标</span><strong id="sel" class="target none">未选择玩家</strong></div>
+         <div class="field-heading"><label for="cashAmt">金币</label><button class="notetog text-button" data-row="cashNoteRow">添加备注</button></div>
+         <div class="row"><input id="cashAmt" type="number" step="1" placeholder="数量，负数为回收" class="grow" /><button id="grantCash" class="go">发放金币</button></div>
+         <div class="row noterow" id="cashNoteRow" hidden><label for="cashNote" class="sr-only">金币备注</label><input id="cashNote" class="grow" placeholder="金币备注（可选）" /></div>
+         <div class="field-heading"><label for="preset">道具</label><button class="notetog text-button" data-row="noteRow">添加备注</button></div>
+         <div class="row"><select id="preset" class="grow"><option value="">选择奖励道具</option></select><button id="grant" class="go">发放道具</button></div>
+         <div class="row noterow" id="noteRow" hidden><label for="note" class="sr-only">道具备注</label><input id="note" class="grow" placeholder="道具备注（可选）" /></div>
+         <details class="custom-codes"><summary>自定义道具代码</summary><div id="codes" class="codegrid"></div><label for="manual" class="sr-only">道具代码</label><input id="manual" placeholder="输入 dec / 0x hex，逗号分隔" /></details>
+         <p class="hint">金币计入账户余额；道具在下次登录时进入礼物箱。</p>
+        </section>
+        <section class="pending-section" aria-labelledby="pending-title"><div class="section-heading"><h3 id="pending-title">待发队列</h3><div class="inline-actions"><button id="refresh" class="text-button">刷新</button><button id="revoke" class="text-button danger-text">清空</button></div></div><div class="box"><table><thead><tr><th>#</th><th>类型</th><th>内容</th><th>备注</th><th>时间</th></tr></thead><tbody id="pending"><tr><td colspan="5" class="mut">选择一名玩家后查看</td></tr></tbody></table></div></section>
+       </div>
+      </div>
+      <details class="reference"><summary>礼物码参考表</summary><div class="box"><table><thead><tr><th>Hex</th><th>Dec</th><th>名称</th><th>出处</th></tr></thead><tbody id="table"><tr><td colspan="4" class="mut">连接后读取</td></tr></tbody></table></div></details>
+     </div>
+     <section data-view="content" hidden id="article-tools">
+      <select id="article-kind" hidden aria-hidden="true" tabindex="-1"><option value="notice">公告</option><option value="event">活动</option></select>
+      <div class="section-heading"><h3 id="article-heading">公告编辑</h3><span id="article-status" class="status-badge" role="status">连接后读取</span></div>
+      <div class="content-controls"><label class="locale-field" for="article-locale">编辑语言<select id="article-locale"><option value="zh">中文</option><option value="en">English</option></select></label><button id="article-add" class="go" disabled>新增公告</button><button id="article-reload">重新读取</button><label class="deleted-toggle"><input type="checkbox" id="article-deleted" />已删除</label></div>
+      <p id="article-context" class="hint">正在编辑：公告 · 中文；发布后显示在游戏面板的“公告”区域。</p><div id="article-list"></div>
+     </section>
+     <section data-view="devil" hidden id="devil-tools">
+      <div class="section-heading"><h3>Devil 活动设置</h3><div class="inline-actions"><span id="devil-status" class="status-badge" role="status">连接后读取</span><button type="button" id="devil-refresh" class="text-button">重新读取</button></div></div>
+      <form id="devil-form"><fieldset id="devil-fields" disabled>
+       <label class="enable-event" for="devil-enabled"><input type="checkbox" id="devil-enabled" /><span>开启 Devil 活动</span></label>
+       <div class="form-grid"><label class="full-field" for="devil-title">活动名称<input id="devil-title" value="Devil Event" maxlength="60" required /></label><label for="devil-start">开始时间<input id="devil-start" type="datetime-local" required /></label><label for="devil-end">结束时间<input id="devil-end" type="datetime-local" required /></label></div><p class="hint" id="devil-timezone"></p>
+       <div class="form-grid three-fields"><label for="devil-step">出现积累<input id="devil-step" type="number" min="1" max="100" step="1" value="20" required /></label><label for="devil-multiplier">蓝图倍率<input id="devil-multiplier" type="number" min="1" max="10" step="1" value="2" required /></label><label for="devil-limit">每日额外蓝图上限<input id="devil-limit" type="number" min="0" max="1000" step="1" value="20" required /></label></div>
+       <div class="rules-note"><p>原版出现积累为 10；数值越大，Devil 越容易出现。保留教学门槛和体力加成。</p><p>每日上限只限制额外蓝图，用完后仍获得基础 1 张。按北京时间统计，设置约 30 秒内同步。</p></div>
+       <div class="form-actions"><button type="submit" id="devil-save" class="go">保存活动设置</button></div>
+      </fieldset></form>
+     </section>
+    </ContentBox>
+   </div>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+ </main>
+ <script is:inline src="/vendor/quill/quill.js"></script>
+ <script>import '../../scripts/admin.js';</script>
+</Layout>

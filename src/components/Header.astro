@@ -2,6 +2,8 @@
 import logoImg from '../img/logo.webp';
 import { getLangFromUrl, t, getLocalizedPath } from '../i18n/translations';
 
+interface Props { admin?: boolean; }
+const { admin = false } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const tr = t(lang);
 const switchLang = lang === 'en' ? 'zh' : (lang === 'zh' ? 'ja' : 'en');
@@ -26,7 +28,7 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 				<a href={getLocalizedPath('/enemies', lang)} class={basePath.startsWith('/enemies') ? 'active' : ''}>{tr.nav.enemy}</a>
 				<a href={getLocalizedPath('/assets', lang)} class={basePath.startsWith('/assets') ? 'active' : ''}>{tr.nav.assets}</a>
 			</nav>
-			<div class="nav-actions">
+			{!admin && <div class="nav-actions">
 				<a href={switchHref} class="lang-switch" aria-label={switchLabel} title={switchLabel}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<circle cx="12" cy="12" r="10"></circle>
@@ -46,7 +48,7 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 						<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
 					</svg>
 				</button>
-			</div>
+			</div>}
 		</div>
 	</div>
 </header>
@@ -54,7 +56,7 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 <script>
 	// BGM setup - runs once, persists across page navigations
 	(function initBgm() {
-		if (window.__bgmInitDone) return;
+		if (window.__bgmInitDone || !document.getElementById('bgm-toggle')) return;
 		window.__bgmInitDone = true;
 
 		const bgms = [0, 1, 2, 4, 5, 10].map(i => `/audio/bgm_${i}.ogg`);

@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 // Under-construction pages carry noindex, so keep them out of the sitemap too.
-const placeholderPages = ['games', 'mechas', 'enemies', 'assets'];
+const placeholderPages = ['games', 'mechas', 'enemies', 'assets', 'admin'];
 
 // https://astro.build/config
 export default defineConfig({
