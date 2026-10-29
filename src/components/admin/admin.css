@@ -20,3 +20,5 @@
 .admin-shell .admin-sidebar{padding:10px}.admin-shell .admin-sidebar button{padding:12px}
 @media(max-width:760px){.admin-heading{flex-wrap:wrap;gap:16px}.admin-heading .compact-connection{width:100%;margin-left:0}.admin-heading h1{font-size:25px}}
 @media(max-width:420px){.admin-heading .compact-connection{grid-template-columns:1fr}.compact-connection .connection-copy{justify-content:space-between}}
+
+.admin-shell .compact-connection #save{flex-shrink:0;white-space:nowrap;min-width:48px}.admin-shell .compact-connection #token{flex:1;width:0}
