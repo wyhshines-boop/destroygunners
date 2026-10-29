@@ -98,6 +98,7 @@
   #toast.ok{background:var(--cash);color:#fff;} #toast.bad{background:var(--warn);color:#fff;}
 
 #article-fields{border:0;padding:0;margin:0;min-width:0}#article-title{width:100%;margin:8px 0 12px}#article-editor{height:300px;font-size:16px}#article-toolbar{background:var(--surface)}.ql-toolbar.ql-snow,.ql-container.ql-snow{border-color:var(--line)}.ql-editor{color:var(--fg)}.ql-editor.ql-blank::before{color:var(--mut)}.ql-snow .ql-stroke{stroke:var(--fg)}.ql-snow .ql-fill{fill:var(--fg)}.ql-snow .ql-picker{color:var(--fg)}.ql-snow .ql-picker-options{background:var(--surface)}.article-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.article-actions button{min-height:40px}.event-article{overflow-wrap:anywhere;line-height:1.6}.event-article img,.ql-editor img{display:block;max-width:100%;height:auto;margin:12px 0}.event-article h2,.event-article h3,.event-article h4{float:none;margin:12px 0}.event-article p{white-space:pre-wrap;margin:10px 0}#article-preview{border:1px solid var(--line);padding:20px;margin-top:16px;max-width:760px}.ql-toolbar button{min-width:28px}.ql-toolbar button:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.article-card{border:1px solid var(--line);border-radius:5px;margin:12px 0;padding:12px}.article-card>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none}.article-card>summary>span:before{content:'▸ ';color:var(--mut)}.article-card[open]>summary>span:before{content:'▾ '}.article-card-body{margin-top:12px}.article-card-body label{display:block}.article-card-body input[type=text]{width:100%;margin:6px 0 12px}.article-card-body .ql-container{height:270px;font-size:16px}.article-delete{margin-left:auto;flex-shrink:0}.article-card>summary>span{overflow-wrap:anywhere}
 </style>
 <link rel="stylesheet" href="/vendor/quill/quill.snow.css">
 </head>
@@ -170,17 +171,8 @@
 <section id="article-tools" style="margin-top:28px">
 <h2>公告与活动编辑 <span class="side" id="article-status" role="status">连接后读取</span></h2>
 <div class="row"><label for="article-kind">内容</label><select id="article-kind"><option value="notice">公告</option><option value="event">活动</option></select><label for="article-locale">语言</label><select id="article-locale"><option value="zh">中文</option><option value="en">English</option></select></div>
-<fieldset id="article-fields" disabled>
-<label for="article-title">标题</label><input id="article-title" maxlength="80" placeholder="活动标题">
-<div id="article-toolbar" role="toolbar" aria-label="正文格式">
-<span class="ql-formats"><select class="ql-header" aria-label="标题层级"><option selected>正文</option><option value="1">标题 1</option><option value="2">标题 2</option><option value="3">标题 3</option></select></span>
-<span class="ql-formats"><button class="ql-bold" aria-label="加粗"></button><button class="ql-italic" aria-label="斜体"></button><button class="ql-underline" aria-label="下划线"></button></span>
-<span class="ql-formats"><button class="ql-list" value="ordered" aria-label="编号列表"></button><button class="ql-list" value="bullet" aria-label="项目列表"></button><button class="ql-image" aria-label="上传图片"></button><button class="ql-clean" aria-label="清除格式"></button></span>
-</div><div id="article-editor"></div>
-<input type="file" id="article-image" accept="image/jpeg,image/png,image/webp" hidden>
-<p class="hint">图片自动缩小，最多 12 张。中英文分别保存和发布。草稿仅后台可见；图文与 Devil 数值设置独立。</p>
-<div class="article-actions"><button id="article-preview-button">预览</button><button id="article-draft">保存草稿</button><button id="article-publish" class="primary">发布到游戏</button><button id="article-withdraw">撤下</button></div>
-</fieldset><p id="article-live" class="hint"></p><button id="article-reload">重新读取图文</button><article id="article-preview" class="event-article" hidden aria-label="活动预览"></article>
+<div class="row"><button id="article-add" disabled>新增图文</button><button id="article-reload">重新读取</button><label><input type="checkbox" id="article-deleted"> 已删除</label></div>
+<p class="hint">每篇可折叠，独立编辑与发布；中英文分别保存。删除后可恢复。</p><div id="article-list"></div>
 </section>
 
   <section id="devil-tools" style="margin-top:28px">
@@ -419,46 +411,6 @@ function renderEventArticle(target,article){
  if(line.childNodes.length)flush({});
 }
 
-let eventEditor=null,eventRevision=null,eventDirty=false,eventBusy=false,eventUploading=false;
-let editingKind='notice',editingLocale='zh';
-const eventFields=$('#article-fields');
-function setupEventEditor(){
- if(eventEditor)return true;
- if(typeof Quill==='undefined'){$('#article-status').textContent='编辑器加载失败，请刷新页面';return false;}
- eventEditor=new Quill('#article-editor',{theme:'snow',placeholder:'输入正文…',formats:['bold','italic','underline','header','list','image'],modules:{toolbar:{container:'#article-toolbar',handlers:{image:()=>$('#article-image').click()}}}});
- eventEditor.root.setAttribute('aria-label','图文正文');eventEditor.root.setAttribute('role','textbox');eventEditor.root.setAttribute('aria-multiline','true');
- eventEditor.on('text-change',(_,__,source)=>{if(source==='user')markEventDirty();});
- return true;
-}
-function markEventDirty(){eventDirty=true;$('#article-status').textContent='有未保存的修改';}
-$('#article-title').oninput=markEventDirty;
-function articleValue(){return {title:$('#article-title').value.trim(),ops:eventEditor.getContents().ops};}
-function showArticleState(r,replace){
- eventRevision=r.revision;if(replace){$('#article-title').value=r.draft?.title||'';eventEditor.setContents(r.draft?.ops||[{insert:'\n'}]);eventDirty=false;}
- $('#article-status').textContent=r.published?'已发布 · '+new Date(r.published_at).toLocaleString():'未发布';
- $('#article-live').textContent=r.published?'线上标题：'+r.published.title:'当前语言暂无已发布内容';
- eventFields.disabled=false;eventEditor.enable(true);
-}
-async function loadEventArticle(){
- const key={kind:$('#article-kind').value,locale:$('#article-locale').value};
- if(eventBusy||eventUploading){$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;return;}
- if(eventDirty&&!confirm('切换或重新读取会放弃未保存的修改，继续吗？')){$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;return;}
- if(!setupEventEditor())return;$('#article-status').textContent='正在读取…';
- eventBusy=true;eventFields.disabled=true;eventEditor.enable(false);$('#article-kind').disabled=true;$('#article-locale').disabled=true;
- try{const r=await api('EventAdminGet',key);editingKind=key.kind;editingLocale=key.locale;showArticleState(r,true);$('#article-preview').hidden=true;}catch(_){$('#article-status').textContent='读取失败，请重试';$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;}finally{eventBusy=false;$('#article-kind').disabled=false;$('#article-locale').disabled=false;}
-}
-$('#article-reload').onclick=loadEventArticle;$('#article-kind').onchange=loadEventArticle;$('#article-locale').onchange=loadEventArticle;
-$('#article-preview-button').onclick=()=>{if(!eventEditor)return;const preview=$('#article-preview');preview.hidden=!preview.hidden;if(!preview.hidden)renderEventArticle(preview,articleValue());};
-async function saveEventArticle(action){
- if(eventBusy||eventUploading||eventRevision===null)return;
- const article=articleValue();if(action!=='withdraw'&&(!article.title||article.title.length>80||eventEditor.getLength()>20001)){toast('请填写标题，正文不超过 20000 字','bad');return;}
- if(action==='withdraw'&&!confirm('撤下后游戏不再显示这篇图文，草稿会保留。继续吗？'))return;
- eventBusy=true;eventFields.disabled=true;eventEditor.enable(false);$('#article-status').textContent='正在保存…';
- try{const r=await api('EventAdminSave',{kind:editingKind,locale:editingLocale,revision:eventRevision,action,article});showArticleState(r,action!=='withdraw');toast(action==='publish'?'已发布':action==='draft'?'草稿已保存':'已撤下','ok');}
- catch(e){$('#article-status').textContent=e.message||'保存失败，请重试';}
- finally{eventBusy=false;eventFields.disabled=false;eventEditor.enable(true);}
-}
-$('#article-draft').onclick=()=>saveEventArticle('draft');$('#article-publish').onclick=()=>saveEventArticle('publish');$('#article-withdraw').onclick=()=>saveEventArticle('withdraw');
 async function prepareEventImage(file){
  if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>20*1024*1024)throw Error('请选择 JPG、PNG 或 WebP，原图不超过 20 MB');
  const image=new Image(),url=URL.createObjectURL(file);
@@ -468,15 +420,72 @@ async function prepareEventImage(file){
   return await new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(',')[1]);r.onerror=()=>no(Error('无法读取图片'));r.readAsDataURL(blob);});
  }finally{URL.revokeObjectURL(url);}
 }
-$('#article-image').onchange=async e=>{
- const file=e.target.files[0];e.target.value='';if(!file||eventBusy||eventUploading||!eventEditor)return;
- const index=eventEditor.getSelection(true)?.index??Math.max(0,eventEditor.getLength()-1);
- eventUploading=true;eventFields.disabled=true;eventEditor.enable(false);$('#article-status').textContent='正在上传图片…';
- try{const base64=await prepareEventImage(file);const r=await api('EventImageUpload',{base64});eventEditor.enable(true);eventEditor.insertEmbed(index,'image',r.url,'user');eventEditor.insertText(index+1,'\n','user');eventEditor.setSelection(index+2,0);markEventDirty();}
- catch(e){$('#article-status').textContent=e.message||'图片上传失败';}
- finally{eventUploading=false;eventFields.disabled=false;eventEditor.enable(true);}
+let articleCards=[],articleBusy=false,editingKind='notice',editingLocale='zh',editingDeleted=false;
+const pendingCreates={};
+const articleList=$('#article-list'),articleStatus=$('#article-status');
+function hasArticleChanges(){return articleCards.some(c=>c.dirty||c.busy);}
+function updateArticleSummary(card){card.label.textContent=(card.row.draft?.title||card.row.published?.title||'未命名图文')+' · '+(card.row.deleted_at?'已删除':card.row.published?'已发布':'草稿');}
+function makeArticleCard(row,deleted){
+ const card={row,dirty:false,busy:false,editor:null,element:document.createElement('details')};const el=card.element;el.className='article-card';
+ const summary=document.createElement('summary');card.label=document.createElement('span');summary.appendChild(card.label);el.appendChild(summary);updateArticleSummary(card);
+ const message=document.createElement('p');message.className='hint';message.setAttribute('role','status');card.message=message;
+ const deleteButton=document.createElement('button');deleteButton.type='button';deleteButton.className='article-delete';deleteButton.textContent=deleted?'恢复':'删除';summary.appendChild(deleteButton);
+ deleteButton.onclick=async e=>{e.preventDefault();e.stopPropagation();if(card.busy||articleBusy)return;
+  if(!confirm(deleted?'恢复本篇中英文内容及原有发布状态？':'删除本篇中英文内容？游戏中会停止显示，可从“已删除”恢复。'))return;
+  card.busy=true;deleteButton.disabled=true;
+  try{await api('EventAdminDelete',{id:row.id,kind:editingKind,locale:editingLocale,revision:card.row.revision,restore:deleted});card.dirty=false;el.remove();articleCards=articleCards.filter(c=>c!==card);articleStatus.textContent=deleted?'已恢复':'已删除，可在已删除列表恢复';}
+  catch(e){message.textContent=e.message||'操作失败';el.open=true;}
+  finally{card.busy=false;deleteButton.disabled=false;}
+ };
+ el.appendChild(message);
+ if(deleted){message.textContent='恢复会保留删除前的草稿及发布状态。';return card;}
+ const body=document.createElement('div');body.className='article-card-body';el.appendChild(body);
+ el.ontoggle=()=>{if(el.open&&!card.editor)setupCard();};
+ function setupCard(){
+  if(typeof Quill==='undefined'){message.textContent='编辑器加载失败，请刷新';return;}
+  const titleLabel=document.createElement('label');titleLabel.textContent='标题';const title=document.createElement('input');title.type='text';title.maxLength=80;title.value=row.draft?.title||'';title.placeholder='图文标题';titleLabel.appendChild(title);body.appendChild(titleLabel);
+  const host=document.createElement('div');body.appendChild(host);
+  const editor=new Quill(host,{theme:'snow',placeholder:'输入正文…',formats:['bold','italic','underline','header','list','image'],modules:{toolbar:{container:[[{header:[1,2,3,false]}],['bold','italic','underline'],[{list:'ordered'},{list:'bullet'}],['image','clean']],handlers:{image:()=>upload.click()}}}});card.editor=editor;
+  editor.root.setAttribute('aria-label','图文正文');editor.root.setAttribute('role','textbox');editor.root.setAttribute('aria-multiline','true');editor.setContents(row.draft?.ops||[{insert:'\n'}]);
+  const hint=document.createElement('p');hint.className='hint';hint.textContent='最多 20000 字、12 张图片。草稿仅后台可见；中英文分别发布。';body.appendChild(hint);
+  const actions=document.createElement('div');actions.className='article-actions';body.appendChild(actions);const preview=document.createElement('article');preview.className='event-article';preview.hidden=true;body.appendChild(preview);
+  const value=()=>({title:title.value.trim(),ops:editor.getContents().ops});
+  const dirty=()=>{card.dirty=true;message.textContent='有未保存的修改';};title.oninput=dirty;editor.on('text-change',(_,__,source)=>{if(source==='user')dirty();});
+  const buttons=[];
+  function lock(on){card.busy=on;editor.enable(!on);title.disabled=on;buttons.forEach(b=>b.disabled=on);deleteButton.disabled=on;}
+  function button(label,fn){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;actions.appendChild(b);buttons.push(b);return b;}
+  button('预览',()=>{preview.hidden=!preview.hidden;if(!preview.hidden)renderEventArticle(preview,value());});
+  async function save(action){
+   if(card.busy)return;if(action==='withdraw'&&!confirm('撤下当前语言的图文？草稿会保留。'))return;
+   lock(true);message.textContent='正在保存…';
+   try{const r=await api('EventAdminSave',{id:row.id,kind:editingKind,locale:editingLocale,revision:card.row.revision,action,article:value()});card.row=r;if(action!=='withdraw')card.dirty=false;updateArticleSummary(card);message.textContent=action==='publish'?'已发布':action==='draft'?'草稿已保存':'已撤下';}
+   catch(e){message.textContent=e.message||'保存失败';}finally{lock(false);}
+  }
+  button('保存草稿',()=>save('draft'));button('发布到游戏',()=>save('publish'));button('撤下',()=>save('withdraw'));
+  const upload=document.createElement('input');upload.type='file';upload.accept='image/jpeg,image/png,image/webp';upload.hidden=true;body.appendChild(upload);
+  upload.onchange=async()=>{const file=upload.files[0];upload.value='';if(!file||card.busy)return;const index=editor.getSelection(true)?.index??Math.max(0,editor.getLength()-1);lock(true);message.textContent='正在上传图片…';
+   try{const base64=await prepareEventImage(file),r=await api('EventImageUpload',{base64});editor.enable(true);editor.insertEmbed(index,'image',r.url,'user');editor.insertText(index+1,'\n','user');editor.setSelection(index+2,0);dirty();}catch(e){message.textContent=e.message||'图片上传失败';}finally{lock(false);}
+  };
+ }
+ return card;
+}
+async function loadEventArticle(){
+ if(articleBusy||articleCards.some(c=>c.busy)){$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;$('#article-deleted').checked=editingDeleted;return;}
+ if(hasArticleChanges()&&!confirm('切换或重新读取会放弃未保存修改，继续吗？')){$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;$('#article-deleted').checked=editingDeleted;return;}
+ const key={kind:$('#article-kind').value,locale:$('#article-locale').value},deleted=$('#article-deleted').checked;articleBusy=true;articleStatus.textContent='正在读取…';
+ $('#article-add').disabled=true;$('#article-kind').disabled=true;$('#article-locale').disabled=true;$('#article-deleted').disabled=true;
+ try{const r=await api('EventAdminList',{...key,deleted});editingKind=key.kind;editingLocale=key.locale;editingDeleted=deleted;articleList.replaceChildren();articleCards=(r.items||[]).map(row=>makeArticleCard(row,deleted));articleCards.forEach(c=>articleList.appendChild(c.element));articleStatus.textContent=articleCards.length+' 篇'+(deleted?'已删除':'');if(!articleCards.length){const empty=document.createElement('p');empty.className='hint';empty.textContent=deleted?'暂无已删除内容':'暂无图文，点击“新增图文”开始。';articleList.appendChild(empty);}}
+ catch(e){articleStatus.textContent=e.message||'读取失败';$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;$('#article-deleted').checked=editingDeleted;}
+ finally{articleBusy=false;$('#article-add').disabled=deleted;$('#article-kind').disabled=false;$('#article-locale').disabled=false;$('#article-deleted').disabled=false;}
+}
+$('#article-kind').onchange=loadEventArticle;$('#article-locale').onchange=loadEventArticle;$('#article-deleted').onchange=loadEventArticle;$('#article-reload').onclick=loadEventArticle;
+$('#article-add').onclick=async()=>{
+ if(articleBusy||articleCards.some(c=>c.busy))return;articleBusy=true;$('#article-add').disabled=true;
+ const id=pendingCreates[editingKind]||(pendingCreates[editingKind]=crypto.randomUUID());
+ try{await api('EventAdminCreate',{id,kind:editingKind,locale:editingLocale});const r=await api('EventAdminGet',{id,kind:editingKind,locale:editingLocale});delete pendingCreates[editingKind];const existing=articleCards.find(c=>c.row.id===id);if(existing){existing.element.open=true;}else{const card=makeArticleCard(r,false);if(!articleCards.length)articleList.replaceChildren();articleCards.push(card);articleList.appendChild(card.element);card.element.open=true;card.element.scrollIntoView({block:'nearest'});}articleStatus.textContent=articleCards.length+' 篇';}
+ catch(e){articleStatus.textContent=e.message||'新增失败，可重试';}finally{articleBusy=false;$('#article-add').disabled=false;}
 };
-window.addEventListener('beforeunload',e=>{if(eventDirty||eventUploading){e.preventDefault();e.returnValue='';}});
+window.addEventListener('beforeunload',e=>{if(hasArticleChanges()){e.preventDefault();e.returnValue='';}});
 
 /* 黑白主题切换 */
 function applyTheme(t){
