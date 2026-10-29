@@ -174,19 +174,27 @@ document.querySelectorAll(".notetog").forEach(a=>{
 });
 
 
+let devilCover='',devilCoverUploading=false;
+function setDevilCover(url){devilCover=url||'';const img=$('#devil-cover-preview');img.hidden=!devilCover;if(devilCover)img.src=devilCover;else img.removeAttribute('src');$('#devil-cover-empty').hidden=!!devilCover;$('#devil-cover-remove').hidden=!devilCover;}
+$('#devil-cover-choose').onclick=()=>$('#devil-cover-file').click();
+$('#devil-cover-remove').onclick=()=>{setDevilCover('');$('#devil-cover-message').textContent='保存活动设置后移除图片。';};
+$('#devil-cover-file').onchange=async e=>{const file=e.target.files[0];e.target.value='';if(!file||devilCoverUploading)return;devilCoverUploading=true;$('#devil-save').disabled=true;$('#devil-cover-choose').disabled=true;$('#devil-cover-remove').disabled=true;$('#devil-cover-message').textContent='正在上传图片…';
+ try{const base64=await prepareEventImage(file),r=await api('EventImageUpload',{base64});setDevilCover(r.url);$('#devil-cover-message').textContent='图片已上传，保存活动设置后生效。';}catch(e){$('#devil-cover-message').textContent=e.message||'上传失败，请重试';}finally{devilCoverUploading=false;$('#devil-save').disabled=false;$('#devil-cover-choose').disabled=false;$('#devil-cover-remove').disabled=false;}
+};
 function localDateInput(iso){const d=new Date(iso);if(!Number.isFinite(d.getTime()))return '';return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);}
 async function loadDevilConfig(){
+  if(devilCoverUploading)return;
   const status=$("#devil-status");status.textContent="正在读取…";
-  try{const r=await api("DevilAdminGet",{});$("#devil-enabled").checked=r.enabled;$("#devil-title").value=r.title;$("#devil-start").value=localDateInput(r.starts_at);$("#devil-end").value=localDateInput(r.ends_at);$("#devil-step").value=r.encounter_step;$("#devil-multiplier").value=r.multiplier;$("#devil-limit").value=r.daily_bonus_limit;$("#devil-fields").disabled=false;status.textContent=!r.enabled?"已关闭":r.active?"进行中":"未到活动时间";}catch(e){status.textContent="读取失败，请重试";}
+  try{const r=await api("DevilAdminGet",{});$("#devil-enabled").checked=r.enabled;$("#devil-title").value=r.title;setDevilCover(r.cover_url);$("#devil-cover-message").textContent="建议使用横图，按原比例显示。上传后保存活动设置生效。";$("#devil-start").value=localDateInput(r.starts_at);$("#devil-end").value=localDateInput(r.ends_at);$("#devil-step").value=r.encounter_step;$("#devil-multiplier").value=r.multiplier;$("#devil-limit").value=r.daily_bonus_limit;$("#devil-fields").disabled=false;status.textContent=!r.enabled?"已关闭":r.active?"进行中":"未到活动时间";}catch(e){status.textContent="读取失败，请重试";}
 }
 $("#devil-timezone").textContent="输入时间使用本机时区："+Intl.DateTimeFormat().resolvedOptions().timeZone;
 $("#devil-refresh").onclick=loadDevilConfig;
 $("#devil-form").onsubmit=async e=>{
- e.preventDefault();if(!e.currentTarget.reportValidity())return;
+ e.preventDefault();if(devilCoverUploading||!e.currentTarget.reportValidity())return;
  const start=new Date($("#devil-start").value),end=new Date($("#devil-end").value);
  if(!Number.isFinite(start.getTime())||!Number.isFinite(end.getTime())||start>=end)return toast("结束时间必须晚于开始时间","bad");
  const button=$("#devil-save");button.disabled=true;$("#devil-status").textContent="正在保存…";
- try{await api("DevilAdminSet",{enabled:$("#devil-enabled").checked,title:$("#devil-title").value.trim(),starts_at:start.toISOString(),ends_at:end.toISOString(),encounter_step:Number($("#devil-step").value),multiplier:Number($("#devil-multiplier").value),daily_bonus_limit:Number($("#devil-limit").value)});await loadDevilConfig();toast("活动设置已保存","ok");}catch(e){$("#devil-status").textContent="保存失败，请重试";}finally{button.disabled=false;}
+ try{await api("DevilAdminSet",{enabled:$("#devil-enabled").checked,title:$("#devil-title").value.trim(),starts_at:start.toISOString(),ends_at:end.toISOString(),encounter_step:Number($("#devil-step").value),multiplier:Number($("#devil-multiplier").value),daily_bonus_limit:Number($("#devil-limit").value),cover_url:devilCover});await loadDevilConfig();toast("活动设置已保存","ok");}catch(e){$("#devil-status").textContent="保存失败，请重试";}finally{button.disabled=false;}
 };
 
 function renderEventArticle(target,article){
