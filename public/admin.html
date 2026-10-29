@@ -163,6 +163,21 @@
     </div>
   </div>
 
+
+  <section id="devil-tools" style="margin-top:28px">
+    <h2>Devil 活动 <span class="side" id="devil-status" role="status">连接后加载</span></h2>
+    <form id="devil-form"><fieldset id="devil-fields" disabled style="border:0;padding:0;margin:0">
+      <div class="row"><label class="lead" for="devil-enabled">活动开关</label><input type="checkbox" id="devil-enabled"><label for="devil-enabled">开启活动</label></div>
+      <div class="row"><label class="lead" for="devil-title">名称</label><input id="devil-title" value="Devil Event" maxlength="60" required class="grow"></div>
+      <div class="row"><label class="lead" for="devil-start">开始时间</label><input id="devil-start" type="datetime-local" required><label for="devil-end">结束时间</label><input id="devil-end" type="datetime-local" required></div>
+      <p class="hint" id="devil-timezone"></p>
+      <div class="row"><label for="devil-step">出现积累</label><input id="devil-step" type="number" min="1" max="100" step="1" value="20" required style="width:90px"><label for="devil-multiplier">蓝图倍率</label><input id="devil-multiplier" type="number" min="1" max="10" step="1" value="2" required style="width:90px"><label for="devil-limit">每日额外蓝图上限</label><input id="devil-limit" type="number" min="0" max="1000" step="1" value="20" required style="width:100px"></div>
+      <p class="hint">原版每次有效结算积累 10，活动值越高越容易出现；仍保留教学门槛与体力加成。每日上限只限制额外蓝图，用完后每次仍得 1 张，按北京时间统计。设置约 30 秒内同步。</p>
+      <button type="submit" id="devil-save" class="go">保存活动设置</button>
+    </fieldset></form>
+    <button type="button" id="devil-refresh" style="margin-top:8px">重新读取</button>
+  </section>
+
   <details style="margin-top:28px">
     <summary>礼物码参考表（游戏本体实际发放过的有效码）</summary>
     <div class="box" style="margin-top:8px">
@@ -202,7 +217,7 @@ const ts = (s) => (s||"").slice(0,16).replace("T"," ");
 $("#save").onclick = async () => {
   BASE=$("#base").value.trim(); TOKEN=$("#token").value.trim();
   localStorage.setItem("dgzz_base",BASE); localStorage.setItem("dgzz_token",TOKEN);
-  try{ await loadCodes(); await loadUsers(""); setConn(true); toast("已连接","ok"); }
+  try{ await loadCodes(); await loadUsers(""); setConn(true); await loadDevilConfig(); toast("已连接","ok"); }
   catch(e){ setConn(false); }
 };
 
@@ -349,6 +364,22 @@ document.querySelectorAll(".notetog").forEach(a=>{
   };
 });
 
+
+function localDateInput(iso){const d=new Date(iso);if(!Number.isFinite(d.getTime()))return '';return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);}
+async function loadDevilConfig(){
+  const status=$("#devil-status");status.textContent="正在读取…";
+  try{const r=await api("DevilAdminGet",{});$("#devil-enabled").checked=r.enabled;$("#devil-title").value=r.title;$("#devil-start").value=localDateInput(r.starts_at);$("#devil-end").value=localDateInput(r.ends_at);$("#devil-step").value=r.encounter_step;$("#devil-multiplier").value=r.multiplier;$("#devil-limit").value=r.daily_bonus_limit;$("#devil-fields").disabled=false;status.textContent=!r.enabled?"已关闭":r.active?"进行中":"未到活动时间";}catch(e){status.textContent="读取失败，请重试";}
+}
+$("#devil-timezone").textContent="输入时间使用本机时区："+Intl.DateTimeFormat().resolvedOptions().timeZone;
+$("#devil-refresh").onclick=loadDevilConfig;
+$("#devil-form").onsubmit=async e=>{
+ e.preventDefault();if(!e.currentTarget.reportValidity())return;
+ const start=new Date($("#devil-start").value),end=new Date($("#devil-end").value);
+ if(!Number.isFinite(start.getTime())||!Number.isFinite(end.getTime())||start>=end)return toast("结束时间必须晚于开始时间","bad");
+ const button=$("#devil-save");button.disabled=true;$("#devil-status").textContent="正在保存…";
+ try{await api("DevilAdminSet",{enabled:$("#devil-enabled").checked,title:$("#devil-title").value.trim(),starts_at:start.toISOString(),ends_at:end.toISOString(),encounter_step:Number($("#devil-step").value),multiplier:Number($("#devil-multiplier").value),daily_bonus_limit:Number($("#devil-limit").value)});await loadDevilConfig();toast("活动设置已保存","ok");}catch(e){$("#devil-status").textContent="保存失败，请重试";}finally{button.disabled=false;}
+};
+
 /* 黑白主题切换 */
 function applyTheme(t){
   document.documentElement.setAttribute("data-theme", t);
@@ -358,7 +389,7 @@ function applyTheme(t){
 $("#theme").onclick = () => applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light" : "dark");
 applyTheme(localStorage.getItem("dgzz_theme") || "light");
 
-if(BASE&&TOKEN){ loadCodes().then(()=>loadUsers("")).then(()=>setConn(true)).catch(()=>{}); }
+if(BASE&&TOKEN){ loadCodes().then(()=>loadUsers("")).then(()=>{setConn(true);return loadDevilConfig();}).catch(()=>{}); }
 </script>
 </body>
 </html>
