@@ -7,23 +7,22 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
 <Layout seo={seo} admin>
  <link rel="stylesheet" href="/vendor/quill/quill.snow.css" />
  <main class="admin-shell" id="admin-app">
-  <header class="admin-heading"><div><p class="eyebrow">DESTROY GUNNERS / ADMIN</p><h1>社区服管理</h1></div><a href="/zh" class="back-link">返回主站 ↗</a></header>
-  <ContentBox>
-   <section class="connection" aria-labelledby="connection-title">
+  <header class="admin-heading"><h1>社区服管理</h1>
+   <section class="connection compact-connection" aria-labelledby="connection-title">
     <div class="connection-copy"><h2 id="connection-title">服务器连接</h2><span class="connection-state"><span class="dot" id="conn"></span><span id="connection-status" role="status">未连接</span></span></div>
-    <div class="connection-controls"><label for="token">管理员 Token<input id="token" type="password" placeholder="输入 Token" autocomplete="off" /></label><button id="save" class="go">连接</button></div>
+    <div class="connection-controls"><label for="token" class="sr-only">管理员 Token</label><input id="token" type="password" placeholder="管理员 Token" autocomplete="off" /><button id="save" class="go">连接</button></div>
     <details class="advanced"><summary>服务器地址</summary><label for="base" class="sr-only">服务器地址</label><input id="base" type="url" placeholder="服务器地址" /></details>
    </section>
-  </ContentBox>
+  </header>
   <div class="admin-workspace">
-   <aside class="admin-sidebar"><span class="sidebar-label">管理菜单</span><nav aria-label="后台功能">
-    <button data-workspace="rewards" class="active" aria-current="page"><span>01</span>玩家与奖励</button>
-    <button data-workspace="notice"><span>02</span>公告管理</button>
-    <button data-workspace="event"><span>03</span>活动图文</button>
-    <button data-workspace="devil"><span>04</span>Devil 活动</button>
-   </nav><p class="sidebar-note">DGZZ COMMUNITY SERVER</p></aside>
+   <aside class="admin-sidebar"><nav aria-label="后台功能">
+    <button data-workspace="rewards" class="active" aria-current="page">玩家与奖励</button>
+    <button data-workspace="notice">公告管理</button>
+    <button data-workspace="event">活动图文</button>
+    <button data-workspace="devil">Devil 活动</button>
+   </nav></aside>
    <div class="workspace-main">
-    <div class="workspace-heading"><h2 id="workspace-title">玩家与奖励</h2><span class="workspace-caption">SERVER MANAGEMENT</span></div>
+    <div class="workspace-heading"><h2 id="workspace-title">玩家与奖励</h2></div>
     <ContentBox>
      <div data-view="rewards">
       <div class="reward-grid">
