@@ -40,16 +40,24 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
          <div class="field-heading"><label for="cashAmt">金币</label><button class="notetog text-button" data-row="cashNoteRow">添加备注</button></div>
          <div class="row"><input id="cashAmt" type="number" step="1" placeholder="数量，负数为回收" class="grow" /><button id="grantCash" class="go">发放金币</button></div>
          <div class="row noterow" id="cashNoteRow" hidden><label for="cashNote" class="sr-only">金币备注</label><input id="cashNote" class="grow" placeholder="金币备注（可选）" /></div>
-         <div class="field-heading"><label for="preset">道具</label><button class="notetog text-button" data-row="noteRow">添加备注</button></div>
-         <div class="row"><select id="preset" class="grow"><option value="">选择奖励道具</option></select><button id="grant" class="go">发放道具</button></div>
+         <div class="field-heading"><label for="preset">道具礼包</label><button class="notetog text-button" data-row="noteRow">添加备注</button></div>
+         <div class="row"><select id="preset" class="grow"><option value="">选择礼包，或在下方逐项勾选</option></select></div>
          <div class="row noterow" id="noteRow" hidden><label for="note" class="sr-only">道具备注</label><input id="note" class="grow" placeholder="道具备注（可选）" /></div>
-         <details class="custom-codes"><summary>自定义道具代码</summary><div id="codes" class="codegrid"></div><label for="manual" class="sr-only">道具代码</label><input id="manual" placeholder="输入 dec / 0x hex，逗号分隔" /></details>
+         <div class="reward-picker">
+          <label for="item-search" class="sr-only">搜索物品</label><input id="item-search" type="search" placeholder="搜索中文名、英文名或礼物码" />
+          <div class="reward-filters"><label for="item-category" class="sr-only">物品分类</label><select id="item-category"><option value="">全部分类</option><option value="weapon">武器</option><option value="shield">护盾</option><option value="upgrade">强化零件</option><option value="support">支援消耗品</option><option value="ticket">入场券</option><option value="unknown">待确认</option></select><label for="item-evidence" class="sr-only">确认状态</label><select id="item-evidence"><option value="confirmed">已确认</option><option value="device">仅实机确认</option><option value="data">仅数据确认</option><option value="unverified">待实测</option><option value="all">全部条目</option></select></div>
+          <p id="item-count" class="hint" role="status">连接后加载物品</p><div id="item-results" class="reward-results"></div>
+          <article id="item-detail" class="reward-detail" hidden aria-label="物品详情"></article>
+          <div id="reward-selection" class="reward-selection" hidden><div class="section-heading"><span id="reward-selection-count"></span><button id="reward-clear" class="text-button">清空选择</button></div><ul id="reward-selected-items"></ul></div>
+         </div>
+         <details class="custom-codes" id="advanced-rewards"><summary>高级选码</summary><label for="manual" class="sr-only">礼物码</label><input id="manual" placeholder="手动输入礼物码，逗号分隔；支持范围" /><label class="unverified-ack"><input type="checkbox" id="allow-unverified" />确认在测试账号上验证待确认物品</label><p class="hint">未找到有效映射的编号不提供发放。物品编号与商店商品号不能直接当作礼物码。</p></details>
+         <button id="grant" class="go grant-items">发放所选道具</button>
          <p class="hint">金币计入账户余额；道具在下次登录时进入礼物箱。</p>
         </section>
         <section class="pending-section" aria-labelledby="pending-title"><div class="section-heading"><h3 id="pending-title">待发队列</h3><div class="inline-actions"><button id="refresh" class="text-button">刷新</button><button id="revoke" class="text-button danger-text">清空</button></div></div><div class="box"><table><thead><tr><th>#</th><th>类型</th><th>内容</th><th>备注</th><th>时间</th></tr></thead><tbody id="pending"><tr><td colspan="5" class="mut">选择一名玩家后查看</td></tr></tbody></table></div></section>
        </div>
       </div>
-      <details class="reference"><summary>礼物码参考表</summary><div class="box"><table><thead><tr><th>Hex</th><th>Dec</th><th>名称</th><th>出处</th></tr></thead><tbody id="table"><tr><td colspan="4" class="mut">连接后读取</td></tr></tbody></table></div></details>
+      <details class="reference"><summary>完整物品对照表</summary><div class="reference-toolbar"><label for="reference-search" class="sr-only">搜索对照表</label><input id="reference-search" type="search" placeholder="搜索名称、礼物码、原生 ID 或商品号" /><button id="export-rewards">导出 CSV</button></div><p id="reference-stats" class="hint"></p><div class="box"><table><thead><tr><th>物品</th><th>分类</th><th>礼物码</th><th>领取数量</th><th>确认状态</th><th>原生 ID</th><th>商店商品号</th></tr></thead><tbody id="table"><tr><td colspan="7" class="mut">连接后读取</td></tr></tbody></table></div></details>
      </div>
      <section data-view="content" hidden id="article-tools">
       <select id="article-kind" hidden aria-hidden="true" tabindex="-1"><option value="notice">公告</option><option value="event">活动</option></select>

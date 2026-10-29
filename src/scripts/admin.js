@@ -1,3 +1,4 @@
+import {rewardCategories,rewardEvidence,filterRewards,displayReward,csvRewards} from './reward-catalog.js';
 
 const $ = (s) => document.querySelector(s);
 let BASE = localStorage.getItem("dgzz_base") || "https://ttbuviubnrmjhhpsaygs.supabase.co/functions/v1/dgzz";
@@ -30,16 +31,54 @@ $("#save").onclick = async () => {
   catch(e){ setConn(false); }
 };
 
+const selectedGiftCodes=new Set();
+function rewardText(tag,text,className){const el=document.createElement(tag);el.textContent=String(text??'');if(className)el.className=className;return el;}
+function rewardRowName(c){const group=rewardCategories[c.category]||'待确认';return group+' · '+displayReward(c);}
 async function loadCodes(){
-  const j = await api("GiftCodes",{});
-  CODES=j.codes; PRESETS=j.presets;
-  $("#preset").innerHTML = '<option value="">— 自定义选码 —</option>' +
-    PRESETS.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}（${p.codes.length}项）</option>`).join("");
-  $("#codes").innerHTML = CODES.map(c=>
-    `<label><input type="checkbox" value="${c.code}"><code>${esc(c.hex)}</code> ${esc(c.label)}</label>`).join("");
-  $("#table").innerHTML = CODES.map(c=>
-    `<tr><td><code>${esc(c.hex)}</code></td><td>${c.code}</td><td>${esc(c.label)}</td><td class="mut">${esc(c.context)}</td></tr>`).join("");
+ const j=await api('GiftCodes',{});CODES=(j.codes||[]).map(c=>({...c,verification:c.verification||(c.verified?'device':'unverified'),sendable:c.sendable??c.verified,name_zh:c.name_zh||c.label}));PRESETS=j.presets||[];
+ const rank=c=>!c.sendable?9:c.category==='support'?0:c.category==='ticket'?1:[31,41].includes(c.code)?2:c.category==='weapon'?3:c.category==='shield'?4:5;
+ CODES.sort((a,b)=>rank(a)-rank(b)||a.code-b.code);
+ const preset=$('#preset');preset.replaceChildren(new Option('选择礼包，或在下方逐项勾选',''));
+ PRESETS.filter(p=>p.codes.every(code=>CODES.some(c=>c.code===code&&c.sendable))).forEach(p=>preset.appendChild(new Option(p.name+'（'+p.codes.length+' 项）',p.id)));
+ renderRewardResults();renderRewardSelection();renderRewardReference();
+ $('#reference-stats').textContent='共 '+CODES.length+' 条；'+CODES.filter(c=>c.sendable).length+' 条已确认可选，其中 '+CODES.filter(c=>c.verification==='device').length+' 条保留历史实机确认记录。';
 }
+function renderRewardResults(){
+ const rows=filterRewards(CODES,{query:$('#item-search').value,category:$('#item-category').value,evidence:$('#item-evidence').value});
+ $('#item-count').textContent=rows.length+' 项匹配 · 已选 '+selectedGiftCodes.size+' 项';const target=$('#item-results');target.replaceChildren();
+ if(!rows.length){target.appendChild(rewardText('p','没有匹配物品','hint'));return;}
+ rows.forEach(c=>{const row=document.createElement('div');row.className='reward-item';const label=document.createElement('label'),checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.checked=selectedGiftCodes.has(c.code);checkbox.disabled=!!c.blocked;checkbox.setAttribute('aria-label','选择 '+displayReward(c));
+  checkbox.onchange=()=>{if(checkbox.checked)selectedGiftCodes.add(c.code);else selectedGiftCodes.delete(c.code);$('#preset').value='';renderRewardSelection();$('#item-count').textContent=rows.length+' 项匹配 · 已选 '+selectedGiftCodes.size+' 项';};
+  const copy=document.createElement('span');copy.className='reward-item-copy';copy.appendChild(rewardText('strong',displayReward(c)));copy.appendChild(rewardText('small',(c.name_en||'')+' · '+c.hex));label.append(checkbox,copy);row.appendChild(label);
+  const meta=document.createElement('div');meta.className='reward-item-meta';const badge=rewardText('span',c.blocked?'无有效映射':rewardEvidence[c.verification]||'待实测','reward-badge '+c.verification);badge.title=c.evidence||c.context;meta.appendChild(badge);
+  const detail=rewardText('button','详情','text-button');detail.type='button';detail.onclick=()=>renderRewardDetail(c);meta.appendChild(detail);row.appendChild(meta);target.appendChild(row);
+ });
+}
+function renderRewardSelection(){
+ const container=$('#reward-selection');container.hidden=selectedGiftCodes.size===0;$('#reward-selection-count').textContent='已选 '+selectedGiftCodes.size+' 项';const list=$('#reward-selected-items');list.replaceChildren();
+ selectedGiftCodes.forEach(code=>{const c=CODES.find(r=>r.code===code),item=document.createElement('li');item.appendChild(rewardText('span',c?displayReward(c):'礼物码 '+code));const remove=rewardText('button','移除','text-button');remove.type='button';remove.onclick=()=>{selectedGiftCodes.delete(code);$('#preset').value='';renderRewardResults();renderRewardSelection();};item.appendChild(remove);list.appendChild(item);});
+}
+function renderRewardDetail(c){
+ const target=$('#item-detail');target.hidden=false;target.replaceChildren();target.appendChild(rewardText('h4',displayReward(c)));if(c.name_en)target.appendChild(rewardText('p',c.name_en,'mut'));
+ const info=[['分类',rewardCategories[c.category]||'待确认'],['礼物码',c.code+' / '+c.hex],['领取数量',c.quantity_label||'待确认'],['确认状态',rewardEvidence[c.verification]||'待实测']];
+ if(c.level)info.push(['标称等级','Lv'+c.level]);if(c.native_id!=null)info.push(['原生物品 ID',c.native_id]);if(c.shop_sku!=null)info.push(['商店商品号',c.shop_sku]);
+ const dl=document.createElement('dl');info.forEach(([key,value])=>{dl.appendChild(rewardText('dt',key));dl.appendChild(rewardText('dd',value));});target.appendChild(dl);
+ if(c.effect_zh)target.appendChild(rewardText('p',c.effect_zh));if(c.effect_en)target.appendChild(rewardText('p',c.effect_en,'mut'));
+ if(c.evidence)target.appendChild(rewardText('p',c.evidence,'hint'));if(c.warning)target.appendChild(rewardText('p',c.warning,'reward-warning'));
+}
+function renderRewardReference(){
+ const rows=filterRewards(CODES,{query:$('#reference-search').value,evidence:'all'}),tbody=$('#table');tbody.replaceChildren();
+ rows.forEach(c=>{const tr=document.createElement('tr');const name=document.createElement('td');name.appendChild(rewardText('strong',displayReward(c)));if(c.name_en)name.appendChild(rewardText('small',c.name_en));tr.appendChild(name);
+  for(const value of [rewardCategories[c.category]||'待确认',c.code+' / '+c.hex,c.quantity_label||'待确认',c.blocked?'无有效映射':rewardEvidence[c.verification]||'待实测',c.native_id??'—',c.shop_sku??'—'])tr.appendChild(rewardText('td',value));tr.title=c.evidence||c.context||'';tbody.appendChild(tr);
+ });
+ if(!rows.length){const tr=document.createElement('tr'),td=rewardText('td','没有匹配物品','mut');td.colSpan=7;tr.appendChild(td);tbody.appendChild(tr);}
+}
+$('#item-search').oninput=renderRewardResults;$('#item-category').onchange=renderRewardResults;$('#item-evidence').onchange=renderRewardResults;
+$('#reference-search').oninput=renderRewardReference;
+$('#preset').onchange=()=>{const p=PRESETS.find(p=>p.id===$('#preset').value);if(!p)return;selectedGiftCodes.clear();p.codes.forEach(code=>selectedGiftCodes.add(code));renderRewardResults();renderRewardSelection();};
+$('#reward-clear').onclick=()=>{selectedGiftCodes.clear();$('#preset').value='';renderRewardResults();renderRewardSelection();};
+$('#export-rewards').onclick=()=>{const blob=new Blob([csvRewards(CODES)],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='DGZZ物品对照表.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+
 async function loadUsers(q){
   const j = await api("ListUsers",{q});
   const rows = j.users||[];
@@ -86,7 +125,7 @@ async function loadPending(){
   $("#pending").innerHTML = p.length ? p.map(r=>{
     const cash = r.kind==="cash";
     const tag = cash ? '<span class="kind">现金</span>' : '<span class="kind">道具</span>';
-    const body = cash ? `<b>${r.code>0?"+":""}${r.code}</b>` : `<code>${hex(r.code)}</code> <span class="mut">(${r.code})</span>`;
+    const body = cash ? `<b>${r.code>0?"+":""}${r.code}</b>` : `<span>${esc(displayReward(CODES.find(c=>c.code===r.code))||"礼物码")}</span> <code>${hex(r.code)}</code>`;
     return `<tr><td class="mut">${r.id}</td><td>${tag}</td><td>${body}</td><td>${esc(r.note)}</td><td class="mut">${ts(r.created_at)}</td></tr>`;
   }).join("") : '<tr><td colspan="5" class="mut">队列为空</td></tr>';
 }
@@ -110,35 +149,25 @@ $("#revoke").onclick = async () => {
   for(const uid of selected){ await api("RevokePresents",{uid}); }
   toast("已清空 "+selected.size+" 名","ok"); loadPending();
 };
-function parseNum(s){ s=String(s).trim().toLowerCase(); if(!s) return NaN; return s.startsWith("0x")?parseInt(s,16):parseInt(s,10); }
-function parseCodeList(str){          // 支持逗号分隔 + a-b 范围（dec 或 0x）
-  const out=[];
-  String(str).split(",").forEach(tok=>{
-    tok=tok.trim(); if(!tok) return;
-    const dash=tok.split("-");
-    if(dash.length===2){ const a=parseNum(dash[0]), b=parseNum(dash[1]);
-      if(!isNaN(a)&&!isNaN(b)&&b>=a&&b-a<=255){ for(let i=a;i<=b;i++) out.push(i); return; } }
-    const n=parseNum(tok); if(!isNaN(n)) out.push(n);
-  });
-  return out;
-}
+function parseNum(s){s=String(s).trim();if(!/^(?:0x[0-9a-f]+|[0-9]+)$/i.test(s))return NaN;const n=Number(s);return Number.isInteger(n)&&n>=0&&n<=65535?n:NaN;}
+function parseCodeList(str){const out=[];for(const token of String(str).split(',')){const v=token.trim();if(!v)continue;const pair=v.split('-');if(pair.length===2){const a=parseNum(pair[0]),b=parseNum(pair[1]);if(!Number.isFinite(a)||!Number.isFinite(b)||b<a||b-a>255)throw Error('礼物码范围无效，单段最多 256 个');for(let n=a;n<=b;n++)out.push(n);}else{const n=parseNum(v);if(!Number.isFinite(n))throw Error('无效礼物码：'+v);out.push(n);}}return out;}
 function buildItemBody(){
-  const preset=$("#preset").value;
-  if(preset) return { preset, note:$("#note").value.trim() };
-  let codes=[...document.querySelectorAll("#codes input:checked")].map(i=>Number(i.value));
-  const man=$("#manual").value.trim();
-  if(man) codes.push(...parseCodeList(man));
-  codes=[...new Set(codes)];
-  if(!codes.length){ toast("未选择任何码","bad"); return null; }
-  return { codes, note:$("#note").value.trim() };
+ let codes;try{codes=[...new Set([...selectedGiftCodes,...parseCodeList($('#manual').value)])];}catch(e){toast(e.message,'bad');return null;}
+ if(!codes.length){toast('先选择道具','bad');return null;}
+ const blocked=codes.filter(code=>CODES.find(c=>c.code===code)?.blocked);if(blocked.length){toast('没有有效物品映射：'+blocked.join(', '),'bad');return null;}
+ const unknown=codes.filter(code=>!CODES.find(c=>c.code===code)?.sendable);
+ if(unknown.length&&!$('#allow-unverified').checked){$('#advanced-rewards').open=true;$('#allow-unverified').focus();toast('包含待确认物品，请先确认高级选码选项','bad');return null;}
+ return {codes,note:$('#note').value.trim(),allow_unverified:unknown.length>0};
 }
 $("#grant").onclick = async () => {
   if(!selected.size) return toast("先选玩家","bad");
   const base=buildItemBody(); if(!base) return;
-  if(selected.size>1 && !confirm("发放道具到 "+selected.size+" 名玩家？")) return;
-  let ok=0,total=0;
-  for(const uid of selected){ try{ const j=await api("GrantPresent",{uid,...base}); ok++; total+=j.queued||0; }catch(e){} }
-  toast("已发放到 "+ok+"/"+selected.size+" 名（共 "+total+" 项）","ok"); loadPending();
+  if((selected.size>1||base.allow_unverified)&&!confirm('向 '+selected.size+' 名玩家发放 '+base.codes.length+' 项道具？'+(base.allow_unverified?'\n含待确认物品，请使用测试账号。':'')))return;
+  const button=$('#grant');button.disabled=true;let ok=0,total=0;const failed=[];
+  try{for(const uid of selected){try{const j=await api('GrantPresent',{uid,...base});ok++;total+=j.queued||0;}catch(e){failed.push(uid+': '+(e.message||'发放失败'));}}
+   toast(ok===selected.size?'已加入 '+ok+' 名玩家礼物队列，共 '+total+' 项':'成功 '+ok+'/'+selected.size+' 名；'+failed.join('；'),ok===selected.size?'ok':'bad');loadPending();
+  }finally{button.disabled=false;}
+
 };
 let coinBatch=null;
 try{coinBatch=JSON.parse(localStorage.getItem('dgzz_pending_coins')||'null');}catch(_){}
