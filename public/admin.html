@@ -168,7 +168,8 @@
 
 
 <section id="article-tools" style="margin-top:28px">
-<h2>活动图文 <span class="side" id="article-status" role="status">连接后读取</span></h2>
+<h2>公告与活动编辑 <span class="side" id="article-status" role="status">连接后读取</span></h2>
+<div class="row"><label for="article-kind">内容</label><select id="article-kind"><option value="notice">公告</option><option value="event">活动</option></select><label for="article-locale">语言</label><select id="article-locale"><option value="zh">中文</option><option value="en">English</option></select></div>
 <fieldset id="article-fields" disabled>
 <label for="article-title">标题</label><input id="article-title" maxlength="80" placeholder="活动标题">
 <div id="article-toolbar" role="toolbar" aria-label="正文格式">
@@ -177,7 +178,7 @@
 <span class="ql-formats"><button class="ql-list" value="ordered" aria-label="编号列表"></button><button class="ql-list" value="bullet" aria-label="项目列表"></button><button class="ql-image" aria-label="上传图片"></button><button class="ql-clean" aria-label="清除格式"></button></span>
 </div><div id="article-editor"></div>
 <input type="file" id="article-image" accept="image/jpeg,image/png,image/webp" hidden>
-<p class="hint">图片自动缩小，最多 12 张。草稿仅后台可见；发布后显示在游戏活动页，与 Devil 数值设置独立。</p>
+<p class="hint">图片自动缩小，最多 12 张。中英文分别保存和发布。草稿仅后台可见；图文与 Devil 数值设置独立。</p>
 <div class="article-actions"><button id="article-preview-button">预览</button><button id="article-draft">保存草稿</button><button id="article-publish" class="primary">发布到游戏</button><button id="article-withdraw">撤下</button></div>
 </fieldset><p id="article-live" class="hint"></p><button id="article-reload">重新读取图文</button><article id="article-preview" class="event-article" hidden aria-label="活动预览"></article>
 </section>
@@ -419,12 +420,13 @@ function renderEventArticle(target,article){
 }
 
 let eventEditor=null,eventRevision=null,eventDirty=false,eventBusy=false,eventUploading=false;
+let editingKind='notice',editingLocale='zh';
 const eventFields=$('#article-fields');
 function setupEventEditor(){
  if(eventEditor)return true;
  if(typeof Quill==='undefined'){$('#article-status').textContent='编辑器加载失败，请刷新页面';return false;}
- eventEditor=new Quill('#article-editor',{theme:'snow',placeholder:'输入活动正文…',formats:['bold','italic','underline','header','list','image'],modules:{toolbar:{container:'#article-toolbar',handlers:{image:()=>$('#article-image').click()}}}});
- eventEditor.root.setAttribute('aria-label','活动正文');eventEditor.root.setAttribute('role','textbox');eventEditor.root.setAttribute('aria-multiline','true');
+ eventEditor=new Quill('#article-editor',{theme:'snow',placeholder:'输入正文…',formats:['bold','italic','underline','header','list','image'],modules:{toolbar:{container:'#article-toolbar',handlers:{image:()=>$('#article-image').click()}}}});
+ eventEditor.root.setAttribute('aria-label','图文正文');eventEditor.root.setAttribute('role','textbox');eventEditor.root.setAttribute('aria-multiline','true');
  eventEditor.on('text-change',(_,__,source)=>{if(source==='user')markEventDirty();});
  return true;
 }
@@ -434,22 +436,25 @@ function articleValue(){return {title:$('#article-title').value.trim(),ops:event
 function showArticleState(r,replace){
  eventRevision=r.revision;if(replace){$('#article-title').value=r.draft?.title||'';eventEditor.setContents(r.draft?.ops||[{insert:'\n'}]);eventDirty=false;}
  $('#article-status').textContent=r.published?'已发布 · '+new Date(r.published_at).toLocaleString():'未发布';
- $('#article-live').textContent=r.published?'线上标题：'+r.published.title:'游戏中暂无图文活动';
+ $('#article-live').textContent=r.published?'线上标题：'+r.published.title:'当前语言暂无已发布内容';
  eventFields.disabled=false;eventEditor.enable(true);
 }
 async function loadEventArticle(){
- if(eventDirty&&!confirm('重新读取会放弃未保存的修改，继续吗？'))return;
+ const key={kind:$('#article-kind').value,locale:$('#article-locale').value};
+ if(eventBusy||eventUploading){$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;return;}
+ if(eventDirty&&!confirm('切换或重新读取会放弃未保存的修改，继续吗？')){$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;return;}
  if(!setupEventEditor())return;$('#article-status').textContent='正在读取…';
- try{showArticleState(await api('EventAdminGet',{}),true);}catch(_){$('#article-status').textContent='读取失败，请重试';}
+ eventBusy=true;eventFields.disabled=true;eventEditor.enable(false);$('#article-kind').disabled=true;$('#article-locale').disabled=true;
+ try{const r=await api('EventAdminGet',key);editingKind=key.kind;editingLocale=key.locale;showArticleState(r,true);$('#article-preview').hidden=true;}catch(_){$('#article-status').textContent='读取失败，请重试';$('#article-kind').value=editingKind;$('#article-locale').value=editingLocale;}finally{eventBusy=false;$('#article-kind').disabled=false;$('#article-locale').disabled=false;}
 }
-$('#article-reload').onclick=loadEventArticle;
+$('#article-reload').onclick=loadEventArticle;$('#article-kind').onchange=loadEventArticle;$('#article-locale').onchange=loadEventArticle;
 $('#article-preview-button').onclick=()=>{if(!eventEditor)return;const preview=$('#article-preview');preview.hidden=!preview.hidden;if(!preview.hidden)renderEventArticle(preview,articleValue());};
 async function saveEventArticle(action){
  if(eventBusy||eventUploading||eventRevision===null)return;
  const article=articleValue();if(action!=='withdraw'&&(!article.title||article.title.length>80||eventEditor.getLength()>20001)){toast('请填写标题，正文不超过 20000 字','bad');return;}
  if(action==='withdraw'&&!confirm('撤下后游戏不再显示这篇图文，草稿会保留。继续吗？'))return;
  eventBusy=true;eventFields.disabled=true;eventEditor.enable(false);$('#article-status').textContent='正在保存…';
- try{const r=await api('EventAdminSave',{revision:eventRevision,action,article});showArticleState(r,action!=='withdraw');toast(action==='publish'?'已发布':action==='draft'?'草稿已保存':'已撤下','ok');}
+ try{const r=await api('EventAdminSave',{kind:editingKind,locale:editingLocale,revision:eventRevision,action,article});showArticleState(r,action!=='withdraw');toast(action==='publish'?'已发布':action==='draft'?'草稿已保存':'已撤下','ok');}
  catch(e){$('#article-status').textContent=e.message||'保存失败，请重试';}
  finally{eventBusy=false;eventFields.disabled=false;eventEditor.enable(true);}
 }
