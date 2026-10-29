@@ -8,11 +8,13 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
  <link rel="stylesheet" href="/vendor/quill/quill.snow.css" />
  <main class="admin-shell" id="admin-app">
   <header class="admin-heading"><h1>社区服管理</h1>
-   <section class="connection compact-connection" aria-labelledby="connection-title">
-    <div class="connection-copy"><h2 id="connection-title">服务器连接</h2><span class="connection-state"><span class="dot" id="conn"></span><span id="connection-status" role="status">未连接</span></span></div>
-    <div class="connection-controls"><label for="token" class="sr-only">管理员 Token</label><input id="token" type="password" placeholder="管理员 Token" autocomplete="off" /><button id="save" class="go">连接</button></div>
-    <details class="advanced"><summary>服务器地址</summary><label for="base" class="sr-only">服务器地址</label><input id="base" type="url" placeholder="服务器地址" /></details>
-   </section>
+   <details id="connection-settings" class="connection-fold">
+    <summary><span id="connection-title">服务器连接</span><span class="connection-state"><span class="dot" id="conn"></span><span id="connection-status" role="status">未连接</span></span></summary>
+    <div class="connection-popover">
+     <div class="connection-controls"><label for="token">管理员 Token<input id="token" type="password" placeholder="输入 Token" autocomplete="off" /></label><button id="save" class="go">连接</button></div>
+     <details class="advanced"><summary>服务器地址</summary><label for="base" class="sr-only">服务器地址</label><input id="base" type="url" placeholder="服务器地址" /></details>
+    </div>
+   </details>
   </header>
   <div class="admin-workspace">
    <aside class="admin-sidebar"><nav aria-label="后台功能">
@@ -22,7 +24,7 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
     <button data-workspace="devil">Devil 活动</button>
    </nav></aside>
    <div class="workspace-main">
-    <div class="workspace-heading"><h2 id="workspace-title">玩家与奖励</h2></div>
+    <h2 id="workspace-title" class="sr-only">玩家与奖励</h2>
     <ContentBox>
      <div data-view="rewards">
       <div class="reward-grid">

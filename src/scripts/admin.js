@@ -8,7 +8,7 @@ const selected = new Set();   // 批量发放目标 uid 集合
 $("#base").value = BASE; $("#token").value = TOKEN;
 
 function toast(msg, kind){ const t=$("#toast"); t.textContent=msg; t.className="show "+(kind||""); setTimeout(()=>t.className="",2200); }
-function setConn(on){ $("#conn").classList.toggle("on", !!on); $("#connection-status").textContent=on?"已连接":"未连接"; }
+function setConn(on){ $("#conn").classList.toggle("on", !!on); $("#connection-status").textContent=on?"已连接":"未连接";$("#connection-settings").open=!on; }
 async function api(ep, body){
   if(!BASE||!TOKEN){ toast("先填服务器地址和 Token","bad"); throw new Error("no config"); }
   const r = await fetch(BASE.replace(/\/$/,"")+"/"+ep, {
