@@ -28,3 +28,22 @@
 
 /* Override ContentBox scoped margins so both workspace columns start together. */
 .admin-shell .workspace-main > .sf-box{margin-top:0}
+
+/* Dark rails and cyan thumbs, scoped to the administration page. */
+html.admin-site,.admin-shell *{scrollbar-width:thin;scrollbar-color:#397c87 #071c23}
+html.admin-site::-webkit-scrollbar,.admin-shell ::-webkit-scrollbar{width:8px;height:8px}
+html.admin-site::-webkit-scrollbar-track,.admin-shell ::-webkit-scrollbar-track{background:#071c23}
+html.admin-site::-webkit-scrollbar-thumb,.admin-shell ::-webkit-scrollbar-thumb{background:#397c87;border:2px solid #071c23;border-radius:4px}
+html.admin-site::-webkit-scrollbar-thumb:hover,.admin-shell ::-webkit-scrollbar-thumb:hover{background:#65cbd5}
+html.admin-site::-webkit-scrollbar-corner,.admin-shell ::-webkit-scrollbar-corner{background:#071c23}
+
+/* Keep native checkbox semantics while styling every interaction state. */
+.admin-shell input[type=checkbox]{appearance:none;-webkit-appearance:none;display:inline-block;width:16px;height:16px;min-width:16px;padding:0;margin:0;vertical-align:middle;border:1px solid #497d87;border-radius:2px;background:#071d24 center/12px 12px no-repeat;cursor:pointer}
+.admin-shell input[type=checkbox]:hover:not(:disabled){border-color:#8aeff4;background-color:#10343e}
+.admin-shell input[type=checkbox]:checked{border-color:#78e7ed;background-color:#78e7ed;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m3 8 3.2 3.2L13 4.5' stroke='%23051e28' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.admin-shell input[type=checkbox]:checked:hover:not(:disabled){background-color:#a0f6fa}
+.admin-shell input[type=checkbox]:indeterminate{border-color:#78e7ed;background-color:#78e7ed;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8h8' stroke='%23051e28' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E")}
+.admin-shell input[type=checkbox]:focus-visible{outline:2px solid #b1fbff;outline-offset:3px}
+.admin-shell input[type=checkbox]:disabled{opacity:.4;cursor:not-allowed}
+.admin-shell .codegrid input[type=checkbox]{width:16px!important;height:16px}
+@media(forced-colors:active){.admin-shell input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;background:none;forced-color-adjust:auto}html.admin-site,.admin-shell *{scrollbar-color:auto}}

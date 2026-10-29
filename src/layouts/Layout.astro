@@ -24,7 +24,7 @@ const fallbackBg = bgSrcs[0];
 ---
 
 <!doctype html>
-<html lang={lang === 'zh' ? 'zh-CN' : lang === 'ja' ? 'ja-JP' : 'en'} style={`--bg-image: url('${fallbackBg}')`}>
+<html class:list={{ "admin-site": admin }} lang={lang === 'zh' ? 'zh-CN' : lang === 'ja' ? 'ja-JP' : 'en'} style={`--bg-image: url('${fallbackBg}')`}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
