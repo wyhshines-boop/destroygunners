@@ -1,10 +1,42 @@
 ---
-import img1 from "../img/dgzz/dgzz1.webp";
-import img2 from "../img/dgzz/dgzz2.webp";
-import img3 from "../img/dgzz/dgzz3.webp";
-import img4 from "../img/dgzz/dgzz4.webp";
-
-const screenshots = [img1, img2, img3, img4];
+const screenshots = [
+  {
+    "src": "/community/screens/hangar.webp",
+    "width": 1046,
+    "height": 474,
+    "name": "hangar"
+  },
+  {
+    "src": "/community/screens/battle.webp",
+    "width": 1050,
+    "height": 472,
+    "name": "battle"
+  },
+  {
+    "src": "/community/screens/dogfight.webp",
+    "width": 1039,
+    "height": 477,
+    "name": "dogfight"
+  },
+  {
+    "src": "/community/screens/friends.webp",
+    "width": 1042,
+    "height": 475,
+    "name": "friends"
+  },
+  {
+    "src": "/community/screens/account.webp",
+    "width": 1048,
+    "height": 476,
+    "name": "account"
+  },
+  {
+    "src": "/community/screens/title.webp",
+    "width": 852,
+    "height": 383,
+    "name": "title"
+  }
+];
 ---
 
 <div class="gallery-wrapper">
@@ -15,7 +47,10 @@ const screenshots = [img1, img2, img3, img4];
                     <div class="img-frame">
                         <img
                             src={img.src}
-                            alt={`Screenshot ${index + 1}`}
+                            alt={`Destroy Gunners ZZ — ${img.name}`}
+                            width={img.width}
+                            height={img.height}
+                            decoding="async"
                             class="gallery-thumb"
                             loading="lazy"
                         />
@@ -305,7 +340,7 @@ const screenshots = [img1, img2, img3, img4];
     @media (min-width: 768px) {
         .gallery-scroll {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             overflow-x: visible;
             scroll-snap-type: none;
         }

@@ -16,24 +16,9 @@ const SCARESOUL_IMAGE = '/scaresoul/shot1.jpg';
 
 export const seo: Record<PageKey, Record<Lang, PageSeo>> = {
 	home: {
-		en: {
-			title: 'Destroy Gunners — Offline Patch Download & Community',
-			description:
-				'Fan hub for Destroy Gunners ZZ, the mecha action game by SHADE Inc. Download the offline cracked APK for Android, the all-mecha save file, story notes, and join the community.',
-			image: DG_IMAGE,
-		},
-		zh: {
-			title: '毁灭枪手 Destroy Gunners ZZ 离线版下载 | 安卓单机机甲手游社区',
-			description:
-				'毁灭枪手（Destroy Gunners ZZ）是 SHADE Inc. 出品的机甲动作手游。本站提供安卓离线破解版 APK 下载、全机体解锁存档、剧情故事与玩家社区。',
-			image: DG_IMAGE,
-		},
-		ja: {
-			title: 'Destroy Gunners ZZ オフライン版ダウンロード | メカアクション コミュニティ',
-			description:
-				'SHADE Inc. のメカアクションゲーム Destroy Gunners ZZ のファンサイト。Android 向けオフライン改造版 APK、全メカ解放セーブデータ、ストーリー、コミュニティ。',
-			image: DG_IMAGE,
-		},
+		en: { title: "Destroy Gunners ZZ Community Server APK | 3.0.0c", description: "Download the Destroy Gunners ZZ community server for Android. Account sync, friend support and Dog Fight. New accounts start with 2,000 coins.", image: "/community/screens/hangar.webp" },
+		zh: { title: "毁灭枪手 Destroy Gunners ZZ 社区服下载 | 3.0.0c", description: "下载 Destroy Gunners ZZ 3.0.0c 安卓社区服，支持账户同步、好友助战和 Dog Fight 对战。新账户初始 2000 金币。", image: "/community/screens/hangar.webp" },
+		ja: { title: "Destroy Gunners ZZ コミュニティ版 APK | 3.0.0c", description: "Android 向け Destroy Gunners ZZ コミュニティ版。アカウント同期、僚機支援、Dog Fight に対応。新規アカウントは2,000コインで開始。", image: "/community/screens/hangar.webp" },
 	},
 	story: {
 		en: {

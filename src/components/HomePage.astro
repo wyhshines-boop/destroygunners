@@ -15,9 +15,9 @@ const { lang } = Astro.props;
 const tr = t(lang);
 const scareSoulHref = lang === 'en' ? '/scaresoul' : `/${lang}/scaresoul`;
 const pageHeading = {
-	en: 'Destroy Gunners ZZ Offline APK Download & Community',
-	zh: '毁灭枪手 Destroy Gunners ZZ 离线版下载与社区',
-	ja: 'Destroy Gunners ZZ オフライン版ダウンロードとコミュニティ',
+	en: 'Destroy Gunners ZZ APK Download & Community',
+	zh: '毁灭枪手 Destroy Gunners ZZ 下载与社区',
+	ja: 'Destroy Gunners ZZ ダウンロードとコミュニティ',
 }[lang];
 const scareSoulCopy = {
 	en: {
@@ -37,27 +37,9 @@ const scareSoulCopy = {
 	},
 }[lang];
 const communityUpdateCopy = {
-	en: {
-		kicker: 'Community Update',
-		title: 'New private-server community build coming soon',
-		description:
-			'The next community version is planned to bring player friend lists, wingman support assignments, and possible PvP access. Boss units can now be piloted as new playable mecha.',
-		imageAlt: 'Boss mecha playable preview in Destroy Gunners ZZ',
-	},
-	zh: {
-		kicker: '社区版本预告',
-		title: '全新的私服社区版本即将发布',
-		description:
-			'新版本将支持玩家互相添加好友，并可指派僚机助战；PvP 模式也有望开放。现在，部分 Boss 机体已可作为全新机甲驾驶。',
-		imageAlt: 'Destroy Gunners ZZ Boss 机体可驾驶预览',
-	},
-	ja: {
-		kicker: 'コミュニティ更新',
-		title: '新しいプライベートサーバー版を近日公開予定',
-		description:
-			'次期コミュニティ版では、フレンド追加、僚機支援の指定、PvP モードの開放が予定されています。さらに一部のボス機体も、新たなプレイアブルメカとして操縦可能になります。',
-		imageAlt: 'Destroy Gunners ZZ ボス機体プレイアブル化プレビュー',
-	},
+ en: { kicker: 'Community Server', title: '3.0.0c is available', description: 'Account sync, wingman support and Dog Fight. New accounts start with 2,000 coins.', imageAlt: 'Destroy Gunners ZZ community server hangar' },
+ zh: { kicker: '社区服', title: '3.0.0c 已发布', description: '账户同步、好友助战和 Dog Fight 已开放。新账户初始 2000 金币。', imageAlt: 'Destroy Gunners ZZ 社区服大厅' },
+ ja: { kicker: 'コミュニティ版', title: '3.0.0c 公開', description: 'アカウント同期、僚機支援、Dog Fight に対応。新規アカウントは2,000コインで開始。', imageAlt: 'Destroy Gunners ZZ コミュニティ版のハンガー' },
 }[lang];
 ---
 
@@ -91,7 +73,7 @@ const communityUpdateCopy = {
 			</div>
 
 			<article class="community-update-card">
-				<img src="/news/private-server-boss-mecha.jpg" alt={communityUpdateCopy.imageAlt} loading="lazy" />
+				<img src="/community/screens/hangar.webp" alt={communityUpdateCopy.imageAlt} width="1046" height="474" loading="eager" fetchpriority="high" />
 				<div class="community-update-copy">
 					<span>{communityUpdateCopy.kicker}</span>
 					<strong>{communityUpdateCopy.title}</strong>
@@ -152,7 +134,7 @@ const communityUpdateCopy = {
 		<div class="modal-content">
 			<a
 				id="modal-download-direct"
-				href="/downloads/DGunsZZ_3.0.0a.apk"
+				href={tr.notifications.versions[0].apk}
 				download
 				class="retro-btn download-track"
 				data-method="direct"

@@ -9,8 +9,17 @@ export const translations = {
 			assets: 'ASSETS',
 		},
 		notifications: {
-			title: 'Destroy Gunners ZZ Offline Cracked Edition',
+			title: "Destroy Gunners ZZ Downloads",
 			versions: [
+				{
+					id: 'c',
+					name: "Community Server",
+					label: 'v3.0.0c',
+					apk: '/downloads/DGunsZZ_3.0.0c.apk',
+					hasMirror: false,
+					mirrors: { googleDrive: '', lanzou: '', lanzouPw: '' },
+					sections: [{ title: "3.0.0c Community Server (2026-10-31)", items: ["Create an account to sync progress across devices and add friends for wingman support.", "Dog Fight is open, with weekly seasons.", "New accounts start with 2,000 coins. Mecha keep their normal unlock requirements.", "Open Account for news, events and guides. An internet connection is required; testing is ongoing."] }],
+				},
 				{
 					id: 'cx',
 					name: 'Version CX',
@@ -192,8 +201,17 @@ export const translations = {
 			assets: '素材',
 		},
 		notifications: {
-			title: '毁灭枪手 ZZ 离线破解版',
+			title: "Destroy Gunners ZZ 下载",
 			versions: [
+				{
+					id: 'c',
+					name: "社区服",
+					label: 'v3.0.0c',
+					apk: '/downloads/DGunsZZ_3.0.0c.apk',
+					hasMirror: false,
+					mirrors: { googleDrive: '', lanzou: '', lanzouPw: '' },
+					sections: [{ title: "3.0.0c 社区服 (2026-10-31)", items: ["注册账户可跨设备同步进度，并添加好友、邀请僚机助战。", "开放 Dog Fight 对战，每周一个赛季。", "新账户初始 2000 金币，机甲保留正常解锁条件。", "点击 Account 查看公告、活动和教程。社区服需联网，仍在测试中。"] }],
+				},
 				{
 					id: 'cx',
 					name: '版本 CX',
@@ -375,8 +393,17 @@ export const translations = {
 			assets: 'アセット',
 		},
 		notifications: {
-			title: 'Destroy Gunners ZZ オフラインクラック版',
+			title: "Destroy Gunners ZZ ダウンロード",
 			versions: [
+				{
+					id: 'c',
+					name: "コミュニティ版",
+					label: 'v3.0.0c',
+					apk: '/downloads/DGunsZZ_3.0.0c.apk',
+					hasMirror: false,
+					mirrors: { googleDrive: '', lanzou: '', lanzouPw: '' },
+					sections: [{ title: "3.0.0c コミュニティ版 (2026-10-31)", items: ["アカウント登録で端末間の進行状況を同期。フレンド追加と僚機支援に対応。", "Dog Fight を開放。シーズンは毎週更新。", "新規アカウントは2,000コインで開始。機体は通常の条件で解放。", "Account でお知らせ・イベント・ガイドを確認できます。要インターネット接続、テスト継続中。"] }],
+				},
 				{
 					id: 'cx',
 					name: 'バージョン CX',
