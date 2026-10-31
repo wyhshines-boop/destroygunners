@@ -23,6 +23,7 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
     <button data-workspace="notice">公告管理</button>
     <button data-workspace="event">活动图文</button>
     <button data-workspace="devil">Devil 活动</button>
+    <button data-workspace="daily">每日奖励</button>
    </nav></aside>
    <div class="workspace-main">
     <h2 id="workspace-title" class="sr-only">玩家与奖励</h2>
@@ -71,6 +72,16 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
       <div class="section-heading"><h3 id="article-heading">公告编辑</h3><span id="article-status" class="status-badge" role="status">连接后读取</span></div>
       <div class="content-controls"><label class="locale-field" for="article-locale">编辑语言<select id="article-locale"><option value="zh">中文</option><option value="en">English</option></select></label><button id="article-add" class="go" disabled>新增公告</button><button id="article-reload">重新读取</button><label class="deleted-toggle"><input type="checkbox" id="article-deleted" />已删除</label></div>
       <p id="article-context" class="hint">正在编辑：公告 · 中文；发布后显示在游戏面板的“公告”区域。</p><div id="article-list"></div>
+     </section>
+     <section data-view="daily" hidden>
+      <div class="section-heading"><h3>每日登录奖励</h3><button id="daily-admin-refresh" class="text-button">重新读取</button></div>
+      <p class="hint">北京时间周一至周日循环。仅登录账户可领当天奖励，每天一次，错过不补。</p>
+      <form id="daily-admin-form"><fieldset id="daily-admin-fields" disabled>
+       <label class="event-toggle"><input id="daily-admin-enabled" type="checkbox" />开启每日奖励</label>
+       <div id="daily-admin-days" class="daily-admin-days"></div>
+       <p id="daily-admin-status" role="status" class="hint">连接服务器后读取</p><button class="go" type="submit" id="daily-admin-save">保存奖励设置</button>
+      </fieldset></form>
+      <section class="pending-section"><div class="section-heading"><h3>领取记录</h3></div><div class="row"><input id="daily-history-uid" placeholder="玩家ID，留空查看全部" class="grow" /><button id="daily-history-refresh">查询</button></div><div class="box"><table><thead><tr><th>日期</th><th>玩家ID</th><th>奖励</th><th>状态</th></tr></thead><tbody id="daily-admin-history"></tbody></table></div></section>
      </section>
      <section data-view="devil" hidden id="devil-tools">
       <div class="section-heading"><h3>Devil 活动设置</h3><div class="inline-actions"><span id="devil-status" class="status-badge" role="status">连接后读取</span><button type="button" id="devil-refresh" class="text-button">重新读取</button></div></div>

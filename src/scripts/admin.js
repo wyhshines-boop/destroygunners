@@ -1,3 +1,4 @@
+import {initDailyAdmin} from './daily-admin.js';
 import {rewardCategories,rewardEvidence,filterRewards,displayReward,csvRewards} from './reward-catalog.js';
 
 const $ = (s) => document.querySelector(s);
@@ -383,10 +384,12 @@ async function openWorkspace(name){
  }
  document.querySelectorAll('[data-workspace]').forEach(el=>{const on=el.dataset.workspace===name;el.classList.toggle('active',on);if(on)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});
  document.querySelectorAll('[data-view]').forEach(el=>{el.hidden=el.dataset.view!==(article?'content':name);});
- const headings={rewards:'玩家与奖励',history:'发奖记录',notice:'公告管理',event:'活动图文',devil:'Devil 活动'};
+ const headings={rewards:'玩家与奖励',history:'发奖记录',notice:'公告管理',event:'活动图文',devil:'Devil 活动',daily:'每日奖励'};
  $('#workspace-title').textContent=headings[name]||headings.rewards;
  history.replaceState(null,'','#'+name);
  if(name==='history')loadRewardHistory(true);
+ if(name==='daily'&&BASE&&TOKEN){try{if(!CODES.length)await loadCodes();await loadDailyAdmin();}catch{}}
 }
 document.querySelectorAll('[data-workspace]').forEach(el=>el.onclick=()=>openWorkspace(el.dataset.workspace));
-const initialWorkspace=location.hash.slice(1);if(['rewards','history','notice','event','devil'].includes(initialWorkspace))openWorkspace(initialWorkspace);
+const loadDailyAdmin=initDailyAdmin(api,()=>CODES);
+const initialWorkspace=location.hash.slice(1);if(['rewards','history','notice','event','devil','daily'].includes(initialWorkspace))openWorkspace(initialWorkspace);
