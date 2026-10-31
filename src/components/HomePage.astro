@@ -540,6 +540,7 @@ const communityUpdateCopy = {
 
 	.notification-item {
 		margin-bottom: 25px;
+		overflow-wrap: anywhere;
 	}
 
 	.notification-item:last-child {
@@ -624,6 +625,7 @@ const communityUpdateCopy = {
 	}
 
 	.modal-overlay {
+		overflow: hidden;
 		position: fixed;
 		inset: 0;
 		z-index: 2000;
@@ -723,12 +725,13 @@ const communityUpdateCopy = {
 
 	@media (max-width: 700px) {
 		.community-update-card {
-			grid-template-columns: 1fr;
+			grid-template-columns: minmax(0, 1fr);
 			gap: 12px;
 		}
 
 		.community-update-card img {
 			height: auto;
+			aspect-ratio: auto;
 			min-height: 0;
 		}
 

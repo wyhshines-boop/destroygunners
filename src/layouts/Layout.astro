@@ -27,7 +27,7 @@ const fallbackBg = bgSrcs[0];
 <html class:list={{ "admin-site": admin }} lang={lang === 'zh' ? 'zh-CN' : lang === 'ja' ? 'ja-JP' : 'en'} style={`--bg-image: url('${fallbackBg}')`}>
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/png" href="/favicon.png" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -113,6 +113,8 @@ const fallbackBg = bgSrcs[0];
 
 	html {
 		height: 100%;
+		overflow-x: hidden;
+		overflow-x: clip;
 	}
 
 	body {
