@@ -18,7 +18,7 @@ export const translations = {
 					apk: '/downloads/DGunsZZ_3.0.0c.apk',
 					hasMirror: false,
 					mirrors: { googleDrive: '', lanzou: '', lanzouPw: '' },
-					sections: [{ title: "3.0.0c Community Server (2026-10-31)", items: ["Create an account to sync progress across devices and add friends for wingman support.", "Dog Fight is open, with weekly seasons.", "New accounts start with 2,000 coins. Mecha keep their normal unlock requirements.", "Account switching now loads the matching save. Update the original device and confirm progress is synced before moving to another phone.", "Open Account for news, events and guides. An internet connection is required; testing is ongoing."] }],
+					sections: [{ title: "3.0.0c Community Server (2026-10-31)", items: ["Create an account to sync progress across devices and add friends for wingman support.", "Dog Fight is open, with weekly seasons.", "New accounts start with 2,000 coins. Mecha keep their normal unlock requirements.", "Account switching now loads the matching save. Update the original device and confirm progress is synced before moving to another phone.", "Open Account for news, events and guides. An internet connection is required; testing is ongoing.", "If the game crashes or reports a save-data error, first confirm your account is linked and your progress is synced. Then try uninstalling the old version, deleting data/net.gree.android.pf.greeapp58559a from device storage, and reinstalling. Unsynced local progress will be lost."] }],
 				},
 				{
 					id: 'cx',
@@ -210,7 +210,7 @@ export const translations = {
 					apk: '/downloads/DGunsZZ_3.0.0c.apk',
 					hasMirror: false,
 					mirrors: { googleDrive: '', lanzou: '', lanzouPw: '' },
-					sections: [{ title: "3.0.0c 社区服 (2026-10-31)", items: ["注册账户可跨设备同步进度，并添加好友、邀请僚机助战。", "开放 Dog Fight 对战，每周一个赛季。", "新账户初始 2000 金币，机甲保留正常解锁条件。", "修复切换账户后进度不变、存档 ID 不匹配的问题。旧玩家换机前，请先在原手机更新并确认进度已同步。", "点击 Account 查看公告、活动和教程。社区服需联网，仍在测试中。"] }],
+					sections: [{ title: "3.0.0c 社区服 (2026-10-31)", items: ["注册账户可跨设备同步进度，并添加好友、邀请僚机助战。", "开放 Dog Fight 对战，每周一个赛季。", "新账户初始 2000 金币，机甲保留正常解锁条件。", "修复切换账户后进度不变、存档 ID 不匹配的问题。旧玩家换机前，请先在原手机更新并确认进度已同步。", "点击 Account 查看公告、活动和教程。社区服需联网，仍在测试中。", "如遇闪退或存档异常，请先确认账户已绑定、进度已同步，再尝试卸载旧版，删除手机存储中的 data/net.gree.android.pf.greeapp58559a 目录后重新安装。未同步的本地进度会丢失。"] }],
 				},
 				{
 					id: 'cx',
@@ -402,7 +402,7 @@ export const translations = {
 					apk: '/downloads/DGunsZZ_3.0.0c.apk',
 					hasMirror: false,
 					mirrors: { googleDrive: '', lanzou: '', lanzouPw: '' },
-					sections: [{ title: "3.0.0c コミュニティ版 (2026-10-31)", items: ["アカウント登録で端末間の進行状況を同期。フレンド追加と僚機支援に対応。", "Dog Fight を開放。シーズンは毎週更新。", "新規アカウントは2,000コインで開始。機体は通常の条件で解放。", "アカウント切替時のセーブ不一致を修正。機種変更前に元の端末を更新し、進行状況の同期を確認してください。", "Account でお知らせ・イベント・ガイドを確認できます。要インターネット接続、テスト継続中。"] }],
+					sections: [{ title: "3.0.0c コミュニティ版 (2026-10-31)", items: ["アカウント登録で端末間の進行状況を同期。フレンド追加と僚機支援に対応。", "Dog Fight を開放。シーズンは毎週更新。", "新規アカウントは2,000コインで開始。機体は通常の条件で解放。", "アカウント切替時のセーブ不一致を修正。機種変更前に元の端末を更新し、進行状況の同期を確認してください。", "Account でお知らせ・イベント・ガイドを確認できます。要インターネット接続、テスト継続中。", "強制終了やセーブエラーが出る場合は、先にアカウント連携と進行状況の同期を確認してください。その後、旧版をアンインストールし、端末ストレージの data/net.gree.android.pf.greeapp58559a を削除して再インストールをお試しください。未同期の進行状況は失われます。"] }],
 				},
 				{
 					id: 'cx',
