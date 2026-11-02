@@ -115,21 +115,6 @@ const communityUpdateCopy = {
 
 
 		</ContentBox>
-		<ContentBox title={versionCopy.offline}>
-			<p class="offline-intro">{versionCopy.intro}</p>
-			<div class="offline-versions">
-				{offlineVersions.map(v => <article class="offline-version">
-					<h3>{v.label.replace(/^v/,'')}</h3>
-					<p>{versionCopy[v.id as 'cx' | 'b' | 'bx' | 'a']}</p>
-					<DownloadButton version={v} text={tr.download.button} mainland={mainlandLinks[v.apk]} />
-					<details class="release-log">
-						<summary>{languageGuideCopy.log}</summary>
-						<div class="release-log-content">{v.sections.map(section => <div class="notification-item"><h4 class="cyan-text">{section.title}</h4><ul>{section.items.map(item => <li>{item}</li>)}</ul></div>)}</div>
-					</details>
-				</article>)}
-			</div>
-		</ContentBox>
-
 		<ContentBox title={faqCopy.title}>
 			<div class="faq-list">
 				<details class="faq-item">
@@ -155,6 +140,23 @@ const communityUpdateCopy = {
 				</details>
 			</div>
 		</ContentBox>
+
+		<ContentBox title={versionCopy.offline}>
+			<p class="offline-intro">{versionCopy.intro}</p>
+			<div class="offline-versions">
+				{offlineVersions.map(v => <article class="offline-version">
+					<h3>{v.label.replace(/^v/,'')}</h3>
+					<p>{versionCopy[v.id as 'cx' | 'b' | 'bx' | 'a']}</p>
+					<DownloadButton version={v} text={tr.download.button} mainland={mainlandLinks[v.apk]} />
+					<details class="release-log">
+						<summary>{languageGuideCopy.log}</summary>
+						<div class="release-log-content">{v.sections.map(section => <div class="notification-item"><h4 class="cyan-text">{section.title}</h4><ul>{section.items.map(item => <li>{item}</li>)}</ul></div>)}</div>
+					</details>
+				</article>)}
+			</div>
+		</ContentBox>
+
+
 
 		<a class="scaresoul-card" href={scareSoulHref}>
 			<img src="/scaresoul/ss_logo.webp" alt="ScareSoul" />
