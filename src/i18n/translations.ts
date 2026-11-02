@@ -163,12 +163,12 @@ export const translations = {
 		story: {
 			title: 'Story Archive',
 			dg: {
-				title: 'Destroy Gunners Series',
-				era: { label: 'Era', content: 'Near future. National borders have weakened, and the global situation is controlled by a complex network of military organizations, corporate forces, and mercenary groups. War has evolved into an endless, systematic norm.' },
-				weapon: { label: 'Main Weapon', content: 'The primary force on the battlefield is the "Destroyer" humanoid combat mecha. These units are adapted to extreme terrains like ruins and deserts, generally equipped with advanced fire control systems such as missile arrays and energy weapons.' },
-				player: { label: 'Player Identity', content: 'A mercenary/executor with no clear name or affiliation. Tasks mostly involve single-machine infiltration into enemy lines, executing direct annihilation, line-breaking, or giant weapon destruction orders.' },
-				enemies: { label: 'Hostile Forces', content: 'Sources are unknown and highly mixed. They include mecha units from rival factions, rogue automated defense networks, and ultra-large experimental weapons that have escaped the control of any single faction.' },
-				core: { label: 'Core Worldview', content: 'No central linear narrative. It portrays a world where warfare has become highly automated and institutionalized, and where control over the war machine by various factions is in an extremely unstable state.' }
+				title: "Destroy Gunners ZZ",
+				era: { label: "A world at war", content: "On a planet at the edge of the galaxy, rival nations wage futile wars with mechanized weapons." },
+				weapon: { label: "The demon program", content: "A scientist, disillusioned with humanity, plants a program in the master server that controls the mechs. Its command is simple: kill all of mankind. An attack on the server triggers the program." },
+				player: { label: "The Destroyers", content: "Infected mechs become known as Destroyers. The nations unite against them, but their forces are overwhelmed and their territories fall one after another." },
+				enemies: { label: "Survivors underground", content: "The few survivors retreat underground and wait for a chance to fight back. Years later, they develop mechs capable of taking on the Destroyers and form a unit called Destroy Gunners." },
+				core: { label: "The counterattack", content: "The Gunners advance into the Madlum sector to eliminate the Destroyers and destroy the master server. But the enemy already knows their plan, and an interception force is waiting." }
 			},
 			ag: {
 				title: 'Assault Gunners Series',
@@ -179,13 +179,8 @@ export const translations = {
 				mystery: { label: 'Key Anomaly', content: 'During combat, a mysterious unit named "Ghost" frequently appears. This unit possesses autonomous combat capabilities far exceeding ordinary ANTs and seems to be secretly guiding the entire rebellion, hinting at AI awakening or deeper human intervention behind the disaster.' }
 			},
 			note: {
-				title: "Archivist's Note",
-				content: [
-					"The Destroy Gunners and Assault Gunners series developed by Shade Inc. are cult classics in the hearts of mecha shooter enthusiasts. With the closure of the developer studio, official records of these series have become increasingly difficult to find on the internet.",
-					"Systematically archiving and organizing these world-building settings—which carry the memories of early hardcore mecha action gaming—is deeply meaningful for preserving the history of mecha games.",
-					"As mecha-action pioneers of the early smartphone era (spanning multiple titles like F, SP, SP-alpha, ZZ, and Iceburn), the world of Destroy Gunners presents a quintessential 'Wasteland Sci-Fi' style. The narrative text is minimal, focusing instead on high-freedom customization and pure combat exhilaration.",
-					"Assault Gunners, which originally debuted on the PS Vita (and later reached PC, PS4, and Switch as an HD Remaster), serves as Shade Inc.'s spiritual successor in the mecha genre. Compared to Destroy Gunners, it features a more complete and concrete sci-fi narrative framework. Furthermore, it boasts voice acting from renowned seiyuu, including Kana Hanazawa, Maaya Sakamoto, and Keiji Fujiwara, adding a professional cinematic touch to the Martian conflict."
-				]
+				title: "About this text",
+				content: ["The Destroy Gunners ZZ background below is based on the game’s opening story and the introduction to its first mission."]
 			}
 		},
 		footer: '© Community Preservation Project. Original IP by SHADE Inc.',
@@ -356,12 +351,12 @@ export const translations = {
 		story: {
 			title: '故事档案',
 			dg: {
-				title: '《毁灭枪手》(Destroy Gunners) 系列设定档案',
-				era: { label: '时代背景', content: '近未来时代。传统国家边界弱化，世界局势由军事组织、企业武装和雇佣兵集团的复杂网络掌控，战争演变为一种无休止的常态系统。' },
-				weapon: { label: '主要兵器', content: '战场主力为名为“Destroyer”的人形战斗机甲。机体适应废墟、荒漠等极端地形，普遍搭载导弹阵列与能量武器等先进火控系统。' },
-				player: { label: '玩家身份', content: '无明确姓名与归属的雇佣兵/执行者。任务多为单机突入敌阵，执行直接的歼灭、防线突破或巨型兵器破坏指令。' },
-				enemies: { label: '敌对势力', content: '来源不明且高度混杂。包括其他派系的机甲建制部队、失控的自动化防御网络，以及脱离单一势力掌控的超大型实验兵器。' },
-				core: { label: '世界观核心', content: '无中心主线叙事。展现了一个战争已高度自动化、制度化的世界，各方势力对战争机器的控制权处于极其不稳定的状态。' }
+				title: "Destroy Gunners ZZ",
+				era: { label: "战争中的星球", content: "在银河系边缘的一颗星球上，各国分割领土，利用机甲进行着无休止的战争。" },
+				weapon: { label: "恶魔程序", content: "一名对人类失望的科学家，将恶魔程序植入控制机甲的主服务器，命令它消灭全人类。后来，主服务器遭到攻击，程序被触发。" },
+				player: { label: "毁灭者", content: "感染程序的机甲被称为“毁灭者”。各国联合抵抗，却因悬殊的战力差距接连溃败，领土也被逐一占领。" },
+				enemies: { label: "地下的幸存者", content: "少数幸存者逃入地下，等待反击的机会。数年后，人们终于造出了能够对抗毁灭者的机甲，并组建了 Destroy Gunners 部队。" },
+				core: { label: "反攻开始", content: "为了消灭毁灭者、摧毁主服务器，Gunners 向马德鲁姆地区进军。然而，敌人早已察觉他们的行动，迎击部队正在前方等待。" }
 			},
 			ag: {
 				title: '《突击枪手》(Assault Gunners) 系列设定档案',
@@ -372,13 +367,8 @@ export const translations = {
 				mystery: { label: '关键异象', content: '在战斗中，一台名为“Ghost”的神秘机体频繁出现。该机体拥有远超普通 ANTs 的自主战斗能力，且似乎在暗中引导整个叛乱，暗示灾难背后存在 AI 觉醒或更深层的人为干预。' }
 			},
 			note: {
-				title: '存档评论',
-				content: [
-					"Shade Inc. 开发的《毁灭枪手》（Destroy Gunners）与《突击枪手》（Assault Gunners）是机甲射击游戏爱好者心中的经典。随着开发商工作室的关闭，这个系列在网络上的官方资料已经越来越难寻觅。",
-					"将这些承载了早期硬核机甲动作游戏记忆的世界观设定系统化地进行归档与整理，对于保留机甲游戏的发展历史而言是一件非常有意义的事情。",
-					"作为智能手机时代早期的 3D 机甲动作先驱（包含 F, SP, SP-alpha, ZZ, Iceburn 等多部作品），《毁灭枪手》的世界观呈现出一种典型的“废土科幻”风格，剧情文本较少，主要将笔墨集中在极高自由度的机体客制化和纯粹的战斗爽快感上。",
-					"《突击枪手》最初登陆 PS Vita 平台（后以 HD 重制版登陆 PC、PS4 和 Switch），可以看作是 Shade Inc. 在机甲题材上的精神延续。相比《毁灭枪手》，它拥有更加完整、具体的科幻剧情框架。此外，本作还拥有花泽香菜（Kana Hanazawa）、坂本真绫（Maaya Sakamoto）以及藤原启治（Keiji Fujiwara）等知名声优配音，为火星战区增添了厚重的电影质感。"
-				]
+				title: "文本来源",
+				content: ["下方 Destroy Gunners ZZ 的背景，依据游戏内开场剧情和首关介绍整理。"]
 			}
 		},
 		footer: '© 社区保存计划。原作版权归 SHADE Inc. 所有。',
@@ -549,12 +539,12 @@ export const translations = {
 		story: {
 			title: 'ストーリー・アーカイブ',
 			dg: {
-				title: '『Destroy Gunners』シリーズ設定',
-				era: { label: '時代背景', content: '近未来。従来の国家境界は薄れ、世界は軍事組織、企業武装勢力、傭兵集団の複雑なネットワークによって支配されており、戦争は終わりのないシステム化された日常へと変貌した。' },
-				weapon: { label: '主力兵器', content: '戦場の主力は「Destroyer」と呼ばれる人型戦闘メカ。廃墟や砂漠などの極端な地形に適応し、ミサイル展開やエネルギー兵器などの高度なFCS（火器管制システム）を標準搭載している。' },
-				player: { label: 'プレイヤー身分', content: '明確な名前や所属を持たない傭兵／執行者。任務の多くは敵陣への単機潜入であり、直接的な殲滅、防衛線の突破、または巨大兵器の破壊指令を遂行する。' },
-				enemies: { label: '敵対勢力', content: '出自は不明で高度に混在している。他の派閥の正規メカ部隊、暴走した自動防衛ネットワーク、さらにはどの勢力の制御も受け付けなくなった超大型の実験的兵器などが含まれる。' },
-				core: { label: '世界観の核心', content: '中心となる一本道のストーリーは存在しない。戦争が高度に自動化、制度化された世界において、各勢力による戦争機械のコントロールが極めて不安定な状態にある様を描く。' }
+				title: "Destroy Gunners ZZ",
+				era: { label: "戦争が続く惑星", content: "銀河系のはずれにある惑星。領土を分け合う国々は、機動兵器を使った無益な戦争を続けていた。" },
+				weapon: { label: "悪魔のプログラム", content: "人類に失望した科学者は、機体を管理するマスターサーバーに悪魔のプログラムを組み込む。命令は「全人類を殺戮せよ」。やがてサーバーが攻撃を受け、その衝撃でプログラムが起動した。" },
+				player: { label: "デストロイヤー", content: "感染した機体は「デストロイヤー」と呼ばれた。各国は団結して対抗するが、圧倒的な戦力差に敗れ、次々と制圧されていく。" },
+				enemies: { label: "地下の生存者たち", content: "わずかに生き残った人々は地下に潜り、反攻の機会を待った。数年後、デストロイヤーに対抗できる機動兵器が完成し、「デストロイ・ガンナーズ」が結成される。" },
+				core: { label: "反攻の始まり", content: "デストロイヤーを一掃し、マスターサーバーを破壊するため、ガンナーズはマドラム地区へ進軍する。しかし、その行動はすでに敵に把握され、迎撃軍が待ち構えていた。" }
 			},
 			ag: {
 				title: '『Assault Gunners』シリーズ設定',
@@ -565,13 +555,8 @@ export const translations = {
 				mystery: { label: '異常現象', content: '戦闘中、「Ghost」と呼ばれる謎の機体が頻繁に姿を現す。この機体は通常のANTsを遥かに凌ぐ自律戦闘能力を持ち、叛乱全体を裏で導いている節があり、AIの覚醒もしくは人為的介入の存在を暗示している。' }
 			},
 			note: {
-				title: 'アーカイブ・ノート',
-				content: [
-					"Shade Inc. 開発の『Destroy Gunners』と『Assault Gunners』は、メカ・シューティング愛好家の間でカルト的な人気を誇る名作である。開発スタジオの閉鎖に伴い、公式記録は日を追うごとに散逸しつつある。",
-					"初期ハードコアメカアクションの記憶を宿すこれらの世界設定を体系的に保存しアーカイブすることは、メカゲームの歴史を継承する上で非常に意義深い。",
-					"スマホ時代の初期3Dメカアクションのパイオニアとして、『Destroy Gunners』の世界観は「ポストアポカリプスSF」の典型を示している。シナリオテキストは極力抑えられ、自由度の高い機体カスタマイズと純粋な戦闘の爽快感に焦点が当てられていた。",
-					"後にPS Vita向けに発売された『Assault Gunners』は、メカジャンルにおける Shade Inc. の精神的続編とも言える。DGと比較すると、より具体的なSFの物語枠組みを有しており、さらに花澤香菜、坂本真綾、藤原啓治といった著名な声優陣による音声が、火星の戦場に重厚な映画的質感を添えている。"
-				]
+				title: "本文について",
+				content: ["以下の『Destroy Gunners ZZ』の背景は、ゲーム内のオープニングと最初のミッションの導入をもとにまとめています。"]
 			}
 		},
 		footer: '© コミュニティ保存計画。原作の著作権は SHADE Inc. に帰属します。',
