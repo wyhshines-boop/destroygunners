@@ -179,8 +179,13 @@ export const translations = {
 				mystery: { label: 'Key Anomaly', content: 'During combat, a mysterious unit named "Ghost" frequently appears. This unit possesses autonomous combat capabilities far exceeding ordinary ANTs and seems to be secretly guiding the entire rebellion, hinting at AI awakening or deeper human intervention behind the disaster.' }
 			},
 			note: {
-				title: "About this text",
-				content: ["The Destroy Gunners ZZ background below is based on the game’s opening story and the introduction to its first mission."]
+				title: "Archivist's Note",
+				content: [
+					"The Destroy Gunners and Assault Gunners series developed by Shade Inc. are cult classics in the hearts of mecha shooter enthusiasts. With the closure of the developer studio, official records of these series have become increasingly difficult to find on the internet.",
+					"Systematically archiving and organizing these world-building settings—which carry the memories of early hardcore mecha action gaming—is deeply meaningful for preserving the history of mecha games.",
+					"As mecha-action pioneers of the early smartphone era (spanning multiple titles like F, SP, SP-alpha, ZZ, and Iceburn), the world of Destroy Gunners presents a quintessential 'Wasteland Sci-Fi' style. The narrative text is minimal, focusing instead on high-freedom customization and pure combat exhilaration.",
+					"Assault Gunners, which originally debuted on the PS Vita (and later reached PC, PS4, and Switch as an HD Remaster), serves as Shade Inc.'s spiritual successor in the mecha genre. Compared to Destroy Gunners, it features a more complete and concrete sci-fi narrative framework. Furthermore, it boasts voice acting from renowned seiyuu, including Kana Hanazawa, Maaya Sakamoto, and Keiji Fujiwara, adding a professional cinematic touch to the Martian conflict."
+				]
 			}
 		},
 		footer: '© Community Preservation Project. Original IP by SHADE Inc.',
@@ -367,8 +372,13 @@ export const translations = {
 				mystery: { label: '关键异象', content: '在战斗中，一台名为“Ghost”的神秘机体频繁出现。该机体拥有远超普通 ANTs 的自主战斗能力，且似乎在暗中引导整个叛乱，暗示灾难背后存在 AI 觉醒或更深层的人为干预。' }
 			},
 			note: {
-				title: "文本来源",
-				content: ["下方 Destroy Gunners ZZ 的背景，依据游戏内开场剧情和首关介绍整理。"]
+				title: '存档评论',
+				content: [
+					"Shade Inc. 开发的《毁灭枪手》（Destroy Gunners）与《突击枪手》（Assault Gunners）是机甲射击游戏爱好者心中的经典。随着开发商工作室的关闭，这个系列在网络上的官方资料已经越来越难寻觅。",
+					"将这些承载了早期硬核机甲动作游戏记忆的世界观设定系统化地进行归档与整理，对于保留机甲游戏的发展历史而言是一件非常有意义的事情。",
+					"作为智能手机时代早期的 3D 机甲动作先驱（包含 F, SP, SP-alpha, ZZ, Iceburn 等多部作品），《毁灭枪手》的世界观呈现出一种典型的“废土科幻”风格，剧情文本较少，主要将笔墨集中在极高自由度的机体客制化和纯粹的战斗爽快感上。",
+					"《突击枪手》最初登陆 PS Vita 平台（后以 HD 重制版登陆 PC、PS4 和 Switch），可以看作是 Shade Inc. 在机甲题材上的精神延续。相比《毁灭枪手》，它拥有更加完整、具体的科幻剧情框架。此外，本作还拥有花泽香菜（Kana Hanazawa）、坂本真绫（Maaya Sakamoto）以及藤原启治（Keiji Fujiwara）等知名声优配音，为火星战区增添了厚重的电影质感。"
+				]
 			}
 		},
 		footer: '© 社区保存计划。原作版权归 SHADE Inc. 所有。',
@@ -555,8 +565,13 @@ export const translations = {
 				mystery: { label: '異常現象', content: '戦闘中、「Ghost」と呼ばれる謎の機体が頻繁に姿を現す。この機体は通常のANTsを遥かに凌ぐ自律戦闘能力を持ち、叛乱全体を裏で導いている節があり、AIの覚醒もしくは人為的介入の存在を暗示している。' }
 			},
 			note: {
-				title: "本文について",
-				content: ["以下の『Destroy Gunners ZZ』の背景は、ゲーム内のオープニングと最初のミッションの導入をもとにまとめています。"]
+				title: 'アーカイブ・ノート',
+				content: [
+					"Shade Inc. 開発の『Destroy Gunners』と『Assault Gunners』は、メカ・シューティング愛好家の間でカルト的な人気を誇る名作である。開発スタジオの閉鎖に伴い、公式記録は日を追うごとに散逸しつつある。",
+					"初期ハードコアメカアクションの記憶を宿すこれらの世界設定を体系的に保存しアーカイブすることは、メカゲームの歴史を継承する上で非常に意義深い。",
+					"スマホ時代の初期3Dメカアクションのパイオニアとして、『Destroy Gunners』の世界観は「ポストアポカリプスSF」の典型を示している。シナリオテキストは極力抑えられ、自由度の高い機体カスタマイズと純粋な戦闘の爽快感に焦点が当てられていた。",
+					"後にPS Vita向けに発売された『Assault Gunners』は、メカジャンルにおける Shade Inc. の精神的続編とも言える。DGと比較すると、より具体的なSFの物語枠組みを有しており、さらに花澤香菜、坂本真綾、藤原啓治といった著名な声優陣による音声が、火星の戦場に重厚な映画的質感を添えている。"
+				]
 			}
 		},
 		footer: '© コミュニティ保存計画。原作の著作権は SHADE Inc. に帰属します。',
