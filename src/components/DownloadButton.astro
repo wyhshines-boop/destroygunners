@@ -1,0 +1,24 @@
+---
+import buttonImg from '../img/button.webp';
+interface Props {
+ version: { label: string; apk: string; hasMirror: boolean; mirrors?: { googleDrive?: string; lanzou?: string; lanzouPw?: string } };
+ text: string;
+ mainland?: string;
+ id?: string;
+}
+const { version, text, mainland, id } = Astro.props;
+const name = version.label.replace(/^v/, '');
+---
+<div class="download-btn-wrap">
+ <button id={id} class="retro-btn open-download" data-apk={version.apk} data-version={name} data-download-label={text}
+  data-mainland={mainland} data-has-mirror={String(version.hasMirror)} data-google-drive={version.mirrors?.googleDrive}
+  data-lanzou={version.mirrors?.lanzou} data-lanzou-pw={version.mirrors?.lanzouPw} style={`background-image: url('${buttonImg.src}');`}>
+  <span class="btn-inner">{text} {name}</span>
+ </button>
+</div>
+<style>
+.download-btn-wrap { margin-top: 12px; width: 280px; max-width: 100%; }
+.retro-btn { display:flex; align-items:center; justify-content:center; width:100%; min-height:64px; padding:12px 18px; border:0; background-color:transparent; background-size:100% 100%; color:#30da96; font:inherit; font-size:.9rem; font-weight:400; letter-spacing:1px; cursor:pointer; }
+.retro-btn:hover { filter:drop-shadow(0 0 5px rgba(0,240,255,.4)); color:#fff; }
+.retro-btn:focus-visible { outline:2px solid #00f0ff; outline-offset:4px; }
+</style>

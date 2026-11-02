@@ -117,10 +117,8 @@ export const translations = {
 						{
 							title: 'Destroy Gunners ZZ v3.0.0a (2026-03-22)',
 							items: [
-								'GREE servers have been shut down.',
-								'This patch allows offline play.',
-								'No copyright infringement intended.',
-								'Enjoy the game!',
+								'The original service ended years ago. This offline edition was made so players can keep enjoying the game.',
+								'Play without the original servers. All original rights remain with their respective owners.',
 							],
 						},
 						{
@@ -310,10 +308,8 @@ export const translations = {
 						{
 							title: 'Destroy Gunners ZZ v3.0.0a (2026-03-22)',
 							items: [
-								'GREE 服务器已关闭。',
-								'此补丁支持离线游玩。',
-								'无意侵犯版权。',
-								'祝游戏愉快！',
+								'原版停服多年。为让玩家继续体验这款游戏，我们制作了离线版。',
+								'无需连接原版服务器即可游玩，原作版权归原权利方所有。',
 							],
 						},
 						{
@@ -503,10 +499,8 @@ export const translations = {
 						{
 							title: 'Destroy Gunners ZZ v3.0.0a (2026-03-22)',
 							items: [
-								'GREE サーバーのサービスは終了しました。',
-								'このパッチによりオフラインでのプレイが可能になります。',
-								'著作権侵害の意図はありません。',
-								'ゲームをお楽しみください！',
+								'原作のサービス終了後も遊べるよう、オフライン版を制作しました。',
+								'原作のサーバーに接続せずプレイできます。原作の権利は各権利者に帰属します。',
 							],
 						},
 						{

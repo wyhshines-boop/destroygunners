@@ -27,6 +27,11 @@ export function initMainlandDownload() {
   cancel.addEventListener('click', () => controller?.abort());
   // Closing the dialog stops the transfer instead of leaving it running unseen.
   const stop = () => controller?.abort();
+  document.getElementById('download-modal')?.addEventListener('download-selection-change', () => {
+    stop(); box.hidden = true; save.hidden = true;
+    if (objectUrl) { URL.revokeObjectURL(objectUrl); objectUrl = null; }
+    save.removeAttribute('href');
+  });
   document.getElementById('close-download')?.addEventListener('click', stop);
   document.getElementById('download-modal')?.addEventListener('click', e => {
     if (e.target === e.currentTarget) stop();

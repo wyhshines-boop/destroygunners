@@ -1,5 +1,6 @@
 ---
 import ContentBox from './ContentBox.astro';
+import DownloadButton from './DownloadButton.astro';
 import borderImg from '../img/border.webp';
 import buttonImg from '../img/button.webp';
 import { type Lang, t } from '../i18n/translations';
@@ -53,6 +54,13 @@ const languageGuideCopy = {
  en: { title: 'How to change the game language', log: 'Release notes', settings: 'In the lobby, tap Settings (设置) at the bottom right.', language: 'Find Language (语言) and tap to cycle through 简体中文, English and 日本語.', restart: 'Close Settings and choose Restart. The selected language takes effect after restarting.' },
  ja: { title: 'ゲームの言語を切り替える', log: '更新履歴', settings: 'ロビー右下の設定（设置）をタップします。', language: '言語（语言）をタップすると、简体中文・English・日本語を切り替えられます。', restart: '設定を閉じて再起動を選ぶと、選択した言語が反映されます。' },
 }[lang];
+const versionCopy = {
+ zh: { community: '社区服', offline: '离线版本', intro: '原版停服多年。为让玩家继续体验这款游戏，制作并分享了这些离线版本。', cx: '全机甲解锁版，基于3.0.0b。', b: '离线版。', bx: '离线全机甲解锁版。', a: '早期离线版。' },
+ en: { community: 'Community Server', offline: 'Offline Versions', intro: 'The original service ended years ago. These offline versions were made so players can continue enjoying the game.', cx: 'All-mecha unlock edition, based on 3.0.0b.', b: 'Offline edition.', bx: 'Offline edition with all mechs unlocked.', a: 'Earlier offline edition.' },
+ ja: { community: 'コミュニティ版', offline: 'オフライン版', intro: '原作のサービス終了後も遊べるように、これらのオフライン版を制作・公開しています。', cx: '3.0.0bをベースにした全機体解放版。', b: 'オフライン版。', bx: '全機体解放オフライン版。', a: '初期のオフライン版。' },
+}[lang];
+const communityVersion = tr.notifications.versions[0];
+const offlineVersions = tr.notifications.versions.slice(1);
 const communityUpdateCopy = {
  en: { kicker: 'Community Server', title: '3.0.0c is available', description: 'Account sync, wingman support and Dog Fight. New accounts start with 2,000 coins.', imageAlt: 'Destroy Gunners ZZ community server hangar' },
  zh: { kicker: '社区服', title: '3.0.0c 已发布', description: '账户同步、好友助战和 Dog Fight 已开放。新账户初始 2000 金币。', imageAlt: 'Destroy Gunners ZZ 社区服大厅' },
@@ -72,77 +80,45 @@ const communityUpdateCopy = {
 			<span class="scaresoul-card-action">{scareSoulCopy.action}</span>
 		</a>
 
-		<ContentBox title={tr.notifications.title}>
-			<div class="version-tabs">
-				{tr.notifications.versions.map((v, i) => (
-					<button 
-						class={`version-tab ${i === 0 ? 'active' : ''}`} 
-						data-version-id={v.id}
-						data-apk={v.apk}
-						data-mainland={mainlandLinks[v.apk]}
-						data-has-mirror={String(v.hasMirror)}
-						data-google-drive={v.mirrors?.googleDrive}
-						data-lanzou={v.mirrors?.lanzou}
-						data-lanzou-pw={v.mirrors?.lanzouPw}
-					>
-						{v.name}
-					</button>
-				))}
-			</div>
-
+		<ContentBox title={versionCopy.community}>
 			<article class="community-update-card">
 				<img src={lang === 'zh' ? '/community/screens/zh/hangar.webp' : '/community/screens/hangar.webp'} alt={communityUpdateCopy.imageAlt} width={lang === 'zh' ? 1440 : 1046} height={lang === 'zh' ? 664 : 474} loading="eager" fetchpriority="high" />
 				<div class="community-update-copy">
 					<span>{communityUpdateCopy.kicker}</span>
 					<strong>{communityUpdateCopy.title}</strong>
 					<p>{communityUpdateCopy.description}</p>
-					<div class="download-btn-wrap">
-						<button
-							id="open-download"
-							class="retro-btn"
-							data-apk={tr.notifications.versions[0].apk}
-							data-mainland={mainlandLinks[tr.notifications.versions[0].apk]}
-							data-has-mirror={String(tr.notifications.versions[0].hasMirror)}
-							data-google-drive={tr.notifications.versions[0].mirrors?.googleDrive}
-							data-lanzou={tr.notifications.versions[0].mirrors?.lanzou}
-							data-lanzou-pw={tr.notifications.versions[0].mirrors?.lanzouPw}
-							style={`background-image: url('${buttonImg.src}');`}
-						>
-							<span class="btn-inner">{tr.download.button}</span>
-						</button>
-					</div>
+					<DownloadButton id="open-download" version={communityVersion} text={tr.download.button} mainland={mainlandLinks[communityVersion.apk]} />
 				</div>
 			</article>
-
-			<div id="notifications-container">
-				{tr.notifications.versions.map((v, i) => (
-					<div class={`version-content ${i === 0 ? 'active' : ''}`} id={`version-content-${v.id}`}>
-						<details class="release-log">
-							<summary><span>{languageGuideCopy.log}</span><span>{v.sections[0]?.title || v.label}</span></summary>
-							<div class="release-log-content">
-								{v.sections.map((section, index) => (
-									<div class="notification-item">
-										{index > 0 && <h3 class="cyan-text">{section.title}</h3>}
-										<ul>{section.items.map(item => <li>{item}</li>)}</ul>
-									</div>
-								))}
-							</div>
-						</details>
-						{v.id === 'c' && <section class="language-guide" aria-labelledby="language-guide-title">
-							<h3 id="language-guide-title">{languageGuideCopy.title}</h3>
-							<ol>
-								<li><p>{languageGuideCopy.settings}</p><img src="/community/guide/settings.webp" alt={languageGuideCopy.settings} width="1100" height="495" loading="lazy" decoding="async" /></li>
-								<li><p>{languageGuideCopy.language}</p><img src="/community/guide/language.webp" alt={languageGuideCopy.language} width="1100" height="495" loading="lazy" decoding="async" /></li>
-								<li class="restart-step">{languageGuideCopy.restart}</li>
-							</ol>
-						</section>}
-					</div>
-				))}
-			</div>
-
-
-
+			<details class="release-log">
+				<summary><span>{languageGuideCopy.log}</span><span>{communityVersion.sections[0].title}</span></summary>
+				<div class="release-log-content">{communityVersion.sections.map((section,index) => (
+					<div class="notification-item">{index > 0 && <h3 class="cyan-text">{section.title}</h3>}<ul>{section.items.map(item => <li>{item}</li>)}</ul></div>
+				))}</div>
+			</details>
+			<section class="language-guide" aria-labelledby="language-guide-title">
+				<h3 id="language-guide-title">{languageGuideCopy.title}</h3>
+				<ol>
+					<li><p>{languageGuideCopy.settings}</p><img src="/community/guide/settings.webp" alt={languageGuideCopy.settings} width="1100" height="495" loading="lazy" decoding="async" /></li>
+					<li><p>{languageGuideCopy.language}</p><img src="/community/guide/language.webp" alt={languageGuideCopy.language} width="1100" height="495" loading="lazy" decoding="async" /></li>
+					<li class="restart-step">{languageGuideCopy.restart}</li>
+				</ol>
+			</section>
 			<ScreenshotGallery lang={lang} />
+		</ContentBox>
+		<ContentBox title={versionCopy.offline}>
+			<p class="offline-intro">{versionCopy.intro}</p>
+			<div class="offline-versions">
+				{offlineVersions.map(v => <article class="offline-version">
+					<h3>{v.label.replace(/^v/,'')}</h3>
+					<p>{versionCopy[v.id as 'cx' | 'b' | 'bx' | 'a']}</p>
+					<DownloadButton version={v} text={tr.download.button} mainland={mainlandLinks[v.apk]} />
+					<details class="release-log">
+						<summary>{languageGuideCopy.log}</summary>
+						<div class="release-log-content">{v.sections.map(section => <div class="notification-item"><h4 class="cyan-text">{section.title}</h4><ul>{section.items.map(item => <li>{item}</li>)}</ul></div>)}</div>
+					</details>
+				</article>)}
+			</div>
 		</ContentBox>
 
 		<ContentBox title={tr.about.title}>
@@ -231,46 +207,9 @@ const communityUpdateCopy = {
 		audio.play().catch(() => {});
 	}
 
-	function initVersionSwitcher() {
-		const tabs = document.querySelectorAll('.version-tab');
-		const contents = document.querySelectorAll('.version-content');
-		const mainDownloadBtn = document.getElementById('open-download');
-
-		tabs.forEach(tab => {
-			tab.addEventListener('click', () => {
-				playSound(sfxOpen);
-				const versionId = (tab as HTMLElement).dataset.versionId;
-				const apk = (tab as HTMLElement).dataset.apk;
-				const hasMirror = (tab as HTMLElement).dataset.hasMirror;
-
-				// Update tabs
-				tabs.forEach(t => t.classList.remove('active'));
-				tab.classList.add('active');
-
-				// Update content
-				contents.forEach(c => {
-					if (c.id === `version-content-${versionId}`) {
-						c.classList.add('active');
-					} else {
-						c.classList.remove('active');
-					}
-				});
-
-				// Update main download button data
-				if (mainDownloadBtn) {
-					mainDownloadBtn.dataset.apk = (tab as HTMLElement).dataset.apk;
-					mainDownloadBtn.dataset.mainland = (tab as HTMLElement).dataset.mainland || '';
-					mainDownloadBtn.dataset.hasMirror = (tab as HTMLElement).dataset.hasMirror;
-					mainDownloadBtn.dataset.googleDrive = (tab as HTMLElement).dataset.googleDrive;
-					mainDownloadBtn.dataset.lanzou = (tab as HTMLElement).dataset.lanzou;
-					mainDownloadBtn.dataset.lanzouPw = (tab as HTMLElement).dataset.lanzouPw;
-				}
-			});
-		});
-	}
 
 	function initModal() {
-		const openBtn = document.getElementById("open-download");
+		const openBtns = document.querySelectorAll<HTMLButtonElement>(".open-download");
 		const modal = document.getElementById("download-modal");
 		const closeBtn = document.getElementById("close-download");
 		const modalBox = modal?.querySelector(".modal-box");
@@ -278,7 +217,7 @@ const communityUpdateCopy = {
 		const modalDirectLink = document.getElementById('modal-download-direct') as HTMLAnchorElement;
 		const mirrorLinks = document.getElementById('mirror-links');
 
-		if (!openBtn || !modal) return;
+		if (!openBtns.length || !modal) return;
 
 		function closeModal() {
 			playSound(sfxClose);
@@ -293,10 +232,13 @@ const communityUpdateCopy = {
 			);
 		}
 
-		openBtn.addEventListener("click", () => {
+		openBtns.forEach(openBtn => openBtn.addEventListener("click", () => {
 			playSound(sfxOpen);
 			
-			const { apk, mainland, hasMirror, googleDrive, lanzou, lanzouPw } = openBtn.dataset;
+			const { apk, mainland, hasMirror, googleDrive, lanzou, lanzouPw, version, downloadLabel } = openBtn.dataset;
+			modal.dispatchEvent(new Event('download-selection-change'));
+			const title = modal.querySelector('.modal-title');
+			if (title) title.textContent = `${downloadLabel || ''} ${version || ''}`.trim();
 
 			// Update modal content based on current version data from button
 			if (modalDirectLink) {
@@ -330,7 +272,7 @@ const communityUpdateCopy = {
 
 			modal.classList.remove("closing");
 			modal.classList.add("active");
-		});
+		}));
 
 		closeBtn?.addEventListener("click", closeModal);
 
@@ -358,19 +300,25 @@ const communityUpdateCopy = {
 		});
 	}
 
-	initVersionSwitcher();
 	initModal();
 	initDownloadTracking();
 	initMainlandDownload();
 	document.addEventListener("astro:page-load", () => {
-		initVersionSwitcher();
-		initModal();
+			initModal();
 		initDownloadTracking();
 	initMainlandDownload();
 	});
 </script>
 
 <style>
+	.offline-intro { color:#b4cfd2; line-height:1.8; margin:0 0 20px; }
+	.offline-versions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+	.offline-version { min-width:0; padding:18px; background:rgba(4,24,29,.65); border:1px solid #275e66; }
+	.offline-version > h3 { margin:0 0 8px; color:#8eeaf0; font-size:1.2rem; }
+	.offline-version > p { margin:0 0 14px; line-height:1.7; }
+	.offline-version .release-log { margin:18px 0 0; }
+	@media (max-width:700px) { .offline-versions { grid-template-columns:minmax(0,1fr); } }
+
 	.release-log { border: 1px solid #275e66; background: rgba(4, 24, 29, .65); margin-bottom: 24px; }
 	.release-log summary { cursor: pointer; padding: 16px; color: #8eeaf0; line-height: 1.6; overflow-wrap: anywhere; }
 	.release-log summary span:first-child { margin-right: 12px; color: #e0ffff; }
