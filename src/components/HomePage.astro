@@ -169,6 +169,11 @@ const communityUpdateCopy = {
 				<span class="btn-inner">{tr.download.mainland}</span>
 			</a>
 			<p id="mainland-download-note" hidden={!mainlandLinks[tr.notifications.versions[0].apk]}>{tr.download.mainlandNote}</p>
+			<div id="mainland-progress" hidden>
+				<p role="status" aria-live="polite"></p>
+				<progress aria-label={tr.download.mainland}></progress>
+				<div class="download-actions"><button type="button"></button><a hidden></a></div>
+			</div>
 			<div id="mirror-links" class="mirror-links">
 				<a
 					id="modal-download-google"
@@ -201,6 +206,7 @@ const communityUpdateCopy = {
 </div>
 
 <script>
+	import { initMainlandDownload } from '../scripts/mainland-download';
 	const sfxOpen = new Audio('/audio/button1.ogg');
 	const sfxClose = new Audio('/audio/button2.ogg');
 
@@ -341,15 +347,24 @@ const communityUpdateCopy = {
 	initVersionSwitcher();
 	initModal();
 	initDownloadTracking();
+	initMainlandDownload();
 	document.addEventListener("astro:page-load", () => {
 		initVersionSwitcher();
 		initModal();
 		initDownloadTracking();
+	initMainlandDownload();
 	});
 </script>
 
 <style>
-	#modal-download-mainland[hidden], #mainland-download-note[hidden] { display: none; }
+	#mainland-progress { padding: 12px; background: #06262d; border: 1px solid #28717a; text-align: left; }
+	#mainland-progress p { margin: 0 0 8px; font-size: .85rem; line-height: 1.5; }
+	#mainland-progress progress { width: 100%; height: 8px; accent-color: #00f0ff; }
+	.download-actions { display: flex; gap: 12px; margin-top: 10px; }
+	.download-actions button, .download-actions a { font: inherit; font-size: .85rem; color: #c5faff; background: #103840; border: 1px solid #28717a; padding: 6px 12px; cursor: pointer; text-decoration: none; }
+	#modal-download-mainland[aria-disabled="true"] { opacity: .65; cursor: progress; }
+
+	#mainland-progress[hidden], #mainland-progress [hidden], #modal-download-mainland[hidden], #mainland-download-note[hidden] { display: none; }
 	#mainland-download-note { color: #b7cdcf; font-size: .85rem; line-height: 1.5; margin: 8px 0 16px; }
 	.visually-hidden {
 		position: absolute;
