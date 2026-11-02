@@ -168,7 +168,6 @@ const communityUpdateCopy = {
 			>
 				<span class="btn-inner">{tr.download.mainland}</span>
 			</a>
-			<p id="mainland-download-note" hidden={!mainlandLinks[tr.notifications.versions[0].apk]}>{tr.download.mainlandNote}</p>
 			<div id="mainland-progress" hidden>
 				<p role="status" aria-live="polite"></p>
 				<progress aria-label={tr.download.mainland}></progress>
@@ -290,8 +289,6 @@ const communityUpdateCopy = {
 			const mainlandLink = document.getElementById('modal-download-mainland') as HTMLAnchorElement;
 			if (mainlandLink) {
 				mainlandLink.hidden = !mainland;
-				const note = document.getElementById('mainland-download-note');
-				if (note) note.hidden = !mainland;
 				if (mainland) mainlandLink.href = mainland;
 				else mainlandLink.removeAttribute('href');
 			}
@@ -364,8 +361,7 @@ const communityUpdateCopy = {
 	.download-actions button, .download-actions a { font: inherit; font-size: .85rem; color: #c5faff; background: #103840; border: 1px solid #28717a; padding: 6px 12px; cursor: pointer; text-decoration: none; }
 	#modal-download-mainland[aria-disabled="true"] { opacity: .65; cursor: progress; }
 
-	#mainland-progress[hidden], #mainland-progress [hidden], #modal-download-mainland[hidden], #mainland-download-note[hidden] { display: none; }
-	#mainland-download-note { color: #b7cdcf; font-size: .85rem; line-height: 1.5; margin: 8px 0 16px; }
+	#mainland-progress[hidden], #mainland-progress [hidden], #modal-download-mainland[hidden] { display: none; }
 	.visually-hidden {
 		position: absolute;
 		width: 1px;
