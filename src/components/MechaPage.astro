@@ -1,0 +1,54 @@
+---
+import { type Lang } from '../i18n/translations';
+import catalog from '../data/mecha.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  zh: { title: '机甲图鉴', intro: 'Destroy Gunners ZZ 原版23台机甲。介绍整理自游戏内说明，图片后续补充。', jump: '选择机甲' },
+  en: { title: 'Mecha Catalog', intro: 'The 23 original mechs in Destroy Gunners ZZ, with descriptions from the game. Images will be added later.', jump: 'Choose a mech' },
+  ja: { title: '機体図鑑', intro: 'Destroy Gunners ZZ のオリジナル機体23機。ゲーム内の機体説明を掲載しています。画像は順次追加予定です。', jump: '機体を選ぶ' },
+}[lang];
+const mecha = catalog as Array<{ index: number; name: string; description: Record<Lang, string>; image: string | null }>;
+---
+<main class="mecha-page">
+  <header class="page-heading">
+    <h1>{copy.title}</h1>
+    <p>{copy.intro}</p>
+  </header>
+  <nav class="mecha-index" aria-label={copy.jump}>
+    {mecha.map(mech => <a href={`#mecha-${mech.index}`}>{mech.name}</a>)}
+  </nav>
+  <div class="mecha-grid">
+    {mecha.map(mech => (
+      <article class="mecha-card" id={`mecha-${mech.index}`}>
+        {mech.image && <img src={mech.image} alt={mech.name} width="800" height="600" loading="lazy" decoding="async" />}
+        <header><span aria-hidden="true">{String(mech.index + 1).padStart(2, '0')}</span><h2>{mech.name}</h2></header>
+        <p>{mech.description[lang]}</p>
+      </article>
+    ))}
+  </div>
+</main>
+<style>
+  .mecha-page { max-width: 1120px; margin: 0 auto; padding: 40px 20px 64px; color: #d5e9eb; }
+  .page-heading { margin-bottom: 24px; }
+  h1 { margin: 0 0 12px; color: #e0ffff; font-size: 2rem; letter-spacing: 2px; }
+  .page-heading p { margin: 0; color: #a3bfc3; line-height: 1.8; }
+  .mecha-index { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .mecha-index a { padding: 7px 10px; border: 1px solid #29616b; background: rgba(5, 27, 31, .88); color: #c1e2e6; font-size: .85rem; text-decoration: none; }
+  .mecha-index a:hover { color: #00f0ff; border-color: #00c9d8; }
+  a:focus-visible { outline: 2px solid #00f0ff; outline-offset: 3px; }
+  .mecha-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+  .mecha-card { min-width: 0; padding: 24px; background: rgba(5, 27, 31, .93); border: 1px solid #285b63; border-top: 2px solid #00b5c3; scroll-margin-top: 120px; }
+  .mecha-card header { display: flex; align-items: baseline; gap: 12px; }
+  .mecha-card header span { color: #698f97; font-size: .85rem; }
+  h2 { margin: 0; color: #80f1fa; font-size: 1.25rem; font-weight: 500; overflow-wrap: anywhere; }
+  .mecha-card p { margin: 16px 0 0; font-family: system-ui, sans-serif; font-size: 1rem; line-height: 1.9; overflow-wrap: anywhere; }
+  .mecha-card img { display: block; width: 100%; height: auto; object-fit: contain; margin-bottom: 20px; }
+  @media (max-width: 700px) {
+    .mecha-page { padding: 28px 16px 48px; }
+    .mecha-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+    .mecha-card { padding: 20px; }
+    h1 { font-size: 1.7rem; }
+  }
+</style>

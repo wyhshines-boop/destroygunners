@@ -1,0 +1,255 @@
+[
+  {
+    "index": 0,
+    "name": "DA-01",
+    "description": {
+      "zh": "量产型机甲，性能有限，对各类攻击均缺乏装甲防护，不适合高难度作战。",
+      "en": "Lacking in performance and with no armor implementations against any form of attack、this mass production DGunner is not suited for advanced operations.",
+      "ja": "性能に乏しく、各種攻撃に対する防御も実装されていない。あくまで量産型であるため、高度な作戦には適さない機体である"
+    },
+    "image": null,
+    "source_string_id": 263
+  },
+  {
+    "index": 1,
+    "name": "XDA-01A",
+    "description": {
+      "zh": "以量产型DA-01为基础开发。整体性能变化不大，但抗爆炸能力较强，插槽也较多。型号中的A代表突击型，内置步枪三连射机构。",
+      "en": "Based on the mass production (DA-01) model. While it does not offer any real performance upgrades、it does feature high anti-explosion defense and has a decent amount of slots. The [A] in its model number stands for [Assault]、as its has a built in 3-round burst mechanism for rifles.",
+      "ja": "量産機(DA-01)の原型。大きな性能差は無いが、対爆発防御に優れ、スロット数も僅かに多い。開発コードのＡはアサルトを表し、ライフルは３点バースト機構が組み込まれる"
+    },
+    "image": null,
+    "source_string_id": 264
+  },
+  {
+    "index": 2,
+    "name": "ETMLT-X",
+    "description": {
+      "zh": "依据回收的零散技术资料开发的全新概念机甲。外形与旧机型截然不同，需要熟练的操纵技术才能发挥其真正实力。",
+      "en": "A new concept model based on bits and pieces of scavenged data、 this DGunner differs greatly from previous models with its characteristic form. In order to use this DGunner to its best potential、advanced piloting skills are a necessity.",
+      "ja": "サルベージしたデータを元に作られた新コンセプトの機体で、従来機と大きく異なるフォルムが特徴である。その性能を生かすためには、高度な操縦技術が必要である"
+    },
+    "image": null,
+    "source_string_id": 265
+  },
+  {
+    "index": 3,
+    "name": "DA-03A",
+    "description": {
+      "zh": "外观轻巧，却拥有较高耐久，各项性能均衡，适合多种任务。内置机构还能延长激光武器的照射时间。",
+      "en": "Though this DGunner looks like a lightweight model、it has high endurance(HP) and its basic performance very balanced. This is a good choice for any mission. This DGunner also has a feature that increases the exposure time of laser weapons.",
+      "ja": "軽量型に見えるが、耐久力(ＨＰ)は高い。基本性能もバランスが取れており、あらゆる作戦で扱いやすい機体である。また、レーザー照射時間が長いという特徴を持つ"
+    },
+    "image": null,
+    "source_string_id": 266
+  },
+  {
+    "index": 4,
+    "name": "DA-01/RA",
+    "description": {
+      "zh": "搭载反应装甲，兼具抗冲击与抗爆炸防护。作为重型机甲，受到攻击时有一定概率不会被击退。",
+      "en": "This DGunner features [Reactive Armor] that acts as both anti-impact and anti-explosion defense. Since this is a heavyweight DGunner、 it has a chance to avoid knockback when attacked.",
+      "ja": "増設装甲(リアクティブアーマー)による「対衝撃防御」「対爆発防御」を実装。また、重量増加に伴い、ダメージを受けた際のノックバックも回避可能である"
+    },
+    "image": null,
+    "source_string_id": 267
+  },
+  {
+    "index": 5,
+    "name": "XDA-03c1",
+    "description": {
+      "zh": "利用回收技术开发的试验机之实战改进型。性能与量产型DA-03A相差不大，型号后缀采用小写c表示定制。",
+      "en": "This DGunner is the combat ready version of a prototype DGunner developed from scavenged technology. There is not much of a difference in performance compared with the mass production model (DA-03A). It has a custom lowercase [c] in its model number.",
+      "ja": "サルベージした技術を元に開発した試作機を、戦闘可能レベルにまで引き上げた機体。量産機(DA-03A)と比べ、大きな性能差は無い。開発コードのｃはカスタムの頭文字"
+    },
+    "image": null,
+    "source_string_id": 268
+  },
+  {
+    "index": 6,
+    "name": "XDA-01C",
+    "description": {
+      "zh": "与XDA-01A同时开发的DA系列机甲。注重火力，内置加农炮速射机构，抗电击能力也较高。型号中的C代表加农炮型。",
+      "en": "This DA series DGunner was developed at the same time as the (XDA-01A) prototype. It was designed for firepower; this DGunner's cannon has a fast rate of fire. It also features heavy anti-electro defense. The [C] in its model number stands for [Cannon].",
+      "ja": "ＤＡ系試験機(XDA-01A)と同時に開発された機体。火力強化を重視した設計で、キャノンの展開速度が速い。「対電磁防御」にも優れている。開発コードのＣはキャノンを表す"
+    },
+    "image": null,
+    "source_string_id": 269
+  },
+  {
+    "index": 7,
+    "name": "XDA-01C2",
+    "description": {
+      "zh": "与01C一样内置加农炮速射机构。更注重防护，抗冲击和抗爆炸能力均有所提高。",
+      "en": "Like the [01C]、this DGunner features a fast firing cannon. This model puts more thought into defense; its anti-impact and anti-explosion defenses have both been increased.",
+      "ja": "01Cと同様にキャノンの展開速度が速い。防御強化を重視した設計で、「対衝撃防御」「対爆発防御」を向上させた"
+    },
+    "image": null,
+    "source_string_id": 270
+  },
+  {
+    "index": 8,
+    "name": "DFA-0",
+    "description": {
+      "zh": "全面重新设计存在缺陷的ETMLT-X试验机后，成功大幅提升整体性能。由于改动较大，采用了不同于试验机的新型号。",
+      "en": "By completely redesigning the problematic (ETMLT-X) prototype、 the development team was successful in making a DGunner with a drastically improved level of performance. Its model number differs from its prototype due to the redesign.",
+      "ja": "問題の多かった試験機(ETMLT-X)を根本から再構築した結果、飛躍的に性能を向上させることに成功した。再設計により試験機と開発コードが異なる"
+    },
+    "image": null,
+    "source_string_id": 271
+  },
+  {
+    "index": 9,
+    "name": "XDA-03c2",
+    "description": {
+      "zh": "相较于改良试验型XDA-03C1，各项性能进一步提升且更加均衡。驾驶舱与主要系统集中于背部，武器系统则集中于前部。",
+      "en": "When compared to the improved prototype redesign model (XDA-03C1)、 this DGunner has a drastically higher overall performance、and is very balanced. The cockpit、and all other fundamental systems have been concentrated to the back、while all the weapon systems have been brought to the front.",
+      "ja": "試験機改良型(XDA-03C1)と比べ、全性能が飛躍的に向上し、バランスの取れた機体となった。操縦席等、基幹システムを背部に集中させ、前方に武器を集めた構造である"
+    },
+    "image": null,
+    "source_string_id": 272
+  },
+  {
+    "index": 10,
+    "name": "XDA-01B",
+    "description": {
+      "zh": "与XDA-01A同时开发、一度失踪的DA系列试验机。搭载试验性刀刃部件，专为近距离战斗设计。型号中的B代表刀刃型。",
+      "en": "This DA series DGunner was developed at the same time as the (XDA-01A) prototype、 but it had been lost for a long time. With an experimental [blade] part installed、this DGunner was made for close-quarters combat. The [B] in its model number stands for [Blade].",
+      "ja": "ＤＡ系試験機(XDA-01A)と同時に開発されたが、長い間失われていた。試験搭載したブレードパーツにより、近接攻撃を得意としている。開発コードのＢはブレードを表す"
+    },
+    "image": null,
+    "source_string_id": 273
+  },
+  {
+    "index": 11,
+    "name": "DFA-0/Bst",
+    "description": {
+      "zh": "在高性能量产型DFA-0基础上持续改进的顶级机甲。具备加农炮速射能力，并以大量插槽支持丰富的装备组合。",
+      "en": "Based on the superior-grade production model (DFA-0)、further improvements have been making this a top-class DGunner. It features a fast firing cannon、 and an overwhelming amount of slots that allows for a large number of parts to be equipped.",
+      "ja": "上位量産機(DFA-0)を元に更に改良を加えた最高位の機体。キャノン展開速度が速く、圧倒的なスロット数で多くのパーツ装備を可能とした"
+    },
+    "image": null,
+    "source_string_id": 274
+  },
+  {
+    "index": 12,
+    "name": "XDA-04",
+    "description": {
+      "zh": "DA-01的正统后继试验机。牺牲防御，大幅提高攻击力，贯彻【进攻就是最好的防守】这一设计理念。",
+      "en": "This is the proper follow-up model to the (DA-01)、but this is an experimental DGunner that has sacrificed defense for a large increase in attack power. The DGunner lives by the motto、 [The best defense is a good offense.]",
+      "ja": "量産機(DA-01)の正当な後継機であるが、防御性能を犠牲にし、攻撃性能を大幅に上げた実験機。「攻撃は最大の防御なり」を地で行く機体である"
+    },
+    "image": null,
+    "source_string_id": 275
+  },
+  {
+    "index": 13,
+    "name": "DFA-0C",
+    "description": {
+      "zh": "以高性能量产型DFA-0的顶级改良机DFA-0/Bst为基础，牺牲部分综合性能，进一步提升攻击力。",
+      "en": "This is a modification of the top-class (DFA-0/Bst)、which was based on the superior-grade production model (DFA-0) with further improvements made. It has sacrificed some performance to increase its offensive power.",
+      "ja": "上位量産機(DFA-0)を元に更に改良を加えた最高位の機体DFA-0/Bstの調整機。他の性能を犠牲にして攻撃性能を引き上げている"
+    },
+    "image": null,
+    "source_string_id": 276
+  },
+  {
+    "index": 14,
+    "name": "XDA-01B2",
+    "description": {
+      "zh": "与XDA-01A同时开发的DA系列XDA-01B之改良型。攻防性能均得到强化，保留刀刃部件，擅长近战。",
+      "en": "This is modification of the (XDA-01B) model、a DA series DGunner which was developed at the same time as (XDA-01A) prototype. Both its offensive and defensive performances have been successfully increased. It also features a blade part making it strong in close-quarters combat as well.",
+      "ja": "ＤＡ系試験機(XDA-01A)と同時に開発されたXDA-01Bの調整機。攻撃・防御性能の底上げに成功している。また、ブレードパーツによる近接攻撃も健在である"
+    },
+    "image": null,
+    "source_string_id": 277
+  },
+  {
+    "index": 15,
+    "name": "XDA-04B",
+    "description": {
+      "zh": "均衡型XDA-04的改进型。强化进攻能力的同时，也弥补了原有防御不足，成为综合性能出色的机甲。",
+      "en": "This is an improved version of the balanced (XDA-04) DGunner. Not only has its offensive ability been strengthened、its once inferior defense has also been improved、 remaking it into a very high-performance DGunner.",
+      "ja": "XDA-04の性能バランスを整えた改良機。攻撃性能の強化だけでなく、劣っていた防御性能を強化し高性能機として生まれ変わった"
+    },
+    "image": null,
+    "source_string_id": 278
+  },
+  {
+    "index": 16,
+    "name": "XDA-03c3",
+    "description": {
+      "zh": "改良试验机XDA-03C2的进一步改进型。全面提升各项性能，能够应对长时间作战。",
+      "en": "A modified model of the improved prototype model (XDA-03C2)、 that features an overall improvement of performance. It has the ability to endure even during the longest mission.",
+      "ja": "試験機改良型(XDA-03C2)の全性能を強化した調整機。長時間のミッションにも耐えうる高性能を有する"
+    },
+    "image": null,
+    "source_string_id": 279
+  },
+  {
+    "index": 17,
+    "name": "TYPE-0110",
+    "description": {
+      "zh": "性能远超同代机型，但生产成本是XDA-05的2.5倍，因此未被正式采用。双臂均搭载多重发射器。",
+      "en": "It boasts vastly superior performance、 but it was never officially adopted、 because the production costs are 2.5 times as high when compared to the (XDA-05). It features a multi-launcher system on both arms.",
+      "ja": "非常に優れた性能を誇るが生産コストがXDA-05の2.5倍の為、正式採用を見送られた。両腕に装備したマルチランチャーシステムが特徴"
+    },
+    "image": null,
+    "source_string_id": 280
+  },
+  {
+    "index": 18,
+    "name": "SDA-06",
+    "description": {
+      "zh": "以常规武装取代多重发射器的衍生机型。为少数王牌驾驶员生产时，其型号才获得正式登记。",
+      "en": "A type equipped with regular armament instead of the multi-launcher. When it was produced for a select few Ace Pilots、its model number was officially registered.",
+      "ja": "マルチランチャーの変わりに通常の武装を装備したタイプ。一部エースパイロット用に少数生産された際に形式番号が正式に登録された"
+    },
+    "image": null,
+    "source_string_id": 281
+  },
+  {
+    "index": 19,
+    "name": "XDA-05",
+    "description": {
+      "zh": "主引擎位于背部，带来较高的防护能力。辅助机械臂与可动护盾进一步加强了防御。",
+      "en": "The high defense gained by placing the main engine on the back is even further increased by the sub-arm and the flexible shield.",
+      "ja": "主要機関背部集中配置による防御力の高さはそのままにサブアームとフレキシブルシールドにより更なる防御性能を持つ"
+    },
+    "image": null,
+    "source_string_id": 282
+  },
+  {
+    "index": 20,
+    "name": "DA-05",
+    "description": {
+      "zh": "XDA-05的量产型。输出略有降低，但高性能机体仍保有与试验机相当的实力。",
+      "en": "A mass production version of the (XDA-05). Output has been slightly decreased、 but its high-performance body is equal to that of a prototype.",
+      "ja": "XDA-05の量産仕様機。多少、出力が低下したが試作機同等、高性能な機体である"
+    },
+    "image": null,
+    "source_string_id": 283
+  },
+  {
+    "index": 21,
+    "name": "DFA-05K",
+    "description": {
+      "zh": "DFA系列以KUSANAGI达到了某种意义上的完成形态。攻击力极高，但驾驶员需要接受特殊处理。",
+      "en": "(DFA) has shown a certain form of perfection with the [KUSANAGI]. It boasts extremely high attack power、but it forces a special kind of treatment on its passenger.",
+      "ja": "この「KUSANAGI」をもってDFAは一応の完成をみせた。極めて高い攻撃性能を持つが搭乗者に特殊な処理を強いる機体でもある"
+    },
+    "image": null,
+    "source_string_id": 284
+  },
+  {
+    "index": 22,
+    "name": "DA-04",
+    "description": {
+      "zh": "XDA-04的量产型。性能激进，实力极为强大。",
+      "en": "A mass production version of the (XDA-04). Its performance is almost too extreme、resulting in an immensely powerful DGunners.",
+      "ja": "XDA-04の量産仕様機。極端すぎた性能を改め、非常に強力な機体に生まれ変わった"
+    },
+    "image": null,
+    "source_string_id": 285
+  }
+]

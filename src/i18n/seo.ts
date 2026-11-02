@@ -76,7 +76,11 @@ export const seo: Record<PageKey, Record<Lang, PageSeo>> = {
 		},
 	},
 	games: placeholder('Games', '游戏', 'ゲーム'),
-	mechas: placeholder('Mecha', '机甲', 'メカ'),
+	mechas: {
+    en: { title: 'Destroy Gunners ZZ Mecha Catalog | 23 Original Mechs', description: 'Explore all 23 original Destroy Gunners ZZ mechs, with their in-game descriptions.', image: '/community/screens/hangar.webp' },
+    zh: { title: '毁灭枪手 ZZ 机甲图鉴 | 23台原版机甲', description: 'Destroy Gunners ZZ 原版23台机甲介绍，依据游戏内机甲说明整理。', image: '/community/screens/zh/hangar.webp' },
+    ja: { title: 'Destroy Gunners ZZ 機体図鑑 | オリジナル23機', description: 'Destroy Gunners ZZ のオリジナル機体23機を、ゲーム内の機体説明とともに紹介。', image: '/community/screens/hangar.webp' },
+  },
 	enemies: placeholder('Enemy', '敌军', '敵'),
 	assets: placeholder('Assets', '素材', '素材'),
 };
