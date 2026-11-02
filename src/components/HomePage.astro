@@ -86,7 +86,7 @@ const communityUpdateCopy = {
 			</div>
 
 			<article class="community-update-card">
-				<img src="/community/screens/hangar.webp" alt={communityUpdateCopy.imageAlt} width="1046" height="474" loading="eager" fetchpriority="high" />
+				<img src={lang === 'zh' ? '/community/screens/zh/hangar.webp' : '/community/screens/hangar.webp'} alt={communityUpdateCopy.imageAlt} width={lang === 'zh' ? 1440 : 1046} height={lang === 'zh' ? 664 : 474} loading="eager" fetchpriority="high" />
 				<div class="community-update-copy">
 					<span>{communityUpdateCopy.kicker}</span>
 					<strong>{communityUpdateCopy.title}</strong>
@@ -125,7 +125,7 @@ const communityUpdateCopy = {
 				</button>
 			</div>
 
-			<ScreenshotGallery />
+			<ScreenshotGallery lang={lang} />
 		</ContentBox>
 
 		<ContentBox title={tr.about.title}>

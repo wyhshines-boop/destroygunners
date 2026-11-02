@@ -1,0 +1,26 @@
+[
+  {
+    "src": "/community/screens/zh/hangar.webp",
+    "width": 1440,
+    "height": 664,
+    "name": "中文大厅"
+  },
+  {
+    "src": "/community/screens/zh/equipment.webp",
+    "width": 1440,
+    "height": 664,
+    "name": "装备与武器"
+  },
+  {
+    "src": "/community/screens/zh/language.webp",
+    "width": 1440,
+    "height": 664,
+    "name": "语言设置"
+  },
+  {
+    "src": "/community/screens/zh/shop.webp",
+    "width": 1440,
+    "height": 664,
+    "name": "机甲商店"
+  }
+]
