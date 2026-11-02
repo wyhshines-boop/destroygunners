@@ -48,6 +48,11 @@ const scareSoulCopy = {
 		action: 'Open',
 	},
 }[lang];
+const languageGuideCopy = {
+ zh: { title: '如何切换游戏语言', log: '更新日志', settings: '在大厅点击右下角的“设置”。', language: '找到“语言”，点击可切换简体中文、English 和 日本語。', restart: '退出设置后选择立即重启，新的语言会在重启后生效。' },
+ en: { title: 'How to change the game language', log: 'Release notes', settings: 'In the lobby, tap Settings (设置) at the bottom right.', language: 'Find Language (语言) and tap to cycle through 简体中文, English and 日本語.', restart: 'Close Settings and choose Restart. The selected language takes effect after restarting.' },
+ ja: { title: 'ゲームの言語を切り替える', log: '更新履歴', settings: 'ロビー右下の設定（设置）をタップします。', language: '言語（语言）をタップすると、简体中文・English・日本語を切り替えられます。', restart: '設定を閉じて再起動を選ぶと、選択した言語が反映されます。' },
+}[lang];
 const communityUpdateCopy = {
  en: { kicker: 'Community Server', title: '3.0.0c is available', description: 'Account sync, wingman support and Dog Fight. New accounts start with 2,000 coins.', imageAlt: 'Destroy Gunners ZZ community server hangar' },
  zh: { kicker: '社区服', title: '3.0.0c 已发布', description: '账户同步、好友助战和 Dog Fight 已开放。新账户初始 2000 金币。', imageAlt: 'Destroy Gunners ZZ 社区服大厅' },
@@ -97,14 +102,25 @@ const communityUpdateCopy = {
 			<div id="notifications-container">
 				{tr.notifications.versions.map((v, i) => (
 					<div class={`version-content ${i === 0 ? 'active' : ''}`} id={`version-content-${v.id}`}>
-						{v.sections.map(section => (
-							<div class="notification-item">
-								<h3 class="cyan-text">{section.title}</h3>
-								<ul>
-									{section.items.map(item => <li>{item}</li>)}
-								</ul>
+						<details class="release-log">
+							<summary><span>{languageGuideCopy.log}</span><span>{v.sections[0]?.title || v.label}</span></summary>
+							<div class="release-log-content">
+								{v.sections.map((section, index) => (
+									<div class="notification-item">
+										{index > 0 && <h3 class="cyan-text">{section.title}</h3>}
+										<ul>{section.items.map(item => <li>{item}</li>)}</ul>
+									</div>
+								))}
 							</div>
-						))}
+						</details>
+						{v.id === 'c' && <section class="language-guide" aria-labelledby="language-guide-title">
+							<h3 id="language-guide-title">{languageGuideCopy.title}</h3>
+							<ol>
+								<li><p>{languageGuideCopy.settings}</p><img src="/community/guide/settings.webp" alt={languageGuideCopy.settings} width="1100" height="495" loading="lazy" decoding="async" /></li>
+								<li><p>{languageGuideCopy.language}</p><img src="/community/guide/language.webp" alt={languageGuideCopy.language} width="1100" height="495" loading="lazy" decoding="async" /></li>
+								<li class="restart-step">{languageGuideCopy.restart}</li>
+							</ol>
+						</section>}
 					</div>
 				))}
 			</div>
@@ -354,6 +370,20 @@ const communityUpdateCopy = {
 </script>
 
 <style>
+	.release-log { border: 1px solid #275e66; background: rgba(4, 24, 29, .65); margin-bottom: 24px; }
+	.release-log summary { cursor: pointer; padding: 16px; color: #8eeaf0; line-height: 1.6; overflow-wrap: anywhere; }
+	.release-log summary span:first-child { margin-right: 12px; color: #e0ffff; }
+	.release-log summary:focus-visible { outline: 2px solid #00f0ff; outline-offset: 3px; }
+	.release-log-content { padding: 0 16px 20px; }
+	.language-guide { padding: 20px; border: 1px solid #275e66; background: rgba(4, 24, 29, .65); }
+	.language-guide h3 { margin: 0 0 16px; color: #8eeaf0; font-size: 1.1rem; font-weight: 500; }
+	.language-guide ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; padding-left: 22px; margin: 0; }
+	.language-guide li { min-width: 0; line-height: 1.7; }
+	.language-guide p { margin: 0 0 10px; }
+	.language-guide img { display: block; width: 100%; height: auto; border: 1px solid #275e66; }
+	.restart-step { grid-column: 1 / -1; }
+	@media (max-width: 700px) { .language-guide { padding: 16px; } .language-guide ol { grid-template-columns: minmax(0, 1fr); } }
+
 	#mainland-progress { padding: 12px; background: #06262d; border: 1px solid #28717a; text-align: left; }
 	#mainland-progress p { margin: 0 0 8px; font-size: .85rem; line-height: 1.5; }
 	#mainland-progress progress { width: 100%; height: 8px; accent-color: #00f0ff; }
