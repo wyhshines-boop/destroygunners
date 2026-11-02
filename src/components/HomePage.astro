@@ -54,6 +54,32 @@ const languageGuideCopy = {
  en: { title: 'How to change the game language', log: 'Release notes', settings: 'In the lobby, tap Settings (设置) at the bottom right.', language: 'Find Language (语言) and tap to cycle through 简体中文, English and 日本語.', restart: 'Close Settings and choose Restart. The selected language takes effect after restarting.' },
  ja: { title: 'ゲームの言語を切り替える', log: '更新履歴', settings: 'ロビー右下の設定（设置）をタップします。', language: '言語（语言）をタップすると、简体中文・English・日本語を切り替えられます。', restart: '設定を閉じて再起動を選ぶと、選択した言語が反映されます。' },
 }[lang];
+const faqCopy = {
+ zh: {
+  title: 'FAQ · 常见问题', protect: '被 Google Play 保护机制拦截，如何安装？',
+  intro: '请从本站下载，并先按提示完成 Google Play 保护机制扫描。确认来源后，若仍决定继续安装：',
+  steps: ['若提示“不允许安装未知应用”，进入系统设置，为本次使用的浏览器或文件管理器开启“允许此来源”。', '若警告窗口提供“更多详情 → 仍要安装”，可从该入口继续。并非所有警告都有此选项。', '如需临时关闭扫描：打开 Play 商店 → 头像 → Play 保护机制 → 右上角设置 → 关闭“使用 Play 保护机制扫描应用”。安装完成后重新开启。'],
+  note: '若明确报告恶意行为，请先停止安装并反馈具体提示，不要直接当作误报。企业管理或高级保护也可能禁止继续安装。',
+  source: 'Google 官方说明', compatibility: '系统提示不兼容或目标SDK过低怎么办？',
+  compatibilityBody: '这是系统版本或处理器兼容问题，关闭 Play 保护机制无法解决。游戏目前使用32位原生引擎；部分新系统会限制安装旧SDK应用，纯64位系统也无法直接运行。新版系统兼容包仍在测试中。'
+ },
+ en: {
+  title: 'FAQ', protect: 'How do I install if Google Play Protect blocks the APK?',
+  intro: 'Download from this website and run the recommended Play Protect scan first. If you trust the source and decide to proceed:',
+  steps: ['If Android blocks unknown apps, allow installation from the browser or file manager you are using in system settings.', 'If the warning offers More details → Install anyway, you can continue there. This option is not available for every warning.', 'To temporarily disable scanning: Play Store → profile icon → Play Protect → Settings → turn off Scan apps with Play Protect. Turn it back on after installation.'],
+  note: 'If a specific harmful behavior is reported, stop and share the warning rather than assume a false positive. Managed devices or Advanced Protection may prevent installation.',
+  source: 'Google’s official guidance', compatibility: 'What if the system installer reports incompatibility or a target SDK that is too low?',
+  compatibilityBody: 'This is an OS or processor compatibility issue; disabling Play Protect does not fix it. The game uses a 32-bit native engine. Some newer systems restrict old-target apps, and 64-bit-only systems cannot run it directly. A newer-Android compatibility package is still being tested.'
+ },
+ ja: {
+  title: 'FAQ · よくある質問', protect: 'Google Play プロテクトでブロックされた場合は？',
+  intro: '当サイトからダウンロードし、まず推奨されたスキャンを実行してください。入手元を確認したうえでインストールを続ける場合：',
+  steps: ['不明なアプリのインストールが拒否された場合は、端末の設定で使用中のブラウザやファイル管理アプリにインストールを許可します。', '警告に「詳細 → インストールする」などの選択肢があれば、そこから続行できます。すべての警告に表示されるわけではありません。', '一時的にスキャンを無効にする場合：Play ストア → プロフィール → Play プロテクト → 設定 → アプリのスキャンをオフ。インストール後はオンに戻してください。'],
+  note: '具体的な有害動作が報告された場合は中断し、警告内容をお知らせください。管理対象端末や高度な保護では続行できない場合があります。',
+  source: 'Google 公式ヘルプ', compatibility: 'システムが互換性や対象SDKの低さを理由にインストールを拒否する場合は？',
+  compatibilityBody: 'OSやプロセッサの互換性の問題で、Play プロテクトをオフにしても解決しません。本作は32ビットのネイティブエンジンを使用しています。新しいOSでは古い対象SDKのアプリが制限され、64ビット専用環境でも直接実行できません。互換性テスト版は現在検証中です。'
+ },
+}[lang];
 const versionCopy = {
  zh: { community: '社区服', offline: '离线版本', intro: '原版停服多年。为让玩家继续体验这款游戏，制作并分享了这些离线版本。', cx: '全机甲解锁版，基于3.0.0b。', b: '离线版。', bx: '离线全机甲解锁版。', a: '早期离线版。' },
  en: { community: 'Community Server', offline: 'Offline Versions', intro: 'The original service ended years ago. These offline versions were made so players can continue enjoying the game.', cx: 'All-mecha unlock edition, based on 3.0.0b.', b: 'Offline edition.', bx: 'Offline edition with all mechs unlocked.', a: 'Earlier offline edition.' },
@@ -89,14 +115,7 @@ const communityUpdateCopy = {
 					<div class="notification-item">{index > 0 && <h3 class="cyan-text">{section.title}</h3>}<ul>{section.items.map(item => <li>{item}</li>)}</ul></div>
 				))}</div>
 			</details>
-			<section class="language-guide" aria-labelledby="language-guide-title">
-				<h3 id="language-guide-title">{languageGuideCopy.title}</h3>
-				<ol>
-					<li><p>{languageGuideCopy.settings}</p><img src="/community/guide/settings.webp" alt={languageGuideCopy.settings} width="1100" height="495" loading="lazy" decoding="async" /></li>
-					<li><p>{languageGuideCopy.language}</p><img src="/community/guide/language.webp" alt={languageGuideCopy.language} width="1100" height="495" loading="lazy" decoding="async" /></li>
-					<li class="restart-step">{languageGuideCopy.restart}</li>
-				</ol>
-			</section>
+
 			<ScreenshotGallery lang={lang} />
 		</ContentBox>
 		<ContentBox title={versionCopy.offline}>
@@ -111,6 +130,34 @@ const communityUpdateCopy = {
 						<div class="release-log-content">{v.sections.map(section => <div class="notification-item"><h4 class="cyan-text">{section.title}</h4><ul>{section.items.map(item => <li>{item}</li>)}</ul></div>)}</div>
 					</details>
 				</article>)}
+			</div>
+		</ContentBox>
+
+		<ContentBox title={faqCopy.title}>
+			<div class="faq-list">
+				<details class="faq-item">
+					<summary id="language-guide-title">{languageGuideCopy.title}</summary>
+			<div class="language-guide">
+				<ol>
+					<li><p>{languageGuideCopy.settings}</p><img src="/community/guide/settings.webp" alt={languageGuideCopy.settings} width="1100" height="495" loading="lazy" decoding="async" /></li>
+					<li><p>{languageGuideCopy.language}</p><img src="/community/guide/language.webp" alt={languageGuideCopy.language} width="1100" height="495" loading="lazy" decoding="async" /></li>
+					<li class="restart-step">{languageGuideCopy.restart}</li>
+				</ol>
+			</div>
+				</details>
+				<details class="faq-item">
+					<summary>{faqCopy.protect}</summary>
+					<div class="faq-body">
+						<p>{faqCopy.intro}</p>
+						<ol>{faqCopy.steps.map(step => <li>{step}</li>)}</ol>
+						<p>{faqCopy.note}</p>
+						<a href={`https://support.google.com/googleplay/answer/2812853?hl=${lang === 'zh' ? 'zh-Hans' : lang}`} target="_blank" rel="noopener">{faqCopy.source}</a>
+					</div>
+				</details>
+				<details class="faq-item">
+					<summary>{faqCopy.compatibility}</summary>
+					<div class="faq-body"><p>{faqCopy.compatibilityBody}</p></div>
+				</details>
 			</div>
 		</ContentBox>
 
@@ -313,6 +360,16 @@ const communityUpdateCopy = {
 </script>
 
 <style>
+	.faq-list { display:grid; gap:12px; }
+	.faq-item { border:1px solid #275e66; background:rgba(4,24,29,.65); }
+	.faq-item summary { padding:16px; color:#8eeaf0; cursor:pointer; line-height:1.6; }
+	.faq-item summary:focus-visible { outline:2px solid #00f0ff; outline-offset:3px; }
+	.faq-body { padding:0 20px 20px; line-height:1.8; overflow-wrap:anywhere; }
+	.faq-body p { margin:0 0 14px; }
+	.faq-body ol { padding-left:24px; margin:0 0 14px; }
+	.faq-body li { margin:0 0 10px; }
+	.faq-body a { color:#8eeaf0; text-underline-offset:3px; }
+
 	.offline-intro { color:#b4cfd2; line-height:1.8; margin:0 0 20px; }
 	.offline-versions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
 	.offline-version { min-width:0; padding:18px; background:rgba(4,24,29,.65); border:1px solid #275e66; }
@@ -326,7 +383,7 @@ const communityUpdateCopy = {
 	.release-log summary span:first-child { margin-right: 12px; color: #e0ffff; }
 	.release-log summary:focus-visible { outline: 2px solid #00f0ff; outline-offset: 3px; }
 	.release-log-content { padding: 0 16px 20px; }
-	.language-guide { padding: 20px; border: 1px solid #275e66; background: rgba(4, 24, 29, .65); }
+	.language-guide { padding: 0 20px 20px; }
 	.language-guide h3 { margin: 0 0 16px; color: #8eeaf0; font-size: 1.1rem; font-weight: 500; }
 	.language-guide ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; padding-left: 22px; margin: 0; }
 	.language-guide li { min-width: 0; line-height: 1.7; }
