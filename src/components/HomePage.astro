@@ -6,6 +6,18 @@ import { type Lang, t } from '../i18n/translations';
 import Giscus from './Giscus.astro';
 
 import ScreenshotGallery from './ScreenshotGallery.astro';
+import mainlandDownloads from '../data/mainland-downloads.json';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+// Bind mirrors to both the selected release URL and exact APK bytes.
+const mainlandLinks: Record<string, string> = {};
+for (const entry of mainlandDownloads as Array<{ apk: string; url: string; sha256: string }>) {
+	const file = resolve(process.cwd(), `public${entry.apk.split('?')[0]}`);
+	const digest = createHash('sha256').update(readFileSync(file)).digest('hex');
+	if (digest === entry.sha256) mainlandLinks[entry.apk] = entry.url;
+}
 
 interface Props {
 	lang: Lang;
@@ -62,6 +74,7 @@ const communityUpdateCopy = {
 						class={`version-tab ${i === 0 ? 'active' : ''}`} 
 						data-version-id={v.id}
 						data-apk={v.apk}
+						data-mainland={mainlandLinks[v.apk]}
 						data-has-mirror={String(v.hasMirror)}
 						data-google-drive={v.mirrors?.googleDrive}
 						data-lanzou={v.mirrors?.lanzou}
@@ -101,6 +114,7 @@ const communityUpdateCopy = {
 					id="open-download"
 					class="retro-btn"
 					data-apk={tr.notifications.versions[0].apk}
+					data-mainland={mainlandLinks[tr.notifications.versions[0].apk]}
 					data-has-mirror={String(tr.notifications.versions[0].hasMirror)}
 					data-google-drive={tr.notifications.versions[0].mirrors?.googleDrive}
 					data-lanzou={tr.notifications.versions[0].mirrors?.lanzou}
@@ -142,6 +156,19 @@ const communityUpdateCopy = {
 			>
 				<span class="btn-inner">{tr.download.direct}</span>
 			</a>
+			<a
+				id="modal-download-mainland"
+				href={mainlandLinks[tr.notifications.versions[0].apk]}
+				hidden={!mainlandLinks[tr.notifications.versions[0].apk]}
+				target="_blank"
+				rel="noopener"
+				class="retro-btn download-track"
+				data-method="123_direct"
+				style={`background-image: url('${buttonImg.src}');`}
+			>
+				<span class="btn-inner">{tr.download.mainland}</span>
+			</a>
+			<p id="mainland-download-note" hidden={!mainlandLinks[tr.notifications.versions[0].apk]}>{tr.download.mainlandNote}</p>
 			<div id="mirror-links" class="mirror-links">
 				<a
 					id="modal-download-google"
@@ -210,6 +237,7 @@ const communityUpdateCopy = {
 				// Update main download button data
 				if (mainDownloadBtn) {
 					mainDownloadBtn.dataset.apk = (tab as HTMLElement).dataset.apk;
+					mainDownloadBtn.dataset.mainland = (tab as HTMLElement).dataset.mainland || '';
 					mainDownloadBtn.dataset.hasMirror = (tab as HTMLElement).dataset.hasMirror;
 					mainDownloadBtn.dataset.googleDrive = (tab as HTMLElement).dataset.googleDrive;
 					mainDownloadBtn.dataset.lanzou = (tab as HTMLElement).dataset.lanzou;
@@ -246,13 +274,22 @@ const communityUpdateCopy = {
 		openBtn.addEventListener("click", () => {
 			playSound(sfxOpen);
 			
-			const { apk, hasMirror, googleDrive, lanzou, lanzouPw } = openBtn.dataset;
+			const { apk, mainland, hasMirror, googleDrive, lanzou, lanzouPw } = openBtn.dataset;
 
 			// Update modal content based on current version data from button
 			if (modalDirectLink) {
 				modalDirectLink.href = apk || '';
 			}
 			
+			const mainlandLink = document.getElementById('modal-download-mainland') as HTMLAnchorElement;
+			if (mainlandLink) {
+				mainlandLink.hidden = !mainland;
+				const note = document.getElementById('mainland-download-note');
+				if (note) note.hidden = !mainland;
+				if (mainland) mainlandLink.href = mainland;
+				else mainlandLink.removeAttribute('href');
+			}
+
 			if (mirrorLinks) {
 				mirrorLinks.style.display = hasMirror === 'true' ? 'block' : 'none';
 				
@@ -312,6 +349,8 @@ const communityUpdateCopy = {
 </script>
 
 <style>
+	#modal-download-mainland[hidden], #mainland-download-note[hidden] { display: none; }
+	#mainland-download-note { color: #b7cdcf; font-size: .85rem; line-height: 1.5; margin: 8px 0 16px; }
 	.visually-hidden {
 		position: absolute;
 		width: 1px;
