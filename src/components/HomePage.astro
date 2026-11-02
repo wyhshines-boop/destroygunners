@@ -71,14 +71,7 @@ const communityUpdateCopy = {
 <div class="container">
 	<main>
 		<h1 class="visually-hidden">{pageHeading}</h1>
-		<a class="scaresoul-card" href={scareSoulHref}>
-			<img src="/scaresoul/ss_logo.webp" alt="ScareSoul" />
-			<div class="scaresoul-card-copy">
-				<strong>{scareSoulCopy.title}</strong>
-				<span>{scareSoulCopy.subtitle}</span>
-			</div>
-			<span class="scaresoul-card-action">{scareSoulCopy.action}</span>
-		</a>
+
 
 		<ContentBox title={versionCopy.community}>
 			<article class="community-update-card">
@@ -120,6 +113,15 @@ const communityUpdateCopy = {
 				</article>)}
 			</div>
 		</ContentBox>
+
+		<a class="scaresoul-card" href={scareSoulHref}>
+			<img src="/scaresoul/ss_logo.webp" alt="ScareSoul" />
+			<div class="scaresoul-card-copy">
+				<strong>{scareSoulCopy.title}</strong>
+				<span>{scareSoulCopy.subtitle}</span>
+			</div>
+			<span class="scaresoul-card-action">{scareSoulCopy.action}</span>
+		</a>
 
 		<ContentBox title={tr.about.title}>
 			<p>{tr.about.description}</p>
