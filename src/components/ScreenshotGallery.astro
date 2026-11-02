@@ -1,7 +1,7 @@
 ---
 import chineseScreenshots from '../data/chinese-screenshots.json';
-interface Props { lang?: string }
-const { lang = 'en' } = Astro.props;
+interface Props { lang?: string; hero?: boolean }
+const { lang = 'en', hero = false } = Astro.props;
 const originalScreenshots = [
   {
     "src": "/community/screens/hangar.webp",
@@ -43,7 +43,7 @@ const originalScreenshots = [
 const screenshots = lang === 'zh' ? chineseScreenshots : originalScreenshots;
 ---
 
-<div class="gallery-wrapper">
+<div class:list={["gallery-wrapper", { hero }]}>
     <div class="gallery-scroll">
         {
             screenshots.map((img, index) => (
@@ -56,7 +56,8 @@ const screenshots = lang === 'zh' ? chineseScreenshots : originalScreenshots;
                             height={img.height}
                             decoding="async"
                             class="gallery-thumb"
-                            loading="lazy"
+                            loading={hero && index === 0 ? "eager" : "lazy"}
+                            fetchpriority={hero && index === 0 ? "high" : "auto"}
                         />
                     </div>
                 </div>
@@ -297,6 +298,12 @@ const screenshots = lang === 'zh' ? chineseScreenshots : originalScreenshots;
 </style>
 
 <style>
+    .gallery-wrapper.hero { margin-top: 0; min-width: 0; width: 100%; }
+    .gallery-wrapper.hero .gallery-scroll { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; }
+    .gallery-wrapper.hero .gallery-item { flex: 0 0 100%; scroll-snap-align: start; }
+    .gallery-wrapper.hero .gallery-item:hover { transform: none; }
+    .gallery-wrapper.hero .fake-scrollbar { display: flex; }
+
     .gallery-wrapper {
         margin-top: 30px;
     }

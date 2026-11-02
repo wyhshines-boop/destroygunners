@@ -101,7 +101,7 @@ const communityUpdateCopy = {
 
 		<ContentBox title={versionCopy.community}>
 			<article class="community-update-card">
-				<img src={lang === 'zh' ? '/community/screens/zh/hangar.webp' : '/community/screens/hangar.webp'} alt={communityUpdateCopy.imageAlt} width={lang === 'zh' ? 1440 : 1046} height={lang === 'zh' ? 664 : 474} loading="eager" fetchpriority="high" />
+				<ScreenshotGallery lang={lang} hero />
 				<div class="community-update-copy">
 					<span>{communityUpdateCopy.kicker}</span>
 					<strong>{communityUpdateCopy.title}</strong>
@@ -116,7 +116,7 @@ const communityUpdateCopy = {
 				))}</div>
 			</details>
 
-			<ScreenshotGallery lang={lang} />
+
 		</ContentBox>
 		<ContentBox title={versionCopy.offline}>
 			<p class="offline-intro">{versionCopy.intro}</p>
