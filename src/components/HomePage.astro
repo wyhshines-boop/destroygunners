@@ -96,6 +96,21 @@ const communityUpdateCopy = {
 					<span>{communityUpdateCopy.kicker}</span>
 					<strong>{communityUpdateCopy.title}</strong>
 					<p>{communityUpdateCopy.description}</p>
+					<div class="download-btn-wrap">
+						<button
+							id="open-download"
+							class="retro-btn"
+							data-apk={tr.notifications.versions[0].apk}
+							data-mainland={mainlandLinks[tr.notifications.versions[0].apk]}
+							data-has-mirror={String(tr.notifications.versions[0].hasMirror)}
+							data-google-drive={tr.notifications.versions[0].mirrors?.googleDrive}
+							data-lanzou={tr.notifications.versions[0].mirrors?.lanzou}
+							data-lanzou-pw={tr.notifications.versions[0].mirrors?.lanzouPw}
+							style={`background-image: url('${buttonImg.src}');`}
+						>
+							<span class="btn-inner">{tr.download.button}</span>
+						</button>
+					</div>
 				</div>
 			</article>
 
@@ -125,21 +140,7 @@ const communityUpdateCopy = {
 				))}
 			</div>
 
-			<div class="download-btn-wrap">
-				<button
-					id="open-download"
-					class="retro-btn"
-					data-apk={tr.notifications.versions[0].apk}
-					data-mainland={mainlandLinks[tr.notifications.versions[0].apk]}
-					data-has-mirror={String(tr.notifications.versions[0].hasMirror)}
-					data-google-drive={tr.notifications.versions[0].mirrors?.googleDrive}
-					data-lanzou={tr.notifications.versions[0].mirrors?.lanzou}
-					data-lanzou-pw={tr.notifications.versions[0].mirrors?.lanzouPw}
-					style={`background-image: url('${buttonImg.src}');`}
-				>
-					<span class="btn-inner">{tr.download.button}</span>
-				</button>
-			</div>
+
 
 			<ScreenshotGallery lang={lang} />
 		</ContentBox>
@@ -575,7 +576,7 @@ const communityUpdateCopy = {
 		padding: 6px 8px 6px 0;
 	}
 
-	.community-update-copy span {
+	.community-update-copy > span {
 		color: rgba(48, 218, 150, 0.92);
 		font-size: 0.72rem;
 		text-transform: uppercase;
@@ -657,9 +658,10 @@ const communityUpdateCopy = {
 	}
 
 	.download-btn-wrap {
-		margin-top: 20px;
-		margin-bottom: 15px;
-		max-width: 240px;
+		margin-top: 8px;
+		margin-bottom: 0;
+		width: 240px;
+		max-width: 100%;
 	}
 
 	.site-footer {
