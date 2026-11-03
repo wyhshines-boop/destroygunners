@@ -19,3 +19,5 @@ Workers Builds 项目：`destroygunners`，根目录 `/`，构建命令 `npm run
 ## 最新测试版（固定入口）
 
 管理页 `https://www.destroygunners.com/zh/admin#test` 只显示最新一份测试版，下载地址固定为 `/downloads/DGZZ_test_latest.apk`。每次制作测试包，都先上传R2并核对大小，再替换 `src/data/test-release.json` 的构建号、说明和 apk_path，并更新 CF/Vercel 中固定下载地址的临时重定向。不要增加测试历史列表，不要将测试包误设为正式版自动更新。R2 对象仍按哈希保存，更新固定入口即可，避免缓存旧包。
+
+后续测试包统一用 `python3 scripts/publish-test-apk.py --apk <签名APK> --build <构建号> --title <标题> --notes <说明>` 上传并替换唯一测试入口。当前合并基线为 Build130（保留127兼容改动、128聊天）；原127独立兼容包仍可下载。正式版清单的apk_url使用R2正式域名直接地址。

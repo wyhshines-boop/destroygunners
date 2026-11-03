@@ -1,8 +1,8 @@
 {
-  "build": 128,
+  "build": 130,
   "version": "3.0.0c",
-  "title": "大厅聊天测试版",
+  "title": "兼容合并、聊天与更新下载",
   "date": "2026-11-03",
-  "apk_path": "/downloads/DGZZ_3.0.0c_build128_lobby_chat.apk",
-  "notes": "Account 面板新增大厅聊天，支持文字和 emoji。后台支持删除消息、禁言和解禁。原生 Chat 按钮暂未接入。"
+  "apk_path": "/downloads/DGZZ_3.0.0c_build130_merged_chat.apk",
+  "notes": "保留 Build127 兼容改动和大厅聊天。欢迎页可切换英文；聊天输入框与发送按钮同行，优化输入样式；更新提醒新增 R2 直接下载按钮，并保留官网和稍后选项。"
 }
