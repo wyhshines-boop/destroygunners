@@ -45,6 +45,11 @@
       "source": "/downloads/scaresoul_offline_v8_signed.apk",
       "destination": "https://downloads.destroygunners.com/apk/d2e0c1ca65917106b06b9637156809801006648e375965f66e4ff5b71530d007/scaresoul_offline_v8_signed.apk",
       "permanent": false
+    },
+    {
+      "source": "/downloads/DGZZ_3.0.0c_build128_lobby_chat.apk",
+      "destination": "https://downloads.destroygunners.com/apk/af33d2e626af0ff0028d8513bf9fdd34aaf0b32ff74230b7cbde06e03da09d7e/DGZZ_3.0.0c_build128_lobby_chat.apk",
+      "permanent": false
     }
   ]
 }
