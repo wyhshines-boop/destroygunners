@@ -8,6 +8,7 @@ import Giscus from './Giscus.astro';
 
 import ScreenshotGallery from './ScreenshotGallery.astro';
 import mainlandDownloads from '../data/mainland-downloads.json';
+import testRelease from '../data/test-release.json';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -104,6 +105,7 @@ const communityUpdateCopy = {
 					<strong>{communityUpdateCopy.title}</strong>
 					<p>{communityUpdateCopy.description}</p>
 					<DownloadButton id="open-download" version={communityVersion} text={tr.download.button} mainland={mainlandLinks[communityVersion.apk]} />
+                    <a class="test-release-link download-track" href="/downloads/DGZZ_test_latest.apk" download data-method="test_release">{{zh:'测试版下载',en:'Test download',ja:'テスト版ダウンロード'}[lang]} · Build{testRelease.build}</a>
 				</div>
 			</article>
 			<details class="release-log">
@@ -825,4 +827,5 @@ const communityUpdateCopy = {
 		}
 
 	}
+.test-release-link {display:block;width:280px;max-width:100%;margin-top:10px;text-align:center;color:#82dce6;font-size:.85rem;text-underline-offset:4px;}
 </style>

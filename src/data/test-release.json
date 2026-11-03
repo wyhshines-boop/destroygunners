@@ -1,8 +1,8 @@
 {
-  "build": 138,
+  "build": 139,
   "version": "3.0.0c",
-  "title": "正式版 Build138",
+  "title": "面板 WebView 兼容测试",
   "date": "2026-11-03",
-  "apk_path": "/downloads/DGZZ_3.0.0c_build138_release.apk",
-  "notes": "正式发布：大厅聊天、精简账户布局与兼容改动；聊天发送仅失败提醒。"
+  "apk_path": "/downloads/DGZZ_3.0.0c_build139_webview_test.apk",
+  "notes": "基于正式 Build138。面板脚本转换为 Chrome53 兼容语法，补齐 DOM 接口，分离可选内容初始化；恢复真实内核标识，启动失败显示阶段与内核版本。尚待 OriginOS 玩家验证，正式版保持138。"
 }

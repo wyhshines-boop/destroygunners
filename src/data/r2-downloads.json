@@ -120,6 +120,12 @@
       "key": "apk/cfbcaa4b823403c1c497720ec81a9873327ff0b87f263a6059a875bdbcfc2f86/DGZZ_3.0.0c_build138_release.apk",
       "bytes": 25482920,
       "sha256": "cfbcaa4b823403c1c497720ec81a9873327ff0b87f263a6059a875bdbcfc2f86"
+    },
+    {
+      "path": "/downloads/DGZZ_3.0.0c_build139_webview_test.apk",
+      "key": "apk/df52b9b1afe7f19492a1f08356e6f3acd06ecdd262167b211bc2d341557533bf/DGZZ_3.0.0c_build139_webview_test.apk",
+      "bytes": 25487016,
+      "sha256": "df52b9b1afe7f19492a1f08356e6f3acd06ecdd262167b211bc2d341557533bf"
     }
   ],
   "public_url": "https://downloads.destroygunners.com"
