@@ -10,7 +10,7 @@ Workers Builds 项目：`destroygunners`，根目录 `/`，构建命令 `npm run
 
 `public/_redirects` 为 Cloudflare 保留原下载路径，`vercel.json` 中的同名规则为 Vercel 保留路径。构建结束会移除 `dist/downloads/*.apk`，不再把安装包上传到网站部署。仓库原有 APK 暂留作历史备份。
 
-当前先使用公开 r2.dev 地址进行迁移测试。正式使用建议为桶绑定独立下载域名，再同步修改清单和两处重定向；r2.dev 有限速，不应作为长期生产入口。
+正式下载域名为 `https://downloads.destroygunners.com`，已绑定 R2 并启用 HTTPS。清单和两处重定向均使用此域名；网站不再依赖 r2.dev 测试入口。
 
 更新 APK：先按清单键格式上传到 R2，检查下载元数据，再更新清单、两处重定向和相应版本信息。未登记到 R2 清单的新 APK 会阻止构建。123 中国大陆下载仍单独维护，Build127 暂无123镜像。
 
