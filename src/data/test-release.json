@@ -1,8 +1,8 @@
 {
-  "build": 133,
+  "build": 135,
   "version": "3.0.0c",
-  "title": "独立大厅聊天",
+  "title": "精简聊天与面板留白",
   "date": "2026-11-03",
-  "apk_path": "/downloads/DGZZ_3.0.0c_build133_standalone_chat.apk",
-  "notes": "基于 Build132，保留兼容改动。聊天移出 Account 页签，仅由大厅聊天按钮打开；消息列表独立滚动，输入区固定底部；移除原生分享框底板。"
+  "apk_path": "/downloads/DGZZ_3.0.0c_build135_panel_spacing.apk",
+  "notes": "基于 Build133，合并紧凑聊天界面：移除标题、语言、构建号和额外背景；底部图标发送栏缩矮。Account 左栏金币、页签和语言统一增加左侧留白，与右侧内容区外边距对齐。"
 }
