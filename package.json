@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/prepare-r2-downloads.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -17,5 +17,8 @@
   },
   "optionalDependencies": {
     "@rollup/rollup-win32-x64-msvc": "^4.60.1"
+  },
+  "devDependencies": {
+    "wrangler": "4.72.0"
   }
 }

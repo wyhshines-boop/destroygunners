@@ -1,0 +1,2 @@
+# APK downloads are served from R2, not Workers Static Assets.
+/downloads/*.apk

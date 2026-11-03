@@ -1,0 +1,60 @@
+{
+  "bucket": "destroygunners-downloads",
+  "files": [
+    {
+      "path": "/downloads/DGunsZZ_3.0.0a.apk",
+      "key": "apk/3f9c12cbbca42c8f4633a5fb98722938c33c3c6b1115a937049ba48af507747b/DGunsZZ_3.0.0a.apk",
+      "bytes": 23232942,
+      "sha256": "3f9c12cbbca42c8f4633a5fb98722938c33c3c6b1115a937049ba48af507747b"
+    },
+    {
+      "path": "/downloads/DGunsZZ_3.0.0b.apk",
+      "key": "apk/65ef6a2c9ae26aa024c4153e55ac4d0a1a8233d3b3344652b6ab4a2173a63400/DGunsZZ_3.0.0b.apk",
+      "bytes": 23232587,
+      "sha256": "65ef6a2c9ae26aa024c4153e55ac4d0a1a8233d3b3344652b6ab4a2173a63400"
+    },
+    {
+      "path": "/downloads/DGunsZZ_3.0.0bx.apk",
+      "key": "apk/c3e48e37dcd4e1e803c0ac152dd7b016dad03e51ce9e0003b8ca1f05cce67a24/DGunsZZ_3.0.0bx.apk",
+      "bytes": 23229359,
+      "sha256": "c3e48e37dcd4e1e803c0ac152dd7b016dad03e51ce9e0003b8ca1f05cce67a24"
+    },
+    {
+      "path": "/downloads/DGunsZZ_3.0.0c.apk",
+      "key": "apk/b2e48070b6ede3ed37ba04da8ede9a759e0509dc31bdd43406a1df3854a601fe/DGunsZZ_3.0.0c.apk",
+      "bytes": 25478824,
+      "sha256": "b2e48070b6ede3ed37ba04da8ede9a759e0509dc31bdd43406a1df3854a601fe"
+    },
+    {
+      "path": "/downloads/DGunsZZ_3.0.0c_Compat2_build127.apk",
+      "key": "apk/19f538b3085adce1a1952bb7afecb824e0be048ad03cf01c208158c6bdc3f263/DGunsZZ_3.0.0c_Compat2_build127.apk",
+      "bytes": 25478824,
+      "sha256": "19f538b3085adce1a1952bb7afecb824e0be048ad03cf01c208158c6bdc3f263"
+    },
+    {
+      "path": "/downloads/DGunsZZ_3.0.0cx.apk",
+      "key": "apk/4f1ae22728cd1664a5a157c8585a74ea26393d2586fb4e8906485d0375484094/DGunsZZ_3.0.0cx.apk",
+      "bytes": 23225263,
+      "sha256": "4f1ae22728cd1664a5a157c8585a74ea26393d2586fb4e8906485d0375484094"
+    },
+    {
+      "path": "/downloads/scaresoul_offline.apk",
+      "key": "apk/42cac867e8198ca2ea66bd64e721c8090ac37e8f026d714d39eee2ba0f58a21d/scaresoul_offline.apk",
+      "bytes": 33106093,
+      "sha256": "42cac867e8198ca2ea66bd64e721c8090ac37e8f026d714d39eee2ba0f58a21d"
+    },
+    {
+      "path": "/downloads/scaresoul_offline_stable_signed.apk",
+      "key": "apk/aa8a6dedc5ba4969b7b538775cf33d33eda3ba405bdf7bfd0787ae832a2f9ecc/scaresoul_offline_stable_signed.apk",
+      "bytes": 33106093,
+      "sha256": "aa8a6dedc5ba4969b7b538775cf33d33eda3ba405bdf7bfd0787ae832a2f9ecc"
+    },
+    {
+      "path": "/downloads/scaresoul_offline_v8_signed.apk",
+      "key": "apk/d2e0c1ca65917106b06b9637156809801006648e375965f66e4ff5b71530d007/scaresoul_offline_v8_signed.apk",
+      "bytes": 33106093,
+      "sha256": "d2e0c1ca65917106b06b9637156809801006648e375965f66e4ff5b71530d007"
+    }
+  ],
+  "public_url": "https://pub-57b683ca2a87482a91d9e7dcad030fd7.r2.dev"
+}

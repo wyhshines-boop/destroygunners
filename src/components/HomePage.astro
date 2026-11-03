@@ -56,26 +56,32 @@ const languageGuideCopy = {
 }[lang];
 const faqCopy = {
  zh: {
-  title: 'FAQ · 常见问题', protect: '被 Google Play 保护机制拦截，如何安装？',
+  title: 'FAQ', protect: '被 Google Play 保护机制拦截，如何安装？',
   intro: '请从本站下载，并先按提示完成 Google Play 保护机制扫描。确认来源后，若仍决定继续安装：',
   steps: ['若提示“不允许安装未知应用”，进入系统设置，为本次使用的浏览器或文件管理器开启“允许此来源”。', '若警告窗口提供“更多详情 → 仍要安装”，可从该入口继续。并非所有警告都有此选项。', '如需临时关闭扫描：打开 Play 商店 → 头像 → Play 保护机制 → 右上角设置 → 关闭“使用 Play 保护机制扫描应用”。安装完成后重新开启。'],
   compatibility: '系统提示不兼容或目标SDK过低怎么办？',
-  compatibilityBody: '这是系统版本或处理器兼容问题，关闭 Play 保护机制无法解决。游戏目前使用32位原生引擎；部分新系统会限制安装旧SDK应用，纯64位系统也无法直接运行。新版系统兼容包仍在测试中。'
+  compatibilityBody: '可在社区服下载菜单选择 Build127 兼容测试版，尝试解决旧 SDK 的安装限制。它基于 Build126，可与正式版共存，已在 Android 13 验证登录、大厅、商店和改装；Android 15/16 尚未验证。仍使用32位引擎，不支持纯64位系统。'
  },
  en: {
   title: 'FAQ', protect: 'How do I install if Google Play Protect blocks the APK?',
   intro: 'Download from this website and run the recommended Play Protect scan first. If you trust the source and decide to proceed:',
   steps: ['If Android blocks unknown apps, allow installation from the browser or file manager you are using in system settings.', 'If the warning offers More details → Install anyway, you can continue there. This option is not available for every warning.', 'To temporarily disable scanning: Play Store → profile icon → Play Protect → Settings → turn off Scan apps with Play Protect. Turn it back on after installation.'],
   compatibility: 'What if the system installer reports incompatibility or a target SDK that is too low?',
-  compatibilityBody: 'This is an OS or processor compatibility issue; disabling Play Protect does not fix it. The game uses a 32-bit native engine. Some newer systems restrict old-target apps, and 64-bit-only systems cannot run it directly. A newer-Android compatibility package is still being tested.'
+  compatibilityBody: 'Try the Build127 compatibility test APK in the community download menu for old-target installation restrictions. Based on Build126, it installs alongside the stable app. Login, lobby, shop and customization were checked on Android 13; Android 15/16 remain untested. The engine is still 32-bit and cannot run on 64-bit-only systems.'
  },
  ja: {
-  title: 'FAQ · よくある質問', protect: 'Google Play プロテクトでブロックされた場合は？',
+  title: 'FAQ', protect: 'Google Play プロテクトでブロックされた場合は？',
   intro: '当サイトからダウンロードし、まず推奨されたスキャンを実行してください。入手元を確認したうえでインストールを続ける場合：',
   steps: ['不明なアプリのインストールが拒否された場合は、端末の設定で使用中のブラウザやファイル管理アプリにインストールを許可します。', '警告に「詳細 → インストールする」などの選択肢があれば、そこから続行できます。すべての警告に表示されるわけではありません。', '一時的にスキャンを無効にする場合：Play ストア → プロフィール → Play プロテクト → 設定 → アプリのスキャンをオフ。インストール後はオンに戻してください。'],
   compatibility: 'システムが互換性や対象SDKの低さを理由にインストールを拒否する場合は？',
-  compatibilityBody: 'OSやプロセッサの互換性の問題で、Play プロテクトをオフにしても解決しません。本作は32ビットのネイティブエンジンを使用しています。新しいOSでは古い対象SDKのアプリが制限され、64ビット専用環境でも直接実行できません。互換性テスト版は現在検証中です。'
+  compatibilityBody: '古い対象SDKによるインストール制限には、コミュニティ版のダウンロードメニューにある Build127 互換性テスト版をお試しください。Build126ベースで正式版と併用できます。Android 13でログイン、ロビー、ショップ、カスタマイズを確認済みですが、Android 15/16は未検証です。32ビットエンジンのため64ビット専用環境には対応しません。'
  },
+}[lang];
+const compatibilityApk = '/downloads/DGunsZZ_3.0.0c_Compat2_build127.apk';
+const compatibilityCopy = {
+ zh: { button: 'Android 兼容测试版 · Build127', note: '基于 Build126，独立安装。Android 15/16 尚未验证，仍需32位支持。' },
+ en: { button: 'Android compatibility test · Build127', note: 'Based on Build126. Installs separately. Android 15/16 untested; requires 32-bit support.' },
+ ja: { button: 'Android 互換性テスト版 · Build127', note: 'Build126ベースの別アプリです。Android 15/16は未検証。32ビット対応が必要です。' },
 }[lang];
 const versionCopy = {
  zh: { community: '社区服', offline: '离线版本', intro: '原版停服多年。为让玩家继续体验这款游戏，制作并分享了这些离线版本。', cx: '全机甲解锁版，基于3.0.0b。', b: '离线版。', bx: '离线无金币内购版。', a: '早期离线版。' },
@@ -207,6 +213,10 @@ const communityUpdateCopy = {
 			>
 				<span class="btn-inner">{tr.download.mainland}</span>
 			</a>
+			<div id="compatibility-download">
+				<a href={compatibilityApk} download class="compatibility-link download-track" data-method="compatibility_test">{compatibilityCopy.button}</a>
+				<p>{compatibilityCopy.note}</p>
+			</div>
 			<div id="mainland-progress" hidden>
 				<p role="status" aria-live="polite"></p>
 				<progress aria-label={tr.download.mainland}></progress>
@@ -283,6 +293,8 @@ const communityUpdateCopy = {
 			
 			const { apk, mainland, hasMirror, googleDrive, lanzou, lanzouPw, version, downloadLabel } = openBtn.dataset;
 			modal.dispatchEvent(new Event('download-selection-change'));
+			const compatibilityDownload = document.getElementById('compatibility-download');
+			if (compatibilityDownload) compatibilityDownload.hidden = version !== '3.0.0c';
 			const title = modal.querySelector('.modal-title');
 			if (title) title.textContent = `${downloadLabel || ''} ${version || ''}`.trim();
 
@@ -358,7 +370,7 @@ const communityUpdateCopy = {
 
 <style>
 	.faq-list { display:grid; gap:12px; }
-	.faq-item { border:1px solid #275e66; background:rgba(4,24,29,.65); }
+	.faq-item { border:0; background:rgba(4,24,29,.65); }
 	.faq-item summary { padding:16px; color:#8eeaf0; cursor:pointer; line-height:1.6; }
 	.faq-item summary:focus-visible { outline:2px solid #00f0ff; outline-offset:3px; }
 	.faq-body { padding:0 20px 20px; line-height:1.8; overflow-wrap:anywhere; }
@@ -375,7 +387,7 @@ const communityUpdateCopy = {
 	.offline-version .release-log { margin:18px 0 0; }
 	@media (max-width:700px) { .offline-versions { grid-template-columns:minmax(0,1fr); } }
 
-	.release-log { border: 1px solid #275e66; background: rgba(4, 24, 29, .65); margin-bottom: 24px; }
+	.release-log { border: 0; background: rgba(4, 24, 29, .65); margin-bottom: 24px; }
 	.release-log summary { cursor: pointer; padding: 16px; color: #8eeaf0; line-height: 1.6; overflow-wrap: anywhere; }
 	.release-log summary span:first-child { margin-right: 12px; color: #e0ffff; }
 	.release-log summary:focus-visible { outline: 2px solid #00f0ff; outline-offset: 3px; }
@@ -389,6 +401,10 @@ const communityUpdateCopy = {
 	.restart-step { grid-column: 1 / -1; }
 	@media (max-width: 700px) { .language-guide { padding: 16px; } .language-guide ol { grid-template-columns: minmax(0, 1fr); } }
 
+	#compatibility-download[hidden] { display:none; }
+	#compatibility-download { text-align:center; }
+	.compatibility-link { color:#8eeaf0; text-underline-offset:4px; }
+	#compatibility-download p { font-size:.8rem; line-height:1.6; color:#b5c9cb; margin:8px 0 0; }
 	#mainland-progress { padding: 12px; background: #06262d; border: 1px solid #28717a; text-align: left; }
 	#mainland-progress p { margin: 0 0 8px; font-size: .85rem; line-height: 1.5; }
 	#mainland-progress progress { width: 100%; height: 8px; accent-color: #00f0ff; }

@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "destroygunners",
+  "account_id": "d5c59bf8109fee7aadc3525ec89c992c",
+  "compatibility_date": "2026-11-03",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "drop-trailing-slash"
+  }
+}
