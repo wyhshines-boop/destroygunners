@@ -1,8 +1,8 @@
 {
-  "build": 130,
+  "build": 131,
   "version": "3.0.0c",
-  "title": "兼容合并、聊天与更新下载",
+  "title": "聊天入口与面板调整",
   "date": "2026-11-03",
-  "apk_path": "/downloads/DGZZ_3.0.0c_build130_merged_chat.apk",
-  "notes": "保留 Build127 兼容改动和大厅聊天。欢迎页可切换英文；聊天输入框与发送按钮同行，优化输入样式；更新提醒新增 R2 直接下载按钮，并保留官网和稍后选项。"
+  "apk_path": "/downloads/DGZZ_3.0.0c_build131_chat_entry.apk",
+  "notes": "基于 Build130，保留 Build127 兼容改动。大厅 Chat 直接打开面板聊天；交换聊天与教程顺序，精简教程说明；语言切换与构建代码同行。"
 }
