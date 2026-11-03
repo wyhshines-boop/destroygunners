@@ -1,0 +1,8 @@
+{
+  "build": 128,
+  "version": "3.0.0c",
+  "title": "大厅聊天测试版",
+  "date": "2026-11-03",
+  "apk_path": "/downloads/DGZZ_3.0.0c_build128_lobby_chat.apk",
+  "notes": "Account 面板新增大厅聊天，支持文字和 emoji。后台支持删除消息、禁言和解禁。原生 Chat 按钮暂未接入。"
+}

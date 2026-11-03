@@ -50,6 +50,11 @@
       "source": "/downloads/DGZZ_3.0.0c_build128_lobby_chat.apk",
       "destination": "https://downloads.destroygunners.com/apk/af33d2e626af0ff0028d8513bf9fdd34aaf0b32ff74230b7cbde06e03da09d7e/DGZZ_3.0.0c_build128_lobby_chat.apk",
       "permanent": false
+    },
+    {
+      "source": "/downloads/DGZZ_test_latest.apk",
+      "destination": "https://downloads.destroygunners.com/apk/af33d2e626af0ff0028d8513bf9fdd34aaf0b32ff74230b7cbde06e03da09d7e/DGZZ_3.0.0c_build128_lobby_chat.apk",
+      "permanent": false
     }
   ]
 }

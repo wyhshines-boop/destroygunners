@@ -2,6 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import ContentBox from '../ContentBox.astro';
 import './admin.css';
+import testRelease from '../../data/test-release.json';
+import r2Downloads from '../../data/r2-downloads.json';
+const testFile = r2Downloads.files.find(file => file.path === testRelease.apk_path);
+if (!testFile) throw new Error('Test APK missing from R2 manifest');
 const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunners 社区服管理后台',noindex:true};
 ---
 <Layout seo={seo} admin>
@@ -25,6 +29,7 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
     <button data-workspace="devil">Devil 活动</button>
     <button data-workspace="daily">每日奖励</button>
     <button data-workspace="chat">大厅聊天</button>
+    <button data-workspace="test">测试版本</button>
    </nav></aside>
    <div class="workspace-main">
     <h2 id="workspace-title" class="sr-only">玩家与奖励</h2>
@@ -84,7 +89,15 @@ const seo={title:'社区服管理 | Destroy Gunners',description:'Destroy Gunner
       </fieldset></form>
       <section class="pending-section"><div class="section-heading"><h3>领取记录</h3></div><div class="row"><input id="daily-history-uid" placeholder="玩家ID，留空查看全部" class="grow" /><button id="daily-history-refresh">查询</button></div><div class="box"><table><thead><tr><th>日期</th><th>玩家ID</th><th>奖励</th><th>状态</th></tr></thead><tbody id="daily-admin-history"></tbody></table></div></section>
      </section>
-     <section data-view="chat" hidden>
+     <section data-view="test" hidden>
+<div class="section-heading"><h3>最新测试版 · Build {testRelease.build}</h3></div>
+<h4>{testRelease.version} · {testRelease.title}</h4>
+<p class="hint">{testRelease.date} · {(testFile.bytes / 1024 / 1024).toFixed(1)} MB</p>
+<p>{testRelease.notes}</p>
+<p><a class="test-download" href="/downloads/DGZZ_test_latest.apk" download>下载最新测试版</a></p>
+<p class="hint">此处只保留最新测试版，每次更新后重新下载即可。</p>
+</section>
+<section data-view="chat" hidden>
 <div class="section-heading"><h3>大厅聊天</h3><button id="chat-admin-refresh" type="button">刷新消息</button></div>
 <p class="hint">显示最近100条消息。玩家端显示最近50条，服务器保留500条。</p>
 <div class="box"><table><thead><tr><th>时间</th><th>昵称</th><th>玩家ID</th><th>消息</th><th>管理</th></tr></thead><tbody id="chat-admin-messages"></tbody></table></div>

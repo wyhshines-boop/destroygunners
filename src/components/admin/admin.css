@@ -55,3 +55,5 @@ html.admin-site::-webkit-scrollbar-corner,.admin-shell ::-webkit-scrollbar-corne
 .admin-shell .daily-admin-days{display:grid;gap:12px;margin:18px 0}.admin-shell .daily-admin-day{border:1px solid #28535d;background:rgba(3,22,28,.64);padding:12px 16px}.admin-shell .daily-admin-day>summary{cursor:pointer;color:#baf9ff;font-weight:600;padding:4px 0 10px}.admin-shell .daily-admin-day>.form-grid{margin:12px 0}.admin-shell .daily-admin-item input{width:85px}.admin-shell .daily-admin-item select{min-width:0}.admin-shell #daily-admin-fields{border:0;padding:0;min-width:0}
 
 #chat-admin-messages td:nth-child(4){white-space:pre-wrap;overflow-wrap:anywhere;min-width:180px;max-width:450px}#chat-admin-messages button{margin:3px}#chat-admin-mutes p{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+.admin-shell .test-download{display:inline-block;padding:12px 20px;border:1px solid #2e737d;background:#10363d;color:#bafcff;text-decoration:none}.admin-shell .test-download:hover{background:#174850}
