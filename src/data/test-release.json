@@ -1,8 +1,8 @@
 {
-  "build": 136,
+  "build": 137,
   "version": "3.0.0c",
-  "title": "聊天边距与消息底色",
+  "title": "蓝色消息卡片与聊天留白",
   "date": "2026-11-03",
-  "apk_path": "/downloads/DGZZ_3.0.0c_build136_chat_padding.apk",
-  "notes": "基于 Build135。聊天消息和输入栏统一左右留白，取消消息区单侧宽留白；关闭按钮上方单独留位；消息背景加深，减少底纹干扰。"
+  "apk_path": "/downloads/DGZZ_3.0.0c_build137_blue_chat.apk",
+  "notes": "基于 Build136。左右留白增至36px，顶部取消关闭按钮占位；消息采用深蓝渐变、亮蓝描边的游戏按钮风格。"
 }
