@@ -1,8 +1,8 @@
 {
-  "build": 135,
+  "build": 136,
   "version": "3.0.0c",
-  "title": "精简聊天与面板留白",
+  "title": "聊天边距与消息底色",
   "date": "2026-11-03",
-  "apk_path": "/downloads/DGZZ_3.0.0c_build135_panel_spacing.apk",
-  "notes": "基于 Build133，合并紧凑聊天界面：移除标题、语言、构建号和额外背景；底部图标发送栏缩矮。Account 左栏金币、页签和语言统一增加左侧留白，与右侧内容区外边距对齐。"
+  "apk_path": "/downloads/DGZZ_3.0.0c_build136_chat_padding.apk",
+  "notes": "基于 Build135。聊天消息和输入栏统一左右留白，取消消息区单侧宽留白；关闭按钮上方单独留位；消息背景加深，减少底纹干扰。"
 }

@@ -87,8 +87,13 @@
       "permanent": false
     },
     {
+      "source": "/downloads/DGZZ_3.0.0c_build136_chat_padding.apk",
+      "destination": "https://downloads.destroygunners.com/apk/58a68745ae87fc49902ad798213305b6723075a03e7bedcb8cee685e66e8b885/DGZZ_3.0.0c_build136_chat_padding.apk",
+      "permanent": false
+    },
+    {
       "source": "/downloads/DGZZ_test_latest.apk",
-      "destination": "https://downloads.destroygunners.com/apk/1c5777d80257ae843aaa5070473981cb4e052db9fa42b51e4971e0d89c84c7f1/DGZZ_3.0.0c_build135_panel_spacing.apk",
+      "destination": "https://downloads.destroygunners.com/apk/58a68745ae87fc49902ad798213305b6723075a03e7bedcb8cee685e66e8b885/DGZZ_3.0.0c_build136_chat_padding.apk",
       "permanent": false
     }
   ]

@@ -102,6 +102,12 @@
       "key": "apk/1c5777d80257ae843aaa5070473981cb4e052db9fa42b51e4971e0d89c84c7f1/DGZZ_3.0.0c_build135_panel_spacing.apk",
       "bytes": 25482920,
       "sha256": "1c5777d80257ae843aaa5070473981cb4e052db9fa42b51e4971e0d89c84c7f1"
+    },
+    {
+      "path": "/downloads/DGZZ_3.0.0c_build136_chat_padding.apk",
+      "key": "apk/58a68745ae87fc49902ad798213305b6723075a03e7bedcb8cee685e66e8b885/DGZZ_3.0.0c_build136_chat_padding.apk",
+      "bytes": 25482920,
+      "sha256": "58a68745ae87fc49902ad798213305b6723075a03e7bedcb8cee685e66e8b885"
     }
   ],
   "public_url": "https://downloads.destroygunners.com"
