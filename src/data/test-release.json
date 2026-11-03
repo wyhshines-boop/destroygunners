@@ -1,8 +1,8 @@
 {
-  "build": 137,
+  "build": 138,
   "version": "3.0.0c",
-  "title": "蓝色消息卡片与聊天留白",
+  "title": "正式版 Build138",
   "date": "2026-11-03",
-  "apk_path": "/downloads/DGZZ_3.0.0c_build137_blue_chat.apk",
-  "notes": "基于 Build136。左右留白增至36px，顶部取消关闭按钮占位；消息采用深蓝渐变、亮蓝描边的游戏按钮风格。"
+  "apk_path": "/downloads/DGZZ_3.0.0c_build138_release.apk",
+  "notes": "正式发布：大厅聊天、精简账户布局与兼容改动；聊天发送仅失败提醒。"
 }
