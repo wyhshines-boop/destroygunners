@@ -72,8 +72,13 @@
       "permanent": false
     },
     {
+      "source": "/downloads/DGZZ_3.0.0c_build133_standalone_chat.apk",
+      "destination": "https://downloads.destroygunners.com/apk/107095a81d55b547ed879f478728fc9bf44b8cfee77d63838dadec876a59495b/DGZZ_3.0.0c_build133_standalone_chat.apk",
+      "permanent": false
+    },
+    {
       "source": "/downloads/DGZZ_test_latest.apk",
-      "destination": "https://downloads.destroygunners.com/apk/600b6526d69e21cc1cbb1ef34e27a21665ae2880920e70815968ad4923e63027/DGZZ_3.0.0c_build132_native_chat.apk",
+      "destination": "https://downloads.destroygunners.com/apk/107095a81d55b547ed879f478728fc9bf44b8cfee77d63838dadec876a59495b/DGZZ_3.0.0c_build133_standalone_chat.apk",
       "permanent": false
     }
   ]
