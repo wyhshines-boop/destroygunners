@@ -78,6 +78,12 @@
       "key": "apk/dcd0f018a8c1c82c9c70488f60beeebeb0c189a0d4b74eb7ec8f069ec5f7c3fa/DGZZ_3.0.0c_build131_chat_entry.apk",
       "bytes": 25482920,
       "sha256": "dcd0f018a8c1c82c9c70488f60beeebeb0c189a0d4b74eb7ec8f069ec5f7c3fa"
+    },
+    {
+      "path": "/downloads/DGZZ_3.0.0c_build132_native_chat.apk",
+      "key": "apk/600b6526d69e21cc1cbb1ef34e27a21665ae2880920e70815968ad4923e63027/DGZZ_3.0.0c_build132_native_chat.apk",
+      "bytes": 25482920,
+      "sha256": "600b6526d69e21cc1cbb1ef34e27a21665ae2880920e70815968ad4923e63027"
     }
   ],
   "public_url": "https://downloads.destroygunners.com"

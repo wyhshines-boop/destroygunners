@@ -1,8 +1,8 @@
 {
-  "build": 131,
+  "build": 132,
   "version": "3.0.0c",
-  "title": "聊天入口与面板调整",
+  "title": "原生聊天入口与滚动修复",
   "date": "2026-11-03",
-  "apk_path": "/downloads/DGZZ_3.0.0c_build131_chat_entry.apk",
-  "notes": "基于 Build130，保留 Build127 兼容改动。大厅 Chat 直接打开面板聊天；交换聊天与教程顺序，精简教程说明；语言切换与构建代码同行。"
+  "apk_path": "/downloads/DGZZ_3.0.0c_build132_native_chat.apk",
+  "notes": "基于 Build131，保留兼容改动。替换原生社区分享框为面板聊天入口；减少输入框下方留白；消息列表滚至边缘后可继续滚动整页。"
 }
