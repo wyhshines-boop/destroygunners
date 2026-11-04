@@ -1,0 +1,98 @@
+---
+import type { Lang } from '../i18n/translations';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = {
+  zh: { title: '3D 模型 · rd10', note: '静态姿态，已包含贴图，暂不含骨骼动画。rd10 为游戏内部资源名。', open: '查看 3D 模型', loading: '正在加载模型…', error: '预览未能加载，可重试或直接下载模型。', help: '拖动旋转，双指或滚轮缩放。', glb: '下载 GLB', blend: '下载 Blender 文件', alt: 'rd10 机甲正反面预览' },
+  en: { title: '3D Model · rd10', note: 'Textured static pose, without rig or animation. rd10 is the internal resource name.', open: 'View 3D model', loading: 'Loading model…', error: 'Preview unavailable. Retry or download the model.', help: 'Drag to rotate. Pinch or scroll to zoom.', glb: 'Download GLB', blend: 'Download Blender file', alt: 'Front and back views of rd10' },
+  ja: { title: '3Dモデル · rd10', note: 'テクスチャ付きの静止モデル。ボーン・アニメーションは含みません。rd10 は内部リソース名です。', open: '3Dモデルを見る', loading: 'モデルを読み込み中…', error: 'プレビューを読み込めません。再試行するか、モデルをダウンロードしてください。', help: 'ドラッグで回転、ピンチやホイールで拡大・縮小。', glb: 'GLBをダウンロード', blend: 'Blenderファイルをダウンロード', alt: 'rd10の正面・背面プレビュー' },
+}[lang];
+---
+<section class="model-preview" data-model-preview data-loading={t.loading} data-error={t.error} aria-labelledby="model-title">
+  <h2 id="model-title">{t.title}</h2>
+  <p class="model-note">{t.note}</p>
+  <div class="model-stage">
+    <div class="model-mount" data-mount></div>
+    <div class="model-poster" data-poster>
+      <img src="/models/rd10/preview.webp" width="1400" height="850" alt={t.alt} loading="lazy" decoding="async" />
+      <button type="button" data-open>{t.open}</button>
+    </div>
+  </div>
+  <p class="model-status" role="status" aria-live="polite" data-status></p>
+  <div class="model-footer">
+    <p>{t.help}</p>
+    <div class="model-downloads">
+      <a href="/models/rd10/DGZZ_rd10.glb" download>{t.glb}</a>
+      <a href="/models/rd10/DGZZ_rd10.blend" download>{t.blend}</a>
+    </div>
+  </div>
+</section>
+<script>
+  function setupModelPreview() {
+    document.querySelectorAll<HTMLElement>('[data-model-preview]').forEach(root => {
+      const button = root.querySelector<HTMLButtonElement>('[data-open]')!;
+      if (button.dataset.bound) return;
+      button.dataset.bound = 'true';
+      button.addEventListener('click', async () => {
+        const status = root.querySelector<HTMLElement>('[data-status]')!;
+        const mount = root.querySelector<HTMLElement>('[data-mount]')!;
+        const poster = root.querySelector<HTMLElement>('[data-poster]')!;
+        button.disabled = true;
+        status.textContent = root.dataset.loading || '';
+        let viewer: HTMLElement | undefined;
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        function fail() {
+          clearTimeout(timer);
+          viewer?.remove();
+          poster.hidden = false;
+          button.disabled = false;
+          status.textContent = root.dataset.error || '';
+        }
+        timer = setTimeout(fail, 45000);
+        try {
+          await import('@google/model-viewer');
+          if (!root.isConnected || !button.disabled) return;
+          viewer = document.createElement('model-viewer');
+          viewer.setAttribute('camera-controls', '');
+          viewer.setAttribute('touch-action', 'pan-y');
+          viewer.setAttribute('interaction-prompt', 'none');
+          viewer.setAttribute('camera-orbit', '-30deg 78deg auto');
+          viewer.setAttribute('shadow-intensity', '0.6');
+          viewer.setAttribute('alt', 'DGZZ rd10');
+          viewer.style.cssText = 'display:block;width:100%;height:100%;touch-action:pan-y';
+          viewer.addEventListener('load', () => {
+            clearTimeout(timer);
+            poster.hidden = true;
+            status.textContent = '';
+          }, { once: true });
+          viewer.addEventListener('error', fail, { once: true });
+          viewer.setAttribute('src', '/models/rd10/DGZZ_rd10.glb');
+          mount.replaceChildren(viewer);
+        } catch { fail(); }
+      });
+    });
+  }
+  setupModelPreview();
+  document.addEventListener('astro:page-load', setupModelPreview);
+</script>
+<style>
+  .model-preview { margin: 0 0 32px; padding: 24px; background: rgba(5,27,31,.93); }
+  h2 { margin: 0; color: #80f1fa; font-size: 1.25rem; font-weight: 500; }
+  .model-note, .model-footer p { color: #a3bfc3; font-family: system-ui,sans-serif; line-height: 1.7; font-size: .9rem; }
+  .model-note { margin: 10px 0 18px; }
+  .model-stage { position: relative; height: clamp(280px, 50vw, 520px); background: radial-gradient(ellipse at center, #193b44, #06161c); overflow: hidden; }
+  .model-mount, .model-poster { position: absolute; inset: 0; }
+  .model-poster { display: flex; align-items: center; justify-content: center; }
+  .model-poster[hidden] { display: none; }
+  .model-poster img { width: 100%; height: 100%; object-fit: contain; }
+  button { position: absolute; bottom: 24px; background: #073b47; color: #dfffff; border: 1px solid #00c9d8; padding: 12px 24px; cursor: pointer; font: inherit; box-shadow: 0 2px 16px #0008; }
+  button:disabled { cursor: wait; opacity: .65; }
+  button:focus-visible, a:focus-visible { outline: 2px solid #00f0ff; outline-offset: 4px; }
+  .model-status { margin: 8px 0 0; color: #c1e2e6; font-size: .9rem; }
+  .model-status:empty { display: none; }
+  .model-footer { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 16px; }
+  .model-footer p { margin: 0; }
+  .model-downloads { display: flex; flex-wrap: wrap; gap: 12px; }
+  .model-downloads a { color: #80f1fa; text-underline-offset: 4px; padding: 8px 0; }
+  @media (max-width: 700px) { .model-preview { padding: 16px; } }
+</style>

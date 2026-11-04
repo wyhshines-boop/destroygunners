@@ -1,6 +1,7 @@
 ---
 import { type Lang } from '../i18n/translations';
 import catalog from '../data/mecha.json';
+import ModelPreview from './ModelPreview.astro';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -16,6 +17,7 @@ const mecha = catalog as Array<{ index: number; name: string; description: Recor
     <h1>{copy.title}</h1>
     <p>{copy.intro}</p>
   </header>
+  <ModelPreview lang={lang} />
   <nav class="mecha-index" aria-label={copy.jump}>
     {mecha.map(mech => <a href={`#mecha-${mech.index}`}>{mech.name}</a>)}
   </nav>
