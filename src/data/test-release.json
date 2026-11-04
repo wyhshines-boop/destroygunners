@@ -1,8 +1,9 @@
 {
-  "build": 140,
-  "version": "3.0.0c",
-  "title": "WebView 启动诊断",
+  "build": 141,
+  "version": "GeckoView ARM32",
+  "title": "GeckoView 独立内核测试",
   "date": "2026-11-04",
-  "apk_path": "/downloads/DGZZ_3.0.0c_build140_webview_diagnostic.apk",
-  "notes": "补全初始化异常信息，支持复制诊断。用于排查面板无法打开的问题。"
+  "apk_path": "/downloads/DGZZ_Gecko_ARM32_build141.apk",
+  "notes": "独立测试应用，不含游戏、不覆盖存档。启动后应显示32-bit及本地测试网页，可测试输入和emoji；失败时复制诊断信息。",
+  "variant": "gecko_probe"
 }

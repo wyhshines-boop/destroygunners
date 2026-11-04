@@ -28,6 +28,9 @@ interface Props {
 
 const { lang } = Astro.props;
 const tr = t(lang);
+const testDownloadLabel = 'variant' in testRelease && testRelease.variant === 'gecko_probe'
+ ? {zh:'GeckoView 独立测试（不含游戏）',en:'GeckoView standalone test (no game)',ja:'GeckoView 単体テスト（ゲームなし）'}[lang]
+ : {zh:'测试版下载',en:'Test download',ja:'テスト版ダウンロード'}[lang];
 const scareSoulHref = lang === 'en' ? '/scaresoul' : `/${lang}/scaresoul`;
 const pageHeading = {
 	en: 'Destroy Gunners ZZ APK Download & Community',
@@ -106,7 +109,7 @@ const communityUpdateCopy = {
 					<strong>{communityUpdateCopy.title}</strong>
 					<p>{communityUpdateCopy.description}</p>
 					<DownloadButton id="open-download" version={communityVersion} text={tr.download.button} mainland={mainlandLinks[communityVersion.apk]} />
-                    <a class="test-release-link download-track" href="/downloads/DGZZ_test_latest.apk" download data-method="test_release">{{zh:'测试版下载',en:'Test download',ja:'テスト版ダウンロード'}[lang]} · Build{testRelease.build}</a>
+                    <a class="test-release-link download-track" href="/downloads/DGZZ_test_latest.apk" download data-method="test_release">{testDownloadLabel} · Build{testRelease.build}</a>
 				</div>
 			</article>
 			<details class="release-log">
