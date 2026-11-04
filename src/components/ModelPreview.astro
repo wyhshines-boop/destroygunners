@@ -1,65 +1,55 @@
 ---
 import type { Lang } from '../i18n/translations';
-import models from '../data/models.json';
-interface Props { lang: Lang }
-const { lang } = Astro.props;
+interface Props { lang: Lang; model: { id: string; name: string } }
+const { lang, model } = Astro.props;
 const t = {
   zh: { title: '3D 模型', open: '查看 3D 模型', loading: '正在加载模型…', error: '预览未能加载，可重试或直接下载模型。', help: '拖动旋转，双指或滚轮缩放。', glb: '下载 GLB', blend: '下载 Blender 文件', alt: '机甲正反面预览' },
   en: { title: '3D Model', open: 'View 3D model', loading: 'Loading model…', error: 'Preview unavailable. Retry or download the model.', help: 'Drag to rotate. Pinch or scroll to zoom.', glb: 'Download GLB', blend: 'Download Blender file', alt: 'Front and back views' },
   ja: { title: '3Dモデル', open: '3Dモデルを見る', loading: 'モデルを読み込み中…', error: 'プレビューを読み込めません。再試行するか、モデルをダウンロードしてください。', help: 'ドラッグで回転、ピンチやホイールで拡大・縮小。', glb: 'GLBをダウンロード', blend: 'Blenderファイルをダウンロード', alt: '機体の正面・背面プレビュー' },
 }[lang];
 ---
-<section class="model-preview" data-model-preview data-loading={t.loading} data-error={t.error} aria-labelledby="model-title">
-  <div class="model-toolbar">
-    <h2 id="model-title">{t.title}</h2>
-    <select data-model-select aria-label={t.title}>
-      {models.map(model => <option value={model.id}>#{String(model.number).padStart(2, '0')} {model.name}</option>)}
-    </select>
-  </div>
+<div class="model-preview" data-model-preview data-model-id={model.id} data-model-name={model.name} data-loading={t.loading} data-error={t.error} aria-label={model.name}>
   <div class="model-stage">
     <div class="model-mount" data-mount></div>
     <div class="model-poster" data-poster>
-      <img src="/models/rd10/preview.webp" width="1400" height="850" alt={t.alt} loading="lazy" decoding="async" />
+      <img src={`/models/${model.id}/preview.webp`} width="1400" height="850" alt={`${model.name} · ${t.alt}`} loading="lazy" decoding="async" />
       <button type="button" data-open>{t.open}</button>
     </div>
   </div>
   <p class="model-status" role="status" aria-live="polite" data-status></p>
   <div class="model-footer">
-    <p>{t.help}</p>
     <div class="model-downloads">
-      <a href="/models/rd10/DGZZ_rd10.glb" data-download="glb" download>{t.glb}</a>
-      <a href="/models/rd10/DGZZ_rd10.blend" data-download="blend" download>{t.blend}</a>
+      <a href={`/models/${model.id}/DGZZ_${model.id}.glb`} data-download="glb" download>{t.glb}</a>
+      <a href={`/models/${model.id}/DGZZ_${model.id}.blend`} data-download="blend" download>{t.blend}</a>
     </div>
   </div>
-</section>
+</div>
 <script>
+  let releaseActive: (() => void) | undefined;
   function setupModelPreview() {
     document.querySelectorAll<HTMLElement>('[data-model-preview]').forEach(root => {
       const button = root.querySelector<HTMLButtonElement>('[data-open]')!;
       if (button.dataset.bound) return;
       button.dataset.bound = 'true';
-      const select = root.querySelector<HTMLSelectElement>('[data-model-select]')!;
+      const model = root.dataset.modelId!;
       const status = root.querySelector<HTMLElement>('[data-status]')!;
       const mount = root.querySelector<HTMLElement>('[data-mount]')!;
       const poster = root.querySelector<HTMLElement>('[data-poster]')!;
       let revision = 0;
       let timer: ReturnType<typeof setTimeout> | undefined;
       const path = (id: string, ext: string) => `/models/${id}/DGZZ_${id}.${ext}`;
-      select.addEventListener('change', () => {
+      function reset() {
         revision++;
         clearTimeout(timer);
         mount.replaceChildren();
-        poster.querySelector('img')!.src = `/models/${select.value}/preview.webp`;
         poster.hidden = false;
         button.disabled = false;
         status.textContent = '';
-        root.querySelectorAll<HTMLAnchorElement>('[data-download]').forEach(link => {
-          link.href = path(select.value, link.dataset.download!);
-        });
-      });
+      }
       button.addEventListener('click', async () => {
+        releaseActive?.();
+        releaseActive = reset;
         const token = ++revision;
-        const model = select.value;
         button.disabled = true;
         status.textContent = root.dataset.loading || '';
         let viewer: HTMLElement | undefined;
@@ -82,7 +72,7 @@ const t = {
           viewer.setAttribute('interaction-prompt', 'none');
           viewer.setAttribute('camera-orbit', '155deg 78deg auto');
           viewer.setAttribute('shadow-intensity', '0.6');
-          viewer.setAttribute('alt', select.selectedOptions[0].text);
+          viewer.setAttribute('alt', root.dataset.modelName!);
           viewer.style.cssText = 'display:block;width:100%;height:100%;touch-action:pan-y';
           viewer.addEventListener('load', () => {
             if (token !== revision) return;
@@ -99,27 +89,21 @@ const t = {
   }
   setupModelPreview();
   document.addEventListener('astro:page-load', setupModelPreview);
+  document.addEventListener('astro:before-swap', () => { releaseActive?.(); releaseActive = undefined; });
 </script>
 <style>
-  .model-preview { margin: 0 0 32px; padding: 24px; background: rgba(5,27,31,.93); }
-  .model-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; justify-content: space-between; margin-bottom: 18px; }
-  select { color: #d5e9eb; background: #0b2830; border: 1px solid #29616b; padding: 10px 14px; font: inherit; max-width: 100%; }
-  select:focus-visible { outline: 2px solid #00f0ff; outline-offset: 3px; }
-  h2 { margin: 0; color: #80f1fa; font-size: 1.25rem; font-weight: 500; }
-  .model-footer p { color: #a3bfc3; font-family: system-ui,sans-serif; line-height: 1.7; font-size: .9rem; }
-  .model-stage { position: relative; height: clamp(280px, 50vw, 520px); background: radial-gradient(ellipse at center, #193b44, #06161c); overflow: hidden; }
+  .model-preview { margin-top: 18px; }
+  .model-stage { position: relative; height: 320px; background: radial-gradient(ellipse at center, #193b44, #06161c); overflow: hidden; }
   .model-mount, .model-poster { position: absolute; inset: 0; }
   .model-poster { display: flex; align-items: center; justify-content: center; }
   .model-poster[hidden] { display: none; }
   .model-poster img { width: 100%; height: 100%; object-fit: contain; }
-  button { position: absolute; bottom: 24px; background: #073b47; color: #dfffff; border: 1px solid #00c9d8; padding: 12px 24px; cursor: pointer; font: inherit; box-shadow: 0 2px 16px #0008; }
+  button { position: absolute; bottom: 16px; background: #073b47; color: #dfffff; border: 1px solid #00c9d8; padding: 10px 18px; cursor: pointer; font: inherit; font-size: .9rem; box-shadow: 0 2px 16px #0008; }
   button:disabled { cursor: wait; opacity: .65; }
   button:focus-visible, a:focus-visible { outline: 2px solid #00f0ff; outline-offset: 4px; }
   .model-status { margin: 8px 0 0; color: #c1e2e6; font-size: .9rem; }
   .model-status:empty { display: none; }
-  .model-footer { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 16px; }
-  .model-footer p { margin: 0; }
-  .model-downloads { display: flex; flex-wrap: wrap; gap: 12px; }
-  .model-downloads a { color: #80f1fa; text-underline-offset: 4px; padding: 8px 0; }
-  @media (max-width: 700px) { .model-preview { padding: 16px; } }
+  .model-downloads { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 8px; }
+  .model-downloads a { color: #80f1fa; text-underline-offset: 4px; padding: 8px 0; font-size: .85rem; }
+  @media (max-width: 700px) { .model-stage { height: clamp(300px, 75vw, 420px); } }
 </style>

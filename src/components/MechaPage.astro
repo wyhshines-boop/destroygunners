@@ -2,6 +2,7 @@
 import { type Lang } from '../i18n/translations';
 import catalog from '../data/mecha.json';
 import ModelPreview from './ModelPreview.astro';
+import models from '../data/models.json';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -16,15 +17,14 @@ const mecha = catalog as Array<{ index: number; name: string; description: Recor
   <header class="page-heading">
     <h1>{copy.title}</h1>
   </header>
-  <ModelPreview lang={lang} />
   <nav class="mecha-index" aria-label={copy.jump}>
     {mecha.map(mech => <a href={`#mecha-${mech.index}`}>{mech.name}</a>)}
   </nav>
   <div class="mecha-grid">
     {mecha.map(mech => (
       <article class="mecha-card" id={`mecha-${mech.index}`}>
-        {mech.image && <img src={mech.image} alt={mech.name} width="800" height="600" loading="lazy" decoding="async" />}
         <header><span aria-hidden="true">{String(mech.index + 1).padStart(2, '0')}</span><h2>{mech.name}</h2></header>
+        {models.find(model => model.number === mech.index + 1) && <ModelPreview lang={lang} model={models.find(model => model.number === mech.index + 1)!} />}
         <p>{mech.description[lang]}</p>
       </article>
     ))}
