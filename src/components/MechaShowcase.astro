@@ -1,0 +1,148 @@
+---
+import type { Lang } from '../i18n/translations';
+import catalog from '../data/mecha.json';
+import models from '../data/models.json';
+import ContentBox from './ContentBox.astro';
+import RetroButton from './RetroButton.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  zh: { title: '机甲', all: '查看全部机甲', prev: '上一台机甲', next: '下一台机甲', loading: '模型加载中…', error: '模型未能加载，请重试。', retry: '重试' },
+  en: { title: 'Mecha', all: 'View all mecha', prev: 'Previous mech', next: 'Next mech', loading: 'Loading model…', error: 'Model unavailable. Please retry.', retry: 'Retry' },
+  ja: { title: '機体', all: 'すべての機体を見る', prev: '前の機体', next: '次の機体', loading: 'モデルを読み込み中…', error: 'モデルを読み込めません。再試行してください。', retry: '再試行' },
+}[lang];
+const items = models.map(model => ({ ...model, description: catalog[model.number - 1].description[lang] }));
+const first = items[0];
+const href = lang === 'en' ? '/mechas' : `/${lang}/mechas`;
+---
+<ContentBox title={copy.title}>
+  <div class="mecha-showcase" data-showcase data-loading={copy.loading} data-error={copy.error} role="region" aria-label={copy.title}>
+    <div class="showcase-stage">
+      <div class="showcase-mount" data-mount></div>
+      <div class="showcase-poster" data-poster>
+        <img src={`/models/${first.id}/preview.webp`} alt={first.name} width="1400" height="850" loading="lazy" decoding="async" />
+        <button class="retry" data-retry hidden type="button">{copy.retry}</button>
+      </div>
+      <button class="arrow prev" data-prev type="button" aria-label={copy.prev}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg></button>
+      <button class="arrow next" data-next type="button" aria-label={copy.next}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg></button>
+    </div>
+    <div class="showcase-copy">
+      <div aria-live="polite" aria-atomic="true">
+        <span class="showcase-count" data-count>01 / 23</span>
+        <h3 data-name>{first.name}</h3>
+        <p class="showcase-description" data-description>{first.description}</p>
+      </div>
+      <p class="showcase-status" role="status" data-status></p>
+      <div class="showcase-link"><RetroButton label={copy.all} href={href} /></div>
+    </div>
+    <script type="application/json" data-models set:html={JSON.stringify(items).replace(/</g, '\\u003c')} />
+  </div>
+</ContentBox>
+<script>
+  function initShowcases() {
+    document.querySelectorAll<HTMLElement>('[data-showcase]').forEach(root => {
+      if (root.dataset.bound) return;
+      root.dataset.bound = 'true';
+      const models = JSON.parse(root.querySelector('[data-models]')!.textContent!) as Array<{id: string; name: string; number: number; description: string}>;
+      const mount = root.querySelector<HTMLElement>('[data-mount]')!;
+      const poster = root.querySelector<HTMLElement>('[data-poster]')!;
+      const image = poster.querySelector('img')!;
+      const retry = root.querySelector<HTMLButtonElement>('[data-retry]')!;
+      const status = root.querySelector<HTMLElement>('[data-status]')!;
+      let index = 0, revision = 0;
+      let viewer: HTMLElement | undefined;
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      async function load() {
+        const token = ++revision;
+        clearTimeout(timer);
+        const model = models[index];
+        poster.hidden = false;
+        retry.hidden = true;
+        status.textContent = root.dataset.loading || '';
+        function fail() {
+          if (token !== revision) return;
+          revision++;
+          clearTimeout(timer);
+          viewer?.remove(); viewer = undefined;
+          poster.hidden = false;
+          retry.hidden = false;
+          status.textContent = root.dataset.error || '';
+        }
+        timer = setTimeout(fail, 45000);
+        try {
+          await import('@google/model-viewer');
+          if (!root.isConnected || token !== revision) return;
+          if (!viewer) {
+            viewer = document.createElement('model-viewer');
+            viewer.setAttribute('camera-controls', '');
+            viewer.setAttribute('touch-action', 'pan-y');
+            viewer.setAttribute('interaction-prompt', 'none');
+            viewer.setAttribute('shadow-intensity', '0.6');
+            viewer.style.cssText = 'display:block;width:100%;height:100%;touch-action:pan-y';
+            mount.replaceChildren(viewer);
+          }
+          viewer.setAttribute('camera-orbit', '155deg 78deg auto');
+          viewer.setAttribute('alt', model.name);
+          viewer.addEventListener('load', () => {
+            if (token !== revision) return;
+            clearTimeout(timer);
+            poster.hidden = true;
+            status.textContent = '';
+          }, { once: true });
+          viewer.addEventListener('error', fail, { once: true });
+          viewer.setAttribute('src', `/models/${model.id}/DGZZ_${model.id}.glb`);
+        } catch { fail(); }
+      }
+      function change(step: number) {
+        index = (index + step + models.length) % models.length;
+        const model = models[index];
+        image.src = `/models/${model.id}/preview.webp`;
+        image.alt = model.name;
+        root.querySelector('[data-name]')!.textContent = model.name;
+        root.querySelector('[data-count]')!.textContent = `${String(model.number).padStart(2, '0')} / ${models.length}`;
+        root.querySelector('[data-description]')!.textContent = model.description;
+        observer?.disconnect();
+        load();
+      }
+      root.querySelector('[data-prev]')!.addEventListener('click', () => change(-1));
+      root.querySelector('[data-next]')!.addEventListener('click', () => change(1));
+      retry.addEventListener('click', load);
+      let observer: IntersectionObserver | undefined;
+      if ('IntersectionObserver' in window) {
+        observer = new IntersectionObserver(entries => {
+          if (entries.some(entry => entry.isIntersecting)) { observer!.disconnect(); load(); }
+        }, { rootMargin: '150px' });
+        observer.observe(root);
+      } else { load(); }
+      document.addEventListener('astro:before-swap', () => {
+        revision++; clearTimeout(timer); observer?.disconnect(); mount.replaceChildren();
+      }, { once: true });
+    });
+  }
+  initShowcases();
+  document.addEventListener('astro:page-load', initShowcases);
+</script>
+<style>
+  .mecha-showcase { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: center; }
+  .showcase-stage { position: relative; height: 350px; min-width: 0; overflow: hidden; background: radial-gradient(ellipse at center, #193b44, #06161c); }
+  .showcase-mount, .showcase-poster { position: absolute; inset: 0; }
+  .showcase-poster img { width: 100%; height: 100%; object-fit: contain; }
+  .showcase-poster[hidden], .retry[hidden] { display: none; }
+  .arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 48px; padding: 9px; background: #06252dd9; border: 1px solid #34727e; color: #a5f5ff; cursor: pointer; }
+  .prev { left: 8px; } .next { right: 8px; }
+  .arrow svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; }
+  button:focus-visible { outline: 2px solid #00f0ff; outline-offset: 3px; }
+  button:hover { color: #fff; border-color: #00d5e5; }
+  .retry { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 10px 20px; background: #073b47; border: 1px solid #00c9d8; color: #dfffff; font: inherit; cursor: pointer; }
+  .showcase-count { color: #7fabb1; font-size: .85rem; }
+  h3 { margin: 10px 0 16px; color: #80f1fa; font-size: 1.5rem; font-weight: 500; overflow-wrap: anywhere; }
+  .showcase-description { margin: 0; color: #c1d8dc; font-family: system-ui,sans-serif; font-size: 1rem; line-height: 1.85; }
+  .showcase-status { color: #9cbdc3; font-size: .85rem; margin: 12px 0 0; }
+  .showcase-status:empty { display: none; }
+  .showcase-link { max-width: 280px; margin-top: 24px; }
+  @media (max-width: 700px) {
+    .mecha-showcase { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+    .showcase-stage { height: 310px; }
+    .showcase-link { max-width: none; margin-top: 20px; }
+  }
+</style>

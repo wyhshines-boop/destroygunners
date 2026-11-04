@@ -5,6 +5,7 @@ import borderImg from '../img/border.webp';
 import buttonImg from '../img/button.webp';
 import { type Lang, t } from '../i18n/translations';
 import Giscus from './Giscus.astro';
+import MechaShowcase from './MechaShowcase.astro';
 
 import ScreenshotGallery from './ScreenshotGallery.astro';
 import mainlandDownloads from '../data/mainland-downloads.json';
@@ -117,6 +118,7 @@ const communityUpdateCopy = {
 
 
 		</ContentBox>
+		<MechaShowcase lang={lang} />
 		<ContentBox title={faqCopy.title}>
 			<div class="faq-list">
 				<details class="faq-item">
