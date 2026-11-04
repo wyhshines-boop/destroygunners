@@ -6,16 +6,15 @@ import ModelPreview from './ModelPreview.astro';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = {
-  zh: { title: '机甲图鉴', intro: 'Destroy Gunners ZZ 原版23台机甲。介绍整理自游戏内说明，图片后续补充。', jump: '选择机甲' },
-  en: { title: 'Mecha Catalog', intro: 'The 23 original mechs in Destroy Gunners ZZ, with descriptions from the game. Images will be added later.', jump: 'Choose a mech' },
-  ja: { title: '機体図鑑', intro: 'Destroy Gunners ZZ のオリジナル機体23機。ゲーム内の機体説明を掲載しています。画像は順次追加予定です。', jump: '機体を選ぶ' },
+  zh: { title: '机甲图鉴', jump: '选择机甲' },
+  en: { title: 'Mecha Catalog', jump: 'Choose a mech' },
+  ja: { title: '機体図鑑', jump: '機体を選ぶ' },
 }[lang];
 const mecha = catalog as Array<{ index: number; name: string; description: Record<Lang, string>; image: string | null }>;
 ---
 <main class="mecha-page">
   <header class="page-heading">
     <h1>{copy.title}</h1>
-    <p>{copy.intro}</p>
   </header>
   <ModelPreview lang={lang} />
   <nav class="mecha-index" aria-label={copy.jump}>
@@ -35,7 +34,6 @@ const mecha = catalog as Array<{ index: number; name: string; description: Recor
   .mecha-page { max-width: 1120px; margin: 0 auto; padding: 40px 20px 64px; color: #d5e9eb; }
   .page-heading { margin-bottom: 24px; }
   h1 { margin: 0 0 12px; color: #e0ffff; font-size: 2rem; letter-spacing: 2px; }
-  .page-heading p { margin: 0; color: #a3bfc3; line-height: 1.8; }
   .mecha-index { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
   .mecha-index a { padding: 7px 10px; border: 1px solid #29616b; background: rgba(5, 27, 31, .88); color: #c1e2e6; font-size: .85rem; text-decoration: none; }
   .mecha-index a:hover { color: #00f0ff; border-color: #00c9d8; }
