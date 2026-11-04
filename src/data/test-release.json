@@ -1,9 +1,8 @@
 {
-  "build": 141,
-  "version": "GeckoView ARM32",
-  "title": "GeckoView 独立内核测试",
+  "build": 142,
+  "version": "3.0.0c",
+  "title": "GeckoView 游戏面板测试",
   "date": "2026-11-04",
-  "apk_path": "/downloads/DGZZ_Gecko_ARM32_build141.apk",
-  "notes": "独立测试应用，不含游戏、不覆盖存档。启动后应显示32-bit及本地测试网页，可测试输入和emoji；失败时复制诊断信息。",
-  "variant": "gecko_probe"
+  "apk_path": "/downloads/DGZZ_3.0.0c_build142_gecko.apk",
+  "notes": "游戏内面板改用内置32位GeckoView，测试OriginOS兼容性。"
 }

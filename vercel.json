@@ -117,8 +117,13 @@
       "permanent": false
     },
     {
+      "source": "/downloads/DGZZ_3.0.0c_build142_gecko.apk",
+      "destination": "https://downloads.destroygunners.com/apk/1809cabdd1f6271935a22e15aa50914ca4e24bef1700871001337c2cfbfbb3a6/DGZZ_3.0.0c_build142_gecko.apk",
+      "permanent": false
+    },
+    {
       "source": "/downloads/DGZZ_test_latest.apk",
-      "destination": "https://downloads.destroygunners.com/apk/70af2a2dc2cdfa6a29541b424b373e2a90d0c1e51e724be048865354ebc27173/DGZZ_Gecko_ARM32_build141.apk",
+      "destination": "https://downloads.destroygunners.com/apk/1809cabdd1f6271935a22e15aa50914ca4e24bef1700871001337c2cfbfbb3a6/DGZZ_3.0.0c_build142_gecko.apk",
       "permanent": false
     }
   ]

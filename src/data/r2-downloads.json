@@ -138,6 +138,12 @@
       "key": "apk/70af2a2dc2cdfa6a29541b424b373e2a90d0c1e51e724be048865354ebc27173/DGZZ_Gecko_ARM32_build141.apk",
       "bytes": 92928181,
       "sha256": "70af2a2dc2cdfa6a29541b424b373e2a90d0c1e51e724be048865354ebc27173"
+    },
+    {
+      "path": "/downloads/DGZZ_3.0.0c_build142_gecko.apk",
+      "key": "apk/1809cabdd1f6271935a22e15aa50914ca4e24bef1700871001337c2cfbfbb3a6/DGZZ_3.0.0c_build142_gecko.apk",
+      "bytes": 116098813,
+      "sha256": "1809cabdd1f6271935a22e15aa50914ca4e24bef1700871001337c2cfbfbb3a6"
     }
   ],
   "public_url": "https://downloads.destroygunners.com"
