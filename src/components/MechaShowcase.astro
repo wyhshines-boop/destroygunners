@@ -75,10 +75,10 @@ const href = lang === 'en' ? '/mechas' : `/${lang}/mechas`;
           if (!viewer) {
             viewer = document.createElement('model-viewer');
             viewer.setAttribute('camera-controls', '');
-            viewer.setAttribute('touch-action', 'pan-y');
+            viewer.setAttribute('touch-action', 'none');
             viewer.setAttribute('interaction-prompt', 'none');
             viewer.setAttribute('shadow-intensity', '0.6');
-            viewer.style.cssText = 'display:block;width:100%;height:100%;touch-action:pan-y';
+            viewer.style.cssText = 'display:block;width:100%;height:100%;touch-action:none';
             mount.replaceChildren(viewer);
           }
           viewer.setAttribute('camera-orbit', '155deg 78deg auto');
