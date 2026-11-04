@@ -1,5 +1,6 @@
 ---
 import type { Lang } from '../i18n/translations';
+import models from '../data/models.json';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = {
@@ -12,8 +13,7 @@ const t = {
   <div class="model-toolbar">
     <h2 id="model-title">{t.title}</h2>
     <select data-model-select aria-label={t.title}>
-      <option value="rd10">#01 DA-01</option>
-      <option value="rd04">#02 XDA-01A</option>
+      {models.map(model => <option value={model.id}>#{String(model.number).padStart(2, '0')} {model.name}</option>)}
     </select>
   </div>
   <div class="model-stage">

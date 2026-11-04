@@ -1,0 +1,117 @@
+[
+  {
+    "id": "rd10",
+    "number": 1,
+    "name": "DA-01"
+  },
+  {
+    "id": "rd04",
+    "number": 2,
+    "name": "XDA-01A"
+  },
+  {
+    "id": "mecha-03",
+    "number": 3,
+    "name": "ETMLT-X"
+  },
+  {
+    "id": "mecha-04",
+    "number": 4,
+    "name": "DA-03A"
+  },
+  {
+    "id": "mecha-05",
+    "number": 5,
+    "name": "DA-01/RA"
+  },
+  {
+    "id": "mecha-06",
+    "number": 6,
+    "name": "XDA-03c1"
+  },
+  {
+    "id": "mecha-07",
+    "number": 7,
+    "name": "XDA-01C"
+  },
+  {
+    "id": "mecha-08",
+    "number": 8,
+    "name": "XDA-01C2"
+  },
+  {
+    "id": "mecha-09",
+    "number": 9,
+    "name": "DFA-0"
+  },
+  {
+    "id": "mecha-10",
+    "number": 10,
+    "name": "XDA-03c2"
+  },
+  {
+    "id": "mecha-11",
+    "number": 11,
+    "name": "XDA-01B"
+  },
+  {
+    "id": "mecha-12",
+    "number": 12,
+    "name": "DFA-0/Bst"
+  },
+  {
+    "id": "mecha-13",
+    "number": 13,
+    "name": "XDA-04"
+  },
+  {
+    "id": "mecha-14",
+    "number": 14,
+    "name": "DFA-0C"
+  },
+  {
+    "id": "mecha-15",
+    "number": 15,
+    "name": "XDA-01B2"
+  },
+  {
+    "id": "mecha-16",
+    "number": 16,
+    "name": "XDA-04B"
+  },
+  {
+    "id": "mecha-17",
+    "number": 17,
+    "name": "XDA-03c3"
+  },
+  {
+    "id": "mecha-18",
+    "number": 18,
+    "name": "TYPE-0110"
+  },
+  {
+    "id": "mecha-19",
+    "number": 19,
+    "name": "SDA-06"
+  },
+  {
+    "id": "mecha-20",
+    "number": 20,
+    "name": "XDA-05"
+  },
+  {
+    "id": "mecha-21",
+    "number": 21,
+    "name": "DA-05"
+  },
+  {
+    "id": "mecha-22",
+    "number": 22,
+    "name": "DFA-05K"
+  },
+  {
+    "id": "mecha-23",
+    "number": 23,
+    "name": "DA-04"
+  }
+]
