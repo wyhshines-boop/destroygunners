@@ -61,21 +61,27 @@ const languageGuideCopy = {
 }[lang];
 const faqCopy = {
  zh: {
-  title: 'FAQ', protect: '被 Google Play 保护机制拦截，如何安装？',
+  title: 'FAQ', panel: '账户或聊天面板无法打开怎么办？',
+  panelBody: '可尝试内置 GeckoView 的测试版，支持覆盖安装，需要 Android 8.0 及以上。若仍无法打开，请反馈手机型号和错误截图。',
+  panelDownload: '下载 GeckoView 测试版', protect: '被 Google Play 保护机制拦截，如何安装？',
   intro: '请从本站下载，并先按提示完成 Google Play 保护机制扫描。确认来源后，若仍决定继续安装：',
   steps: ['若提示“不允许安装未知应用”，进入系统设置，为本次使用的浏览器或文件管理器开启“允许此来源”。', '若警告窗口提供“更多详情 → 仍要安装”，可从该入口继续。并非所有警告都有此选项。', '如需临时关闭扫描：打开 Play 商店 → 头像 → Play 保护机制 → 右上角设置 → 关闭“使用 Play 保护机制扫描应用”。安装完成后重新开启。'],
   compatibility: '系统提示不兼容或目标SDK过低怎么办？',
   compatibilityBody: "最新版社区服已合并原兼容测试版的改动，请直接下载正式版。游戏仍使用32位引擎，设备需要支持32位应用；纯64位系统无法运行。"
  },
  en: {
-  title: 'FAQ', protect: 'How do I install if Google Play Protect blocks the APK?',
+  title: 'FAQ', panel: 'What if the account or chat panel will not open?',
+  panelBody: 'Try the test build with built-in GeckoView. It can be installed over the existing game and requires Android 8.0 or later. If the problem persists, share your phone model and an error screenshot.',
+  panelDownload: 'Download GeckoView test build', protect: 'How do I install if Google Play Protect blocks the APK?',
   intro: 'Download from this website and run the recommended Play Protect scan first. If you trust the source and decide to proceed:',
   steps: ['If Android blocks unknown apps, allow installation from the browser or file manager you are using in system settings.', 'If the warning offers More details → Install anyway, you can continue there. This option is not available for every warning.', 'To temporarily disable scanning: Play Store → profile icon → Play Protect → Settings → turn off Scan apps with Play Protect. Turn it back on after installation.'],
   compatibility: 'What if the system installer reports incompatibility or a target SDK that is too low?',
   compatibilityBody: "The current community release includes the compatibility test changes. Download the regular release. The game still uses a 32-bit engine and requires a device that supports 32-bit apps; 64-bit-only systems cannot run it."
  },
  ja: {
-  title: 'FAQ', protect: 'Google Play プロテクトでブロックされた場合は？',
+  title: 'FAQ', panel: 'アカウントやチャットのパネルが開かない場合は？',
+  panelBody: 'GeckoView内蔵のテスト版をお試しください。上書きインストールが可能で、Android 8.0以降が必要です。改善しない場合は、端末の機種名とエラー画面をお知らせください。',
+  panelDownload: 'GeckoViewテスト版をダウンロード', protect: 'Google Play プロテクトでブロックされた場合は？',
   intro: '当サイトからダウンロードし、まず推奨されたスキャンを実行してください。入手元を確認したうえでインストールを続ける場合：',
   steps: ['不明なアプリのインストールが拒否された場合は、端末の設定で使用中のブラウザやファイル管理アプリにインストールを許可します。', '警告に「詳細 → インストールする」などの選択肢があれば、そこから続行できます。すべての警告に表示されるわけではありません。', '一時的にスキャンを無効にする場合：Play ストア → プロフィール → Play プロテクト → 設定 → アプリのスキャンをオフ。インストール後はオンに戻してください。'],
   compatibility: 'システムが互換性や対象SDKの低さを理由にインストールを拒否する場合は？',
@@ -139,6 +145,13 @@ const communityUpdateCopy = {
 					<div class="faq-body">
 						<p>{faqCopy.intro}</p>
 						<ol>{faqCopy.steps.map(step => <li>{step}</li>)}</ol>
+					</div>
+				</details>
+				<details class="faq-item">
+					<summary>{faqCopy.panel}</summary>
+					<div class="faq-body">
+						<p>{faqCopy.panelBody}</p>
+						<p><a class="download-track" href="/downloads/DGZZ_3.0.0c_build142_gecko.apk" download data-method="faq_gecko_test">{faqCopy.panelDownload} · Build142</a></p>
 					</div>
 				</details>
 				<details class="faq-item">
