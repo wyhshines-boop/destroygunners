@@ -1,4 +1,5 @@
 ---
+import '../styles/mecha-preview.css';
 import type { Lang } from '../i18n/translations';
 interface Props { lang: Lang; model: { id: string; name: string } }
 const { lang, model } = Astro.props;
@@ -9,7 +10,7 @@ const t = {
 }[lang];
 ---
 <div class="model-preview" data-model-preview data-model-id={model.id} data-model-name={model.name} data-loading={t.loading} data-error={t.error} aria-label={model.name}>
-  <div class="model-stage">
+  <div class="model-stage mecha-grid-stage">
     <div class="model-mount" data-mount></div>
     <div class="model-poster" data-poster>
       <img src={`/models/${model.id}/preview.webp`} width="1400" height="850" alt={`${model.name} · ${t.alt}`} loading="lazy" decoding="async" />

@@ -1,0 +1,28 @@
+/* Shared backdrop for the homepage and catalog model previews. */
+.mecha-grid-stage {
+  isolation: isolate;
+  --progress-bar-color: #00c9d8;
+  --progress-bar-height: 4px;
+}
+.mecha-grid-stage::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  left: -65%;
+  right: -65%;
+  top: 51%;
+  height: 110%;
+  background-image:
+    linear-gradient(rgba(79, 177, 190, .3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 177, 190, .3) 1px, transparent 1px);
+  background-size: 38px 38px;
+  transform: perspective(350px) rotateX(62deg);
+  transform-origin: center top;
+  mask-image: linear-gradient(transparent, #000 22%, #000 75%, transparent);
+  -webkit-mask-image: linear-gradient(transparent, #000 22%, #000 75%, transparent);
+}
+.mecha-grid-stage model-viewer {
+  --progress-bar-color: #00c9d8;
+  --progress-bar-height: 4px;
+}

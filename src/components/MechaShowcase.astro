@@ -1,4 +1,5 @@
 ---
+import '../styles/mecha-preview.css';
 import type { Lang } from '../i18n/translations';
 import catalog from '../data/mecha.json';
 import models from '../data/models.json';
@@ -17,7 +18,7 @@ const href = lang === 'en' ? '/mechas' : `/${lang}/mechas`;
 ---
 <ContentBox title={copy.title}>
   <div class="mecha-showcase" data-showcase data-loading={copy.loading} data-error={copy.error} role="region" aria-label={copy.title}>
-    <div class="showcase-stage">
+    <div class="showcase-stage mecha-grid-stage">
       <div class="showcase-mount" data-mount></div>
       <div class="showcase-poster" data-poster>
         <img src={`/models/${first.id}/preview.webp`} alt={first.name} width="1400" height="850" loading="lazy" decoding="async" />
