@@ -7,15 +7,16 @@ import models from '../data/models.json';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = {
-  zh: { title: '机甲图鉴', jump: '选择机甲' },
-  en: { title: 'Mecha Catalog', jump: 'Choose a mech' },
-  ja: { title: '機体図鑑', jump: '機体を選ぶ' },
+  zh: { title: '机甲图鉴', jump: '选择机甲', workshop: '机甲工坊 · 试用' },
+  en: { title: 'Mecha Catalog', jump: 'Choose a mech', workshop: 'Mecha Workshop · Prototype' },
+  ja: { title: '機体図鑑', jump: '機体を選ぶ', workshop: '機体工房 · 試作版' },
 }[lang];
 const mecha = catalog as Array<{ index: number; name: string; description: Record<Lang, string>; image: string | null }>;
 ---
 <main class="mecha-page">
   <header class="page-heading">
     <h1>{copy.title}</h1>
+    <a class="workshop-link" href={lang === 'en' ? '/workshop' : `/${lang}/workshop`}>{copy.workshop} ↗</a>
   </header>
   <nav class="mecha-index" aria-label={copy.jump}>
     {mecha.map(mech => <a href={`#mecha-${mech.index}`}>{mech.name}</a>)}
@@ -33,6 +34,7 @@ const mecha = catalog as Array<{ index: number; name: string; description: Recor
 <style>
   .mecha-page { max-width: 1120px; margin: 0 auto; padding: 40px 20px 64px; color: #d5e9eb; }
   .page-heading { margin-bottom: 24px; }
+  .workshop-link { display: inline-block; padding: 8px 0; color: #80f1fa; font-size: .9rem; text-decoration: none; }
   h1 { margin: 0 0 12px; color: #e0ffff; font-size: 2rem; letter-spacing: 2px; }
   .mecha-index { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
   .mecha-index a { padding: 7px 10px; border: 1px solid #29616b; background: rgba(5, 27, 31, .88); color: #c1e2e6; font-size: .85rem; text-decoration: none; }
