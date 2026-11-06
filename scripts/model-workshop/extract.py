@@ -4,7 +4,13 @@ import struct,json,math,io
 from collections import Counter
 from PIL import Image
 WEB=Path(__file__).resolve().parents[2];D=WEB.parent/'dgzz_model_research';OUT=WEB/'public/workshop';OUT.mkdir(exist_ok=True)
-SOURCES=[('rd10','DA-01',D/'pose_20261104_100831/pose_0.json'),('rd04','XDA-01A',D/'batch_validated/model_00/pose_0.json'),('rd12','ETMLT-X',D/'batch_validated/model_01/pose_1.json')]
+CATALOG=json.loads((WEB/'src/data/models.json').read_text())
+BATCH=json.loads((D/'batch_validated/index.json').read_text())
+SOURCES=[('rd10','rd10',CATALOG[0]['name'],D/'pose_20261104_100831/pose_0.json',CATALOG[0]['id'])]
+for number,item in enumerate(BATCH,2):
+ asset='rd04' if number==2 else 'rd12' if number==3 else CATALOG[number-1]['id']
+ SOURCES.append((asset,item['model'],CATALOG[number-1]['name'],Path(item['folder'])/('pose_'+str(item['index'])+'.json'),CATALOG[number-1]['id']))
+
 def category(n):
  if '頭' in n:return 'head'
  if any(k in n for k in ['腕','ブレード','肩武装']):return 'leftArm' if '左' in n else 'rightArm'
@@ -15,7 +21,7 @@ def inverse(a):
  a,b,c,d,e,f,g,h,i=a[0],a[4],a[8],a[1],a[5],a[9],a[2],a[6],a[10]
  co=[e*i-f*h,c*h-b*i,b*f-c*e,f*g-d*i,a*i-c*g,c*d-a*f,d*h-e*g,b*g-a*h,a*e-b*d];det=a*co[0]+b*co[3]+c*co[6];assert abs(det)>1e-8
  return [x/det for x in co]
-def run(id,label,path):
+def run(asset,id,label,path,original_id):
  pose=json.loads(path.read_text());header=path.with_name('header_'+str(pose['index'])+'.bin').read_bytes()
  candidates=[p for p in (D/'psca').glob('*.bin') if p.read_bytes()[:0x3c]==header[:0x3c]]
  data=next(p.read_bytes() for p in candidates if p.read_bytes()[struct.unpack_from('<I',p.read_bytes(),0x44)[0]:].split(b'\0')[0].decode()==id)
@@ -55,17 +61,20 @@ def run(id,label,path):
   assert all(math.isfinite(x) for x in values);v=view(struct.pack('<'+'f'*len(values),*values),34962);a={'bufferView':v,'componentType':5126,'count':len(values)//size,'type':{2:'VEC2',3:'VEC3'}[size]};a['min']=[min(values[j::size]) for j in range(size)];a['max']=[max(values[j::size]) for j in range(size)];gltf['accessors'].append(a);return len(gltf['accessors'])-1
  slots=sorted(set(slot for _,slot in groups));slotmaterials={}
  for slot in slots:
-  tex=next(t for t in pose['textures'] if t['slot']==slot);texdir=path.parent/'textures';raw=texdir/f'texture_{tex["id"]}.rgba'
+  tex=next(t for t in pose['textures'] if t['slot']==slot)
+  # Unbound secondary slots use the captured body atlas, matching published models.
+  if tex.get('internal',0)<0:tex=next(t for t in pose['textures'] if t['slot']==0)
+  texdir=path.parent/'textures';raw=texdir/f'texture_{tex["id"]}.rgba'
   if raw.exists():
    meta=json.loads(raw.with_suffix('.json').read_text());im=Image.frombytes('RGBA',(meta['width'],meta['height']),raw.read_bytes())
   else:
-   candidates=list((path.parent/('export_'+id)).glob(f'texture_slot{slot}.png'));assert candidates,(path,slot);im=Image.open(candidates[0])
+   candidates=list((path.parent/('export_'+id)).glob(f'texture_slot{tex["slot"]}.png'));assert candidates,(path,slot);im=Image.open(candidates[0])
   out=io.BytesIO();im.save(out,format='PNG');iv=view(out.getvalue());tid=len(gltf['textures']);gltf['images'].append({'bufferView':iv,'mimeType':'image/png'});gltf['textures'].append({'sampler':0,'source':tid});slotmaterials[slot]=len(gltf['materials']);gltf['materials'].append({'name':id+'_texture'+str(slot),'pbrMetallicRoughness':{'baseColorTexture':{'index':tid},'metallicFactor':0,'roughnessFactor':.82},'doubleSided':False})
  for (cat,slot),g in groups.items():
   anchor=anchors[cat];positions=[v*scale-anchor[i%3] for i,v in enumerate(g['p'])];mesh={'name':cat,'primitives':[{'attributes':{'POSITION':accessor(positions,3),'NORMAL':accessor(g['n'],3),'TEXCOORD_0':accessor(g['uv'],2)},'material':slotmaterials[slot]}]};gltf['meshes'].append(mesh);gltf['nodes'][0]['children'].append(len(gltf['nodes']));gltf['nodes'].append({'name':cat,'mesh':len(gltf['meshes'])-1,'translation':anchor,'extras':{'part':cat,'sourceBones':[names[i] for i in sorted(g['bones'])]}})
  gltf['buffers'][0]['byteLength']=len(blob);j=json.dumps(gltf,separators=(',',':'),ensure_ascii=False).encode();j+=b' '*((-len(j))%4);blob+=b'\0'*((-len(blob))%4)
  result=struct.pack('<III',0x46546c67,2,12+8+len(j)+8+len(blob))+struct.pack('<II',len(j),0x4e4f534a)+j+struct.pack('<II',len(blob),0x004e4942)+blob
- (OUT/(id+'.glb')).write_bytes(result);assert set(c for c,_ in groups)>={'head','torso','leftArm','rightArm','leftLeg','rightLeg'}
+ (OUT/(asset+'.glb')).write_bytes(result);assert set(c for c,_ in groups)>={'head','torso','leftArm','rightArm','leftLeg','rightLeg'}, (asset,names,sorted(groups))
  print(id,label,visible,'triangles',len(groups),'groups','cross-part faces',mixed)
- return {'id':id,'name':label,'url':'/workshop/'+id+'.glb','triangles':visible,'anchors':anchors,'parts':sorted(set(c for c,_ in groups))}
+ return {'id':asset,'originalId':original_id,'name':label,'url':'/workshop/'+asset+'.glb','triangles':visible,'anchors':anchors,'parts':sorted(set(c for c,_ in groups))}
 models=[run(*s) for s in SOURCES];(WEB/'src/data/workshop.json').write_text(json.dumps(models,ensure_ascii=False,indent=2)+'\n')

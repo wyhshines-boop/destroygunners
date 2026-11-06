@@ -27,9 +27,9 @@ function setupWorkshop() {
  function center() {if(!assembly)return;const box=bounds(assembly),size=box.getSize(new THREE.Vector3()),target=box.getCenter(new THREE.Vector3());const distance=Math.max(size.y,size.x/camera.aspect)*1.9;controls.target.copy(target);camera.position.copy(target).add(new THREE.Vector3(.55,.2,1).normalize().multiplyScalar(distance));grid.position.y=box.min.y-.015;controls.update();}
  function syncAdjust() {const config=settings[edit.value];tint.value=config.color;root.querySelectorAll<HTMLInputElement>('[data-axis]').forEach(input=>{const k=input.dataset.axis!;input.value=String(config[k]);$<HTMLOutputElement>(`[data-value="${k}"]`).value=k==='scale'?Math.round(config[k]*100)+'%':Number(config[k]).toFixed(2);});}
  function rebuild() {if(disposed||!templates.size)return;const next=assemble(templates,models,settings);if(assembly){scene.remove(assembly);releaseAssembly(assembly);}assembly=next;scene.add(next);$('[data-combination]').textContent=new Set(Object.values(settings).map((c:any)=>c.source).filter(id=>id!=='none')).size===1?models.find((m:any)=>m.id===settings.torso.source).name:'CUSTOM';}
- function resetAll() {settings=defaultSettings(base.value);root.querySelectorAll<HTMLSelectElement>('[data-part]').forEach(select=>select.value=base.value);rebuild();syncAdjust();center();}
+ function resetAll() {settings=defaultSettings(base.value);root.querySelectorAll<HTMLSelectElement>('[data-part]').forEach(select=>select.value=base.value);syncAdjust();void load(true);}
  base.addEventListener('change',resetAll,{signal});edit.addEventListener('change',syncAdjust,{signal});
- root.querySelectorAll<HTMLSelectElement>('[data-part]').forEach(select=>select.addEventListener('change',()=>{settings[select.dataset.part!].source=select.value;edit.value=select.dataset.part!;rebuild();syncAdjust();},{signal}));
+ root.querySelectorAll<HTMLSelectElement>('[data-part]').forEach(select=>select.addEventListener('change',()=>{settings[select.dataset.part!].source=select.value;edit.value=select.dataset.part!;syncAdjust();void load(false);},{signal}));
  function applyTint(value:string){settings[edit.value].color=value;tint.value=value;rebuild();}
  tint.addEventListener('input',()=>applyTint(tint.value),{signal});$('[data-original]').addEventListener('click',()=>applyTint('#ffffff'),{signal});
  root.querySelectorAll<HTMLButtonElement>('[data-swatch]').forEach(button=>button.addEventListener('click',()=>applyTint(button.dataset.swatch!),{signal}));
@@ -38,7 +38,7 @@ function setupWorkshop() {
  $('[data-reset]').addEventListener('click',resetAll,{signal});frame.addEventListener('click',center,{signal});
  mount.addEventListener('keydown',event=>{if(event.key==='Home'){event.preventDefault();center();}},{signal});controls.listenToKeyEvents(mount);
  renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();renderer.setAnimationLoop(null);status.textContent=copy.unsupported;editor.disabled=true;},{signal});
- renderer.domElement.addEventListener('webglcontextrestored',()=>{if(disposed)return;renderer.setAnimationLoop(render);editor.disabled=templates.size!==models.length;status.textContent=templates.size===models.length?copy.ready:copy.loading;},{signal});
+ renderer.domElement.addEventListener('webglcontextrestored',()=>{if(disposed)return;renderer.setAnimationLoop(render);editor.disabled=loading;status.textContent=loading?copy.loading:copy.ready;},{signal});
  output.addEventListener('click',async()=>{if(!assembly||busy)return;busy=true;output.disabled=true;output.textContent=copy.exporting;
   // Snapshot the current assembly so later edits cannot change the file being exported.
   const snapshot=assemble(templates,models,structuredClone(settings));
@@ -46,12 +46,27 @@ function setupWorkshop() {
   catch(error){if(!disposed){console.error('GLB export failed',error);status.textContent=copy.exportError;}}
   finally{releaseAssembly(snapshot);if(!disposed){busy=false;output.disabled=false;output.textContent=copy.exportLabel+' ↓';}}
  },{signal});
- let loadGeneration=0;
- async function load() {const generation=++loadGeneration;status.textContent=copy.loading;retry.hidden=true;editor.disabled=true;frame.disabled=true;const loader=new GLTFLoader();
-  try {for(const model of models){if(templates.has(model.id))continue;const gltf=await loader.loadAsync(model.url);if(disposed||generation!==loadGeneration){disposeTemplate(gltf.scene);return;}templates.set(model.id,gltf.scene);}if(disposed)return;resetAll();editor.disabled=false;frame.disabled=false;status.textContent=copy.ready;}
-  catch(error){if(!disposed&&generation===loadGeneration){console.error('Model load failed',error);status.textContent=copy.error;retry.hidden=false;}}
+ let loadGeneration=0, loading=false, pendingCenter=true;
+ async function load(recenter=pendingCenter) {
+  const generation=++loadGeneration;pendingCenter=recenter;loading=true;status.textContent=copy.loading;retry.hidden=true;editor.disabled=true;frame.disabled=true;
+  const loader=new GLTFLoader();
+  const needed=new Set(Object.values(settings).map((config:any)=>config.source).filter(id=>id!=='none'));
+  try {
+   for(const id of needed){
+    if(templates.has(id))continue;
+    const model=models.find((m:any)=>m.id===id);if(!model)throw new Error('Unknown model');
+    const gltf=await loader.loadAsync(model.url);
+    if(disposed||generation!==loadGeneration){disposeTemplate(gltf.scene);return;}
+    templates.set(id,gltf.scene);
+   }
+   if(disposed||generation!==loadGeneration)return;
+   rebuild();syncAdjust();if(recenter)center();loading=false;editor.disabled=false;frame.disabled=false;status.textContent=copy.ready;
+  } catch(error) {
+   if(!disposed&&generation===loadGeneration){console.error('Model load failed',error);status.textContent=copy.error;retry.hidden=false;}
+  }
  }
  retry.addEventListener('click',()=>void load(),{signal});
+
  function disposeTemplate(template:THREE.Group){const textures=new Set<THREE.Texture>();template.traverse((node:any)=>{if(!node.isMesh)return;node.geometry.dispose();const materials=Array.isArray(node.material)?node.material:[node.material];for(const material of materials){if(material.map)textures.add(material.map);material.dispose();}});textures.forEach(t=>{t.source.data?.close?.();t.dispose();});}
  cleanup=()=>{disposed=true;loadGeneration++;abort.abort();resize.disconnect();renderer.setAnimationLoop(null);controls.dispose();if(assembly)releaseAssembly(assembly);templates.forEach(disposeTemplate);templates.clear();grid.geometry.dispose();(grid.material as THREE.Material).dispose();renderer.dispose();mount.replaceChildren();};
  void load();
