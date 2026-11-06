@@ -7,9 +7,9 @@ import RetroButton from './RetroButton.astro';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = {
-  zh: { title: '机甲', all: '查看全部机甲', prev: '上一台机甲', next: '下一台机甲', loading: '模型加载中…', error: '模型未能加载，请重试。', retry: '重试' },
-  en: { title: 'Mecha', all: 'View all mecha', prev: 'Previous mech', next: 'Next mech', loading: 'Loading model…', error: 'Model unavailable. Please retry.', retry: 'Retry' },
-  ja: { title: '機体', all: 'すべての機体を見る', prev: '前の機体', next: '次の機体', loading: 'モデルを読み込み中…', error: 'モデルを読み込めません。再試行してください。', retry: '再試行' },
+  zh: { title: '机甲', all: '查看全部机甲', workshop: '机甲工坊', prev: '上一台机甲', next: '下一台机甲', loading: '模型加载中…', error: '模型未能加载，请重试。', retry: '重试' },
+  en: { title: 'Mecha', all: 'View all mecha', workshop: 'Mecha Workshop', prev: 'Previous mech', next: 'Next mech', loading: 'Loading model…', error: 'Model unavailable. Please retry.', retry: 'Retry' },
+  ja: { title: '機体', all: 'すべての機体を見る', workshop: '機体工房', prev: '前の機体', next: '次の機体', loading: 'モデルを読み込み中…', error: 'モデルを読み込めません。再試行してください。', retry: '再試行' },
 }[lang];
 const items = models.map(model => ({ ...model, description: catalog[model.number - 1].description[lang] }));
 const first = items[0];
@@ -33,7 +33,7 @@ const href = lang === 'en' ? '/mechas' : `/${lang}/mechas`;
         <p class="showcase-description" data-description>{first.description}</p>
       </div>
       <p class="showcase-status" role="status" data-status></p>
-      <div class="showcase-link"><RetroButton label={copy.all} href={href} /></div>
+      <div class="showcase-link"><RetroButton label={copy.all} href={href} /><RetroButton label={copy.workshop} href={lang === 'en' ? '/workshop' : `/${lang}/workshop`} /></div>
     </div>
     <script type="application/json" data-models set:html={JSON.stringify(items).replace(/</g, '\\u003c')} />
   </div>
@@ -139,7 +139,7 @@ const href = lang === 'en' ? '/mechas' : `/${lang}/mechas`;
   .showcase-description { margin: 0; color: #c1d8dc; font-family: system-ui,sans-serif; font-size: 1rem; line-height: 1.85; }
   .showcase-status { color: #9cbdc3; font-size: .85rem; margin: 12px 0 0; }
   .showcase-status:empty { display: none; }
-  .showcase-link { max-width: 280px; margin-top: 24px; }
+  .showcase-link { display: grid; gap: 10px; max-width: 280px; margin-top: 24px; }
   @media (max-width: 700px) {
     .mecha-showcase { grid-template-columns: minmax(0, 1fr); gap: 18px; }
     .showcase-stage { height: 310px; }
