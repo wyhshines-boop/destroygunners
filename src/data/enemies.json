@@ -20,6 +20,10 @@
     "resource": "rd06",
     "models": [
       {
+        "id": "enemy-rd06-hd",
+        "name": "rd06 · HD"
+      },
+      {
         "id": "enemy-rd06",
         "name": "rd06"
       },
