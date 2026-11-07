@@ -57,7 +57,7 @@ function setupWorkshop() {
   const snapshot=assemble(templates,models,structuredClone(settings));
   try{const data=await new GLTFExporter().parseAsync(snapshot,{binary:true,onlyVisible:true});if(disposed)return;const url=URL.createObjectURL(new Blob([data as ArrayBuffer],{type:'model/gltf-binary'}));const a=document.createElement('a');a.href=url;a.download='DGZZ_Custom.glb';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);status.textContent=copy.ready;}
   catch(error){if(!disposed){console.error('GLB export failed',error);status.textContent=copy.exportError;}}
-  finally{releaseAssembly(snapshot);if(!disposed){busy=false;output.disabled=false;output.textContent=copy.exportLabel+' ↓';}}
+  finally{releaseAssembly(snapshot);if(!disposed){busy=false;output.disabled=false;output.textContent=copy.exportLabel;}}
  },{signal});
  let loadGeneration=0, loading=false, pendingCenter=true;
  async function load(recenter=pendingCenter) {

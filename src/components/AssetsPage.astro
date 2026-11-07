@@ -15,21 +15,21 @@ const copy = {
   <section aria-labelledby="music-heading">
     <header><h2 id="music-heading">{copy.music}</h2><div class="music-actions">
       <label class="loop-control"><input type="checkbox" role="switch" checked data-audio-loop /><span>{copy.loop}</span></label>
-      <a href="/resources/DGZZ_BGM.zip" download>{copy.all} ↓</a>
+      <a href="/resources/DGZZ_BGM.zip" download>{copy.all}</a>
     </div></header>
     <div class="music-grid">
       {media.tracks.map(id => <article class="music-card">
-        <div class="track-heading"><h3 id={`bgm-${id}`}>BGM {String(id).padStart(2, '0')}</h3><a href={`/audio/bgm_${id}.ogg`} download>{copy.download} ↓</a></div>
+        <div class="track-heading"><h3 id={`bgm-${id}`}>BGM {String(id).padStart(2, '0')}</h3><a href={`/audio/bgm_${id}.ogg`} download>{copy.download}</a></div>
         <audio controls loop preload="none" src={`/audio/bgm_${id}.ogg`} aria-labelledby={`bgm-${id}`} data-resource-audio></audio>
       </article>)}
     </div>
   </section>
   <section aria-labelledby="background-heading">
-    <header><h2 id="background-heading">{copy.backgrounds}</h2><a href="/resources/DGZZ_Backgrounds.zip" download>{copy.all} ↓</a></header>
+    <header><h2 id="background-heading">{copy.backgrounds}</h2><a href="/resources/DGZZ_Backgrounds.zip" download>{copy.all}</a></header>
     <div class="background-grid">
       {backgrounds.map((image, index) => <figure>
         <a class="image-link" href={image.src} target="_blank" rel="noopener" aria-label={`${copy.preview} · ${index + 1}`}><img src={image.src} width={image.width} height={image.height} alt={`${copy.background} ${index + 1}`} loading="lazy" decoding="async" /></a>
-        <figcaption><span>{copy.background} {String(index + 1).padStart(2, '0')}</span><a href={image.src} download={`DGZZ_background_${index + 1}.${image.format}`}>{copy.download} ↓</a></figcaption>
+        <figcaption><span>{copy.background} {String(index + 1).padStart(2, '0')}</span><a href={image.src} download={`DGZZ_background_${index + 1}.${image.format}`}>{copy.download}</a></figcaption>
       </figure>)}
     </div>
   </section>

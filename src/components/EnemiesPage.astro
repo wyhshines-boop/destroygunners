@@ -14,7 +14,7 @@ const copy = {
 <main class="enemy-page">
   <header class="page-heading">
     <h1>{copy.title}</h1>
-    <a href="/models/DGZZ_Enemies_Boss_models.zip" download>{copy.download} ↓</a>
+    <a href="/models/DGZZ_Enemies_Boss_models.zip" download>{copy.download}</a>
   </header>
   <nav aria-label={copy.choose}>
     {enemies.map(enemy => <a href={`#enemy-${enemy.resource}`}>{enemy.resource}</a>)}
