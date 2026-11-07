@@ -41,10 +41,15 @@ const originalScreenshots = [
   }
 ];
 const screenshots = lang === 'zh' ? chineseScreenshots : originalScreenshots;
+const copy = {
+    zh: { gallery: '游戏截图', prev: '上一张', next: '下一张' },
+    en: { gallery: 'Game screenshots', prev: 'Previous', next: 'Next' },
+    ja: { gallery: 'ゲーム画面', prev: '前へ', next: '次へ' },
+}[lang] || { gallery: 'Game screenshots', prev: 'Previous', next: 'Next' };
 ---
 
 <div class:list={["gallery-wrapper", { hero }]}>
-    <div class="gallery-scroll">
+    <div class="gallery-scroll" tabindex={hero ? 0 : undefined} role={hero ? 'region' : undefined} aria-label={hero ? copy.gallery : undefined}>
         {
             screenshots.map((img, index) => (
                 <div class="gallery-item" data-index={index}>
@@ -67,6 +72,11 @@ const screenshots = lang === 'zh' ? chineseScreenshots : originalScreenshots;
     <div class="fake-scrollbar" aria-hidden="true">
         <div class="fake-thumb"></div>
     </div>
+    {hero && <div class="gallery-controls">
+        <button type="button" data-gallery-prev aria-label={copy.prev}>‹ <span>{copy.prev}</span></button>
+        <span class="gallery-count" aria-live="polite" aria-atomic="true" data-gallery-count>1 / {screenshots.length}</span>
+        <button type="button" data-gallery-next aria-label={copy.next}><span>{copy.next}</span> ›</button>
+    </div>}
 </div>
 
 <!-- Lightbox lives here but gets teleported to body via JS -->
@@ -97,6 +107,39 @@ const screenshots = lang === 'zh' ? chineseScreenshots : originalScreenshots;
 </div>
 
 <script>
+    function initGalleryControls() {
+        document.querySelectorAll<HTMLElement>('.gallery-wrapper.hero').forEach(wrapper => {
+            if (wrapper.dataset.controlsInit) return;
+            wrapper.dataset.controlsInit = 'true';
+            const scroll = wrapper.querySelector<HTMLElement>('.gallery-scroll')!;
+            const items = Array.from(scroll.querySelectorAll<HTMLElement>('.gallery-item'));
+            const count = wrapper.querySelector<HTMLElement>('[data-gallery-count]')!;
+            const position = (item: HTMLElement) => Math.min(scroll.scrollWidth - scroll.clientWidth,
+                item.getBoundingClientRect().left - scroll.getBoundingClientRect().left + scroll.scrollLeft);
+            function current() {
+                return items.reduce((best, item, index) =>
+                    Math.abs(position(item) - scroll.scrollLeft) < Math.abs(position(items[best]) - scroll.scrollLeft) ? index : best, 0);
+            }
+            function update() { count.textContent = `${current() + 1} / ${items.length}`; }
+            function move(direction: number) {
+                const index = (current() + direction + items.length) % items.length;
+                scroll.scrollTo({ left: position(items[index]), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+            }
+            wrapper.querySelector('[data-gallery-prev]')!.addEventListener('click', () => move(-1));
+            wrapper.querySelector('[data-gallery-next]')!.addEventListener('click', () => move(1));
+            scroll.addEventListener('keydown', event => {
+                if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+                event.preventDefault();
+                move(event.key === 'ArrowLeft' ? -1 : 1);
+            });
+            // Scroll events also cover browsers without scrollsnapchange support.
+            scroll.addEventListener('scroll', update, { passive: true });
+            scroll.addEventListener('scrollsnapchange', update);
+            window.addEventListener('resize', update);
+            update();
+        });
+    }
+
     function initGallery() {
         // Teleport lightbox to body to escape any parent clip-path
         const lightbox = document.getElementById("gallery-lightbox");
@@ -189,9 +232,11 @@ const screenshots = lang === 'zh' ? chineseScreenshots : originalScreenshots;
 
     initGallery();
     initFakeScrollbar();
+    initGalleryControls();
     document.addEventListener("astro:page-load", () => {
         initGallery();
         initFakeScrollbar();
+        initGalleryControls();
     });
 </script>
 
@@ -303,6 +348,11 @@ const screenshots = lang === 'zh' ? chineseScreenshots : originalScreenshots;
     .gallery-wrapper.hero .gallery-item { flex: 0 0 100%; scroll-snap-align: start; }
     .gallery-wrapper.hero .gallery-item:hover { transform: none; }
     .gallery-wrapper.hero .fake-scrollbar { display: flex; }
+    .gallery-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
+    .gallery-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 4px 12px; border: 1px solid #28727a; background: #062b32; color: #80f1fa; cursor: pointer; font: inherit; }
+    .gallery-controls button:hover { background: #0b454d; border-color: #00c9d8; }
+    .gallery-count { color: #a7cdd1; font-size: .85rem; font-variant-numeric: tabular-nums; }
+    .gallery-controls button:focus-visible, .gallery-scroll:focus-visible { outline: 2px solid #00f0ff; outline-offset: 3px; }
     @media (max-width: 700px) {
         .gallery-wrapper.hero .gallery-item { flex-basis: 88%; }
     }
