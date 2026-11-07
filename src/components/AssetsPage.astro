@@ -5,19 +5,22 @@ import media from '../data/site-media.json';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = {
-  zh: { title: '素材', music: '背景音乐', backgrounds: '背景图', download: '下载', all: '全部下载', preview: '查看原图', background: '背景' },
-  en: { title: 'Assets', music: 'Background music', backgrounds: 'Backgrounds', download: 'Download', all: 'Download all', preview: 'View full image', background: 'Background' },
-  ja: { title: '素材', music: 'BGM', backgrounds: '背景画像', download: 'ダウンロード', all: 'まとめてダウンロード', preview: '原寸画像を見る', background: '背景' },
+  zh: { title: '素材', music: '背景音乐', loop: '循环播放', backgrounds: '背景图', download: '下载', all: '全部下载', preview: '查看原图', background: '背景' },
+  en: { title: 'Assets', music: 'Background music', loop: 'Loop playback', backgrounds: 'Backgrounds', download: 'Download', all: 'Download all', preview: 'View full image', background: 'Background' },
+  ja: { title: '素材', music: 'BGM', loop: 'リピート再生', backgrounds: '背景画像', download: 'ダウンロード', all: 'まとめてダウンロード', preview: '原寸画像を見る', background: '背景' },
 }[lang];
 ---
 <main class="assets-page">
   <h1>{copy.title}</h1>
   <section aria-labelledby="music-heading">
-    <header><h2 id="music-heading">{copy.music}</h2><a href="/resources/DGZZ_BGM.zip" download>{copy.all} ↓</a></header>
+    <header><h2 id="music-heading">{copy.music}</h2><div class="music-actions">
+      <label class="loop-control"><input type="checkbox" role="switch" checked data-audio-loop /><span>{copy.loop}</span></label>
+      <a href="/resources/DGZZ_BGM.zip" download>{copy.all} ↓</a>
+    </div></header>
     <div class="music-grid">
       {media.tracks.map(id => <article class="music-card">
         <div class="track-heading"><h3 id={`bgm-${id}`}>BGM {String(id).padStart(2, '0')}</h3><a href={`/audio/bgm_${id}.ogg`} download>{copy.download} ↓</a></div>
-        <audio controls preload="none" src={`/audio/bgm_${id}.ogg`} aria-labelledby={`bgm-${id}`} data-resource-audio></audio>
+        <audio controls loop preload="none" src={`/audio/bgm_${id}.ogg`} aria-labelledby={`bgm-${id}`} data-resource-audio></audio>
       </article>)}
     </div>
   </section>
@@ -35,6 +38,10 @@ const copy = {
   function initResourceAudio() {
     const players = Array.from(document.querySelectorAll<HTMLAudioElement>('[data-resource-audio]'));
     if (!players.length || players[0].dataset.bound) return;
+    const loopControl = document.querySelector<HTMLInputElement>('[data-audio-loop]')!;
+    const syncLoop = () => players.forEach(player => { player.loop = loopControl.checked; });
+    loopControl.addEventListener('change', syncLoop);
+    syncLoop();
     const pausePlayers = () => players.forEach(player => player.pause());
     players.forEach(player => {
       player.dataset.bound = 'true';
@@ -64,6 +71,13 @@ const copy = {
   section + section { margin-top: 40px; }
   header, .track-heading, figcaption { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
   header { margin-bottom: 18px; }
+  .music-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; }
+  .loop-control { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #c1e2e6; font-size: .85rem; cursor: pointer; }
+  .loop-control input { appearance: none; position: relative; flex: none; width: 36px; height: 22px; margin: 0; border: 1px solid #53838a; border-radius: 12px; background: #17353c; cursor: pointer; }
+  .loop-control input::before { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #b8d7db; }
+  .loop-control input:checked { background: #00c9d8; border-color: #00c9d8; }
+  .loop-control input:checked::before { left: 17px; background: #04232b; }
+  .loop-control input:focus-visible { outline: 2px solid #e0ffff; outline-offset: 3px; }
   h2 { margin: 0; color: #80f1fa; font-size: 1.4rem; font-weight: 500; }
   h3 { margin: 0; font-size: 1rem; font-weight: 500; }
   a { color: #80f1fa; text-underline-offset: 4px; }
