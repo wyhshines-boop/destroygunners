@@ -42,10 +42,10 @@ const originalScreenshots = [
 ];
 const screenshots = lang === 'zh' ? chineseScreenshots : originalScreenshots;
 const copy = {
-    zh: { gallery: '游戏截图', prev: '上一张', next: '下一张' },
-    en: { gallery: 'Game screenshots', prev: 'Previous', next: 'Next' },
-    ja: { gallery: 'ゲーム画面', prev: '前へ', next: '次へ' },
-}[lang] || { gallery: 'Game screenshots', prev: 'Previous', next: 'Next' };
+    zh: { gallery: '游戏截图', view: '查看截图' },
+    en: { gallery: 'Game screenshots', view: 'View screenshot' },
+    ja: { gallery: 'ゲーム画面', view: '画面を見る' },
+}[lang] || { gallery: 'Game screenshots', view: 'View screenshot' };
 ---
 
 <div class:list={["gallery-wrapper", { hero }]}>
@@ -69,13 +69,13 @@ const copy = {
             ))
         }
     </div>
-    <div class="fake-scrollbar" aria-hidden="true">
+    {!hero && <div class="fake-scrollbar" aria-hidden="true">
         <div class="fake-thumb"></div>
-    </div>
-    {hero && <div class="gallery-controls">
-        <button type="button" data-gallery-prev aria-label={copy.prev}>‹ <span>{copy.prev}</span></button>
-        <span class="gallery-count" aria-live="polite" aria-atomic="true" data-gallery-count>1 / {screenshots.length}</span>
-        <button type="button" data-gallery-next aria-label={copy.next}><span>{copy.next}</span> ›</button>
+    </div>}
+    {hero && <div class="gallery-album" role="group" aria-label={copy.gallery} style={`--album-columns: ${screenshots.length}`}>
+        {screenshots.map((img, index) => <button type="button" data-gallery-select={index} aria-label={`${copy.view} ${index + 1}`} aria-pressed={index === 0 ? 'true' : 'false'}>
+            <img src={img.src} width={img.width} height={img.height} alt="" loading="lazy" decoding="async" />
+        </button>)}
     </div>}
 </div>
 
@@ -113,24 +113,25 @@ const copy = {
             wrapper.dataset.controlsInit = 'true';
             const scroll = wrapper.querySelector<HTMLElement>('.gallery-scroll')!;
             const items = Array.from(scroll.querySelectorAll<HTMLElement>('.gallery-item'));
-            const count = wrapper.querySelector<HTMLElement>('[data-gallery-count]')!;
+            const choices = Array.from(wrapper.querySelectorAll<HTMLButtonElement>('[data-gallery-select]'));
             const position = (item: HTMLElement) => Math.min(scroll.scrollWidth - scroll.clientWidth,
                 item.getBoundingClientRect().left - scroll.getBoundingClientRect().left + scroll.scrollLeft);
             function current() {
                 return items.reduce((best, item, index) =>
                     Math.abs(position(item) - scroll.scrollLeft) < Math.abs(position(items[best]) - scroll.scrollLeft) ? index : best, 0);
             }
-            function update() { count.textContent = `${current() + 1} / ${items.length}`; }
-            function move(direction: number) {
-                const index = (current() + direction + items.length) % items.length;
+            function update() {
+                const selected = current();
+                choices.forEach((button, index) => button.setAttribute('aria-pressed', String(index === selected)));
+            }
+            function select(index: number) {
                 scroll.scrollTo({ left: position(items[index]), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
             }
-            wrapper.querySelector('[data-gallery-prev]')!.addEventListener('click', () => move(-1));
-            wrapper.querySelector('[data-gallery-next]')!.addEventListener('click', () => move(1));
+            choices.forEach((button, index) => button.addEventListener('click', () => select(index)));
             scroll.addEventListener('keydown', event => {
                 if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
                 event.preventDefault();
-                move(event.key === 'ArrowLeft' ? -1 : 1);
+                select((current() + (event.key === 'ArrowLeft' ? -1 : 1) + items.length) % items.length);
             });
             // Scroll events also cover browsers without scrollsnapchange support.
             scroll.addEventListener('scroll', update, { passive: true });
@@ -347,12 +348,12 @@ const copy = {
     .gallery-wrapper.hero .gallery-scroll { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; }
     .gallery-wrapper.hero .gallery-item { flex: 0 0 100%; scroll-snap-align: start; }
     .gallery-wrapper.hero .gallery-item:hover { transform: none; }
-    .gallery-wrapper.hero .fake-scrollbar { display: flex; }
-    .gallery-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
-    .gallery-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 4px 12px; border: 1px solid #28727a; background: #062b32; color: #80f1fa; cursor: pointer; font: inherit; }
-    .gallery-controls button:hover { background: #0b454d; border-color: #00c9d8; }
-    .gallery-count { color: #a7cdd1; font-size: .85rem; font-variant-numeric: tabular-nums; }
-    .gallery-controls button:focus-visible, .gallery-scroll:focus-visible { outline: 2px solid #00f0ff; outline-offset: 3px; }
+    .gallery-album { display: grid; grid-template-columns: repeat(var(--album-columns), minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
+    .gallery-album button { min-width: 0; min-height: 44px; aspect-ratio: 16 / 9; padding: 2px; border: 1px solid #285c63; background: #062b32; opacity: .6; cursor: pointer; }
+    .gallery-album img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .gallery-album button:hover { opacity: 1; border-color: #80f1fa; }
+    .gallery-album button[aria-pressed="true"] { opacity: 1; border-color: #00f0ff; box-shadow: 0 0 6px #00c9d855; }
+    .gallery-album button:focus-visible, .gallery-scroll:focus-visible { outline: 2px solid #00f0ff; outline-offset: 3px; }
     @media (max-width: 700px) {
         .gallery-wrapper.hero .gallery-item { flex-basis: 88%; }
     }
