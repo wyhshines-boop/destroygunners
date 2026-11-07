@@ -21,7 +21,6 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 		<div class="nav-right">
 			<nav class="nav-links" id="nav-links">
 				<a href={getLocalizedPath('/', lang)} class={basePath === '/' ? 'active' : ''}>{tr.nav.home}</a>
-				<a href={getLocalizedPath('/games', lang)} class={basePath.startsWith('/games') ? 'active' : ''}>{tr.nav.games}</a>
 				<a href={getLocalizedPath('/story', lang)} class={basePath.startsWith('/story') ? 'active' : ''}>{tr.nav.story}</a>
 				<a href={getLocalizedPath('/mechas', lang)} class={basePath.startsWith('/mechas') ? 'active' : ''}>{tr.nav.mecha}</a>
 				<div class="mobile-break"></div>
