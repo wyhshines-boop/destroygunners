@@ -53,12 +53,13 @@ const switchHref = getLocalizedPath(basePath, switchLang);
 </header>
 
 <script>
+	import siteMedia from '../data/site-media.json';
 	// BGM setup - runs once, persists across page navigations
 	(function initBgm() {
 		if (window.__bgmInitDone || !document.getElementById('bgm-toggle')) return;
 		window.__bgmInitDone = true;
 
-		const bgms = [0, 1, 2, 4, 5, 10].map(i => `/audio/bgm_${i}.ogg`);
+		const bgms = siteMedia.music.map(i => `/audio/bgm_${i}.ogg`);
 		const chosen = bgms[Math.floor(Math.random() * bgms.length)];
 		const audio = new Audio(chosen);
 		audio.loop = true;

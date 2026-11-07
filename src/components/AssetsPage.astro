@@ -1,0 +1,84 @@
+---
+import type { Lang } from '../i18n/translations';
+import { backgrounds } from '../data/site-backgrounds';
+import media from '../data/site-media.json';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  zh: { title: '素材', music: '背景音乐', backgrounds: '背景图', download: '下载', all: '全部下载', preview: '查看原图', background: '背景' },
+  en: { title: 'Assets', music: 'Background music', backgrounds: 'Backgrounds', download: 'Download', all: 'Download all', preview: 'View full image', background: 'Background' },
+  ja: { title: '素材', music: 'BGM', backgrounds: '背景画像', download: 'ダウンロード', all: 'まとめてダウンロード', preview: '原寸画像を見る', background: '背景' },
+}[lang];
+---
+<main class="assets-page">
+  <h1>{copy.title}</h1>
+  <section aria-labelledby="music-heading">
+    <header><h2 id="music-heading">{copy.music}</h2><a href="/resources/DGZZ_BGM.zip" download>{copy.all} ↓</a></header>
+    <div class="music-grid">
+      {media.music.map(id => <article class="music-card">
+        <div class="track-heading"><h3 id={`bgm-${id}`}>BGM {String(id).padStart(2, '0')}</h3><a href={`/audio/bgm_${id}.ogg`} download>{copy.download} ↓</a></div>
+        <audio controls preload="none" src={`/audio/bgm_${id}.ogg`} aria-labelledby={`bgm-${id}`} data-resource-audio></audio>
+      </article>)}
+    </div>
+  </section>
+  <section aria-labelledby="background-heading">
+    <header><h2 id="background-heading">{copy.backgrounds}</h2><a href="/resources/DGZZ_Backgrounds.zip" download>{copy.all} ↓</a></header>
+    <div class="background-grid">
+      {backgrounds.map((image, index) => <figure>
+        <a class="image-link" href={image.src} target="_blank" rel="noopener" aria-label={`${copy.preview} · ${index + 1}`}><img src={image.src} width={image.width} height={image.height} alt={`${copy.background} ${index + 1}`} loading="lazy" decoding="async" /></a>
+        <figcaption><span>{copy.background} {String(index + 1).padStart(2, '0')}</span><a href={image.src} download={`DGZZ_background_${index + 1}.${image.format}`}>{copy.download} ↓</a></figcaption>
+      </figure>)}
+    </div>
+  </section>
+</main>
+<script>
+  function initResourceAudio() {
+    const players = Array.from(document.querySelectorAll<HTMLAudioElement>('[data-resource-audio]'));
+    if (!players.length || players[0].dataset.bound) return;
+    const pausePlayers = () => players.forEach(player => player.pause());
+    players.forEach(player => {
+      player.dataset.bound = 'true';
+      player.addEventListener('play', () => {
+        players.forEach(other => { if (other !== player) other.pause(); });
+        window.__bgmAudio?.pause();
+        window.__bgmPlaying = false;
+        const muted = document.getElementById('icon-muted');
+        const playing = document.getElementById('icon-playing');
+        if (muted) muted.style.display = 'block';
+        if (playing) playing.style.display = 'none';
+      });
+    });
+    const bgm = window.__bgmAudio;
+    bgm?.addEventListener('play', pausePlayers);
+    document.addEventListener('astro:before-swap', () => {
+      pausePlayers();
+      bgm?.removeEventListener('play', pausePlayers);
+    }, { once: true });
+  }
+  initResourceAudio();
+  document.addEventListener('astro:page-load', initResourceAudio);
+</script>
+<style>
+  .assets-page { max-width: 1120px; margin: 0 auto; padding: 40px 20px 64px; color: #d5e9eb; }
+  h1 { margin: 0 0 32px; color: #e0ffff; font-size: 2rem; letter-spacing: 2px; }
+  section + section { margin-top: 40px; }
+  header, .track-heading, figcaption { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  header { margin-bottom: 18px; }
+  h2 { margin: 0; color: #80f1fa; font-size: 1.4rem; font-weight: 500; }
+  h3 { margin: 0; font-size: 1rem; font-weight: 500; }
+  a { color: #80f1fa; text-underline-offset: 4px; }
+  header a, .track-heading a, figcaption a { padding: 8px 0; font-size: .85rem; }
+  a:focus-visible, audio:focus-visible { outline: 2px solid #00f0ff; outline-offset: 4px; }
+  .music-grid, .background-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  .music-card, figure { min-width: 0; margin: 0; padding: 18px; background: rgba(5, 27, 31, .94); }
+  .track-heading { margin-bottom: 12px; }
+  audio { display: block; width: 100%; height: 42px; color-scheme: dark; }
+  .image-link { display: block; }
+  img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+  figcaption { margin-top: 10px; font-size: .9rem; }
+  @media (max-width: 700px) {
+    .assets-page { padding: 28px 16px 48px; }
+    h1 { font-size: 1.7rem; }
+    .music-grid, .background-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  }
+</style>

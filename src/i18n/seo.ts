@@ -86,7 +86,11 @@ export const seo: Record<PageKey, Record<Lang, PageSeo>> = {
 		zh: { title: '敌军与 Boss 模型 | Destroy Gunners ZZ', description: '在线旋转预览 Destroy Gunners ZZ 小兵与 Boss 模型，下载 GLB 和 Blender 文件。' },
 		ja: { title: '敵・ボスの3Dモデル | Destroy Gunners ZZ', description: 'Destroy Gunners ZZの敵・ボスモデルを3Dで閲覧。GLBとBlenderファイルをダウンロード。' },
 	},
-	assets: placeholder('Assets', '素材', '素材'),
+	assets: {
+		en: { title: 'Music & Background Downloads | Destroy Gunners ZZ', description: 'Listen to Destroy Gunners ZZ background music and download music and backgrounds.' },
+		zh: { title: '背景音乐与背景图下载 | Destroy Gunners ZZ', description: '试听 Destroy Gunners ZZ 背景音乐，下载音乐与背景图。' },
+		ja: { title: 'BGM・背景画像ダウンロード | Destroy Gunners ZZ', description: 'Destroy Gunners ZZのBGMを試聴。音楽と背景画像をダウンロード。' },
+	},
 };
 
 // Under-construction pages: keep them out of the index until they have content.

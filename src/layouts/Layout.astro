@@ -1,10 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import bg1 from "../img/bg1.jpg";
-import bg2 from "../img/bg2.webp";
-import bg3 from "../img/bg3.webp";
-import bg4 from "../img/bg4.webp";
-import bg5 from "../img/bg5.webp";
+import { backgrounds } from '../data/site-backgrounds';
 import Header from "../components/Header.astro";
 import SeoHead from "../components/SeoHead.astro";
 import { getLangFromUrl } from "../i18n/translations";
@@ -19,7 +15,7 @@ interface Props {
 const { seo, jsonLd, admin = false } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
-const bgSrcs = [bg1, bg2, bg3, bg4, bg5].map(b => b.src);
+const bgSrcs = backgrounds.map(b => b.src);
 const fallbackBg = bgSrcs[0];
 ---
 
