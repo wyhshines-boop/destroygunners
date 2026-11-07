@@ -63,7 +63,7 @@ const faqCopy = {
  zh: {
   title: 'FAQ', saveError: '游戏闪退或提示存档异常怎么办？',
   saveBackup: '先确认进度已同步，或备份本地存档。卸载和清理目录会删除未同步的本地进度。',
-  saveSteps: ['卸载之前安装的游戏版本。', '清理手机内部存储中残留的游戏目录（如存在）：', '重新安装官网版本，启动后登录原账户恢复已同步的进度。'],
+  saveSteps: ['卸载之前安装的游戏版本。', '在内部存储（通常显示为 0）中检查以下两处，删除残留的本游戏目录；旧兼容测试版的 .compat、.compat2 目录也要清理。只删本游戏目录，不要删除整个 data 或 Android/data。', '重新安装官网版本，启动后登录原账户恢复已同步的进度。'],
   panel: '账户或聊天面板无法打开怎么办？',
   panelBody: '可尝试内置 GeckoView 的测试版，支持覆盖安装，需要 Android 8.0 及以上。若仍无法打开，请反馈手机型号和错误截图。',
   panelDownload: '下载 GeckoView 测试版', protect: '被 Google Play 保护机制拦截，如何安装？',
@@ -75,7 +75,7 @@ const faqCopy = {
  en: {
   title: 'FAQ', saveError: 'What if the game crashes or reports a save error?',
   saveBackup: 'Confirm your progress is synced, or back up your local save first. Uninstalling and clearing folders deletes unsynced local progress.',
-  saveSteps: ['Uninstall the previously installed game version.', 'Clear these remaining game folders from internal storage, if present:', 'Reinstall the version from this website, then sign in to your original account to restore synced progress.'],
+  saveSteps: ['Uninstall the previously installed game version.', 'Check both locations below in internal storage (often shown as 0). Remove remaining game folders, including .compat and .compat2 from older compatibility tests. Delete only these game folders, not the entire data or Android/data folder.', 'Reinstall the version from this website, then sign in to your original account to restore synced progress.'],
   panel: 'What if the account or chat panel will not open?',
   panelBody: 'Try the test build with built-in GeckoView. It can be installed over the existing game and requires Android 8.0 or later. If the problem persists, share your phone model and an error screenshot.',
   panelDownload: 'Download GeckoView test build', protect: 'How do I install if Google Play Protect blocks the APK?',
@@ -87,7 +87,7 @@ const faqCopy = {
  ja: {
   title: 'FAQ', saveError: 'ゲームが落ちる、またはセーブエラーが表示される場合は？',
   saveBackup: '先に進行状況の同期を確認するか、ローカルセーブをバックアップしてください。アンインストールとフォルダーの削除で、未同期の進行状況は失われます。',
-  saveSteps: ['以前インストールしたゲームをアンインストールします。', '内部ストレージに以下のゲームフォルダーが残っていれば削除します。', '当サイトのバージョンを再インストールし、元のアカウントでログインして同期済みの進行状況を復元します。'],
+  saveSteps: ['以前インストールしたゲームをアンインストールします。', '内部ストレージ（通常は 0 と表示）の以下2か所を確認し、残っている本ゲームのフォルダーを削除します。旧互換テスト版の .compat・.compat2 も対象です。data や Android/data 全体は削除しないでください。', '当サイトのバージョンを再インストールし、元のアカウントでログインして同期済みの進行状況を復元します。'],
   panel: 'アカウントやチャットのパネルが開かない場合は？',
   panelBody: 'GeckoView内蔵のテスト版をお試しください。上書きインストールが可能で、Android 8.0以降が必要です。改善しない場合は、端末の機種名とエラー画面をお知らせください。',
   panelDownload: 'GeckoViewテスト版をダウンロード', protect: 'Google Play プロテクトでブロックされた場合は？',
@@ -162,7 +162,7 @@ const communityUpdateCopy = {
 						<p>{faqCopy.saveBackup}</p>
 						<ol>
 							<li>{faqCopy.saveSteps[0]}</li>
-							<li>{faqCopy.saveSteps[1]}<ul class="save-folders"><li><code>data/net.gree.android.pf.greeapp58559a/</code></li><li><code>Android/data/net.gree.android.pf.greeapp58559a/</code></li></ul></li>
+							<li>{faqCopy.saveSteps[1]}<ul class="save-folders">{['data', 'Android/data'].flatMap(location => ['', '.compat', '.compat2'].map(suffix => <li><code>{`/storage/emulated/0/${location}/net.gree.android.pf.greeapp58559a${suffix}/`}</code></li>))}</ul></li>
 							<li>{faqCopy.saveSteps[2]}</li>
 						</ol>
 					</div>
