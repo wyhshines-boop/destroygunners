@@ -19,7 +19,7 @@ const copy = {
     </div></header>
     <div class="music-grid">
       {media.tracks.map(id => <article class="music-card">
-        <div class="track-heading"><h3 id={`bgm-${id}`}>BGM {String(id).padStart(2, '0')}</h3><a href={`/audio/bgm_${id}.ogg`} download>{copy.download}</a></div>
+        <div class="track-heading"><h3 id={`bgm-${id}`}>BGM {String(id).padStart(2, '0')}</h3></div>
         <audio controls loop preload="none" src={`/audio/bgm_${id}.ogg`} aria-labelledby={`bgm-${id}`} data-resource-audio></audio>
       </article>)}
     </div>
