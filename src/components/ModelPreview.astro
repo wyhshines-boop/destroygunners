@@ -4,9 +4,9 @@ import type { Lang } from '../i18n/translations';
 interface Props { lang: Lang; model: { id: string; name: string } }
 const { lang, model } = Astro.props;
 const t = {
-  zh: { title: '3D 模型', open: '查看 3D 模型', loading: '正在加载模型…', error: '预览未能加载，可重试或直接下载模型。', help: '拖动旋转，双指或滚轮缩放。', glb: '下载 GLB', blend: '下载 Blender 文件', alt: '机甲正反面预览' },
-  en: { title: '3D Model', open: 'View 3D model', loading: 'Loading model…', error: 'Preview unavailable. Retry or download the model.', help: 'Drag to rotate. Pinch or scroll to zoom.', glb: 'Download GLB', blend: 'Download Blender file', alt: 'Front and back views' },
-  ja: { title: '3Dモデル', open: '3Dモデルを見る', loading: 'モデルを読み込み中…', error: 'プレビューを読み込めません。再試行するか、モデルをダウンロードしてください。', help: 'ドラッグで回転、ピンチやホイールで拡大・縮小。', glb: 'GLBをダウンロード', blend: 'Blenderファイルをダウンロード', alt: '機体の正面・背面プレビュー' },
+  zh: { title: '3D 模型', open: '查看 3D 模型', loading: '正在加载模型…', error: '预览未能加载，可重试或直接下载模型。', help: '拖动旋转，双指或滚轮缩放。', glb: '下载 GLB', blend: '下载 Blender 文件', alt: '模型预览' },
+  en: { title: '3D Model', open: 'View 3D model', loading: 'Loading model…', error: 'Preview unavailable. Retry or download the model.', help: 'Drag to rotate. Pinch or scroll to zoom.', glb: 'Download GLB', blend: 'Download Blender file', alt: 'Model preview' },
+  ja: { title: '3Dモデル', open: '3Dモデルを見る', loading: 'モデルを読み込み中…', error: 'プレビューを読み込めません。再試行するか、モデルをダウンロードしてください。', help: 'ドラッグで回転、ピンチやホイールで拡大・縮小。', glb: 'GLBをダウンロード', blend: 'Blenderファイルをダウンロード', alt: 'モデルプレビュー' },
 }[lang];
 ---
 <div class="model-preview" data-model-preview data-model-id={model.id} data-model-name={model.name} data-loading={t.loading} data-error={t.error} aria-label={model.name}>

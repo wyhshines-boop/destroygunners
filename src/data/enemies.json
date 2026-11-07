@@ -1,0 +1,169 @@
+[
+  {
+    "resource": "rd05",
+    "models": [
+      {
+        "id": "enemy-rd05",
+        "name": "rd05"
+      },
+      {
+        "id": "enemy-rd05_c39055d1",
+        "name": "rd05 · 2"
+      },
+      {
+        "id": "enemy-rd05_0f192899",
+        "name": "rd05 · 3"
+      }
+    ]
+  },
+  {
+    "resource": "rd06",
+    "models": [
+      {
+        "id": "enemy-rd06",
+        "name": "rd06"
+      },
+      {
+        "id": "enemy-rd06_1934b66a",
+        "name": "rd06 · 2"
+      },
+      {
+        "id": "enemy-rd06_3e55643c",
+        "name": "rd06 · 3"
+      }
+    ]
+  },
+  {
+    "resource": "rd07",
+    "models": [
+      {
+        "id": "enemy-rd07",
+        "name": "rd07"
+      },
+      {
+        "id": "enemy-rd07_ab40cb82",
+        "name": "rd07 · 2"
+      },
+      {
+        "id": "enemy-rd07_7b353652",
+        "name": "rd07 · 3"
+      }
+    ]
+  },
+  {
+    "resource": "rd19",
+    "models": [
+      {
+        "id": "enemy-rd19",
+        "name": "rd19"
+      }
+    ]
+  },
+  {
+    "resource": "rd18",
+    "models": [
+      {
+        "id": "enemy-rd18",
+        "name": "rd18"
+      }
+    ]
+  },
+  {
+    "resource": "rd14",
+    "models": [
+      {
+        "id": "enemy-rd14",
+        "name": "rd14"
+      }
+    ]
+  },
+  {
+    "resource": "rd20",
+    "models": [
+      {
+        "id": "enemy-rd20",
+        "name": "rd20"
+      }
+    ]
+  },
+  {
+    "resource": "rd13",
+    "models": [
+      {
+        "id": "enemy-rd13",
+        "name": "rd13"
+      }
+    ]
+  },
+  {
+    "resource": "rd26",
+    "models": [
+      {
+        "id": "enemy-rd26",
+        "name": "rd26"
+      },
+      {
+        "id": "enemy-rd26_47359811",
+        "name": "rd26 · 2"
+      }
+    ]
+  },
+  {
+    "resource": "rd09",
+    "models": [
+      {
+        "id": "enemy-rd09",
+        "name": "rd09"
+      }
+    ]
+  },
+  {
+    "resource": "rd17",
+    "models": [
+      {
+        "id": "enemy-rd17",
+        "name": "rd17"
+      }
+    ]
+  },
+  {
+    "resource": "rd15",
+    "models": [
+      {
+        "id": "enemy-rd15",
+        "name": "rd15"
+      },
+      {
+        "id": "enemy-rd15_628b5aee",
+        "name": "rd15 · 2"
+      }
+    ]
+  },
+  {
+    "resource": "rd16",
+    "models": [
+      {
+        "id": "enemy-rd16",
+        "name": "rd16"
+      }
+    ]
+  },
+  {
+    "resource": "rd08",
+    "models": [
+      {
+        "id": "enemy-rd08",
+        "name": "rd08"
+      }
+    ]
+  },
+  {
+    "resource": "rd21",
+    "models": [
+      {
+        "id": "enemy-rd21",
+        "name": "rd21"
+      }
+    ]
+  }
+]

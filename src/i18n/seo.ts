@@ -81,7 +81,11 @@ export const seo: Record<PageKey, Record<Lang, PageSeo>> = {
     zh: { title: '毁灭枪手 ZZ 机甲图鉴 | 23台原版机甲', description: 'Destroy Gunners ZZ 原版23台机甲介绍，依据游戏内机甲说明整理。', image: '/community/screens/zh/hangar.webp' },
     ja: { title: 'Destroy Gunners ZZ 機体図鑑 | オリジナル23機', description: 'Destroy Gunners ZZ のオリジナル機体23機を、ゲーム内の機体説明とともに紹介。', image: '/community/screens/hangar.webp' },
   },
-	enemies: placeholder('Enemy', '敌军', '敵'),
+	enemies: {
+		en: { title: 'Enemy & Boss Models | Destroy Gunners ZZ', description: 'Explore and download Destroy Gunners ZZ enemy and boss 3D models.' },
+		zh: { title: '敌军与 Boss 模型 | Destroy Gunners ZZ', description: '在线旋转预览 Destroy Gunners ZZ 小兵与 Boss 模型，下载 GLB 和 Blender 文件。' },
+		ja: { title: '敵・ボスの3Dモデル | Destroy Gunners ZZ', description: 'Destroy Gunners ZZの敵・ボスモデルを3Dで閲覧。GLBとBlenderファイルをダウンロード。' },
+	},
 	assets: placeholder('Assets', '素材', '素材'),
 };
 

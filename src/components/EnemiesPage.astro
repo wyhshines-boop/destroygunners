@@ -1,0 +1,65 @@
+---
+import type { Lang } from '../i18n/translations';
+import enemies from '../data/enemies.json';
+import ModelPreview from './ModelPreview.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  zh: { title: '敌军', download: '下载全部模型', choose: '选择机型', variants: '其他外观' },
+  en: { title: 'Enemies', download: 'Download all models', choose: 'Choose a model', variants: 'Variants' },
+  ja: { title: '敵軍', download: '全モデルをダウンロード', choose: '機体を選ぶ', variants: 'バリエーション' },
+}[lang];
+---
+<main class="enemy-page">
+  <header class="page-heading">
+    <h1>{copy.title}</h1>
+    <a href="/models/DGZZ_Enemies_Boss_models.zip" download>{copy.download} ↓</a>
+  </header>
+  <nav aria-label={copy.choose}>
+    {enemies.map(enemy => <a href={`#enemy-${enemy.resource}`}>{enemy.resource}</a>)}
+  </nav>
+  <div class="enemy-grid">
+    {enemies.map(enemy => (
+      <article id={`enemy-${enemy.resource}`}>
+        <h2>{enemy.resource}</h2>
+        <ModelPreview lang={lang} model={enemy.models[0]} />
+        {enemy.models.length > 1 && (
+          <details>
+            <summary>{copy.variants} ({enemy.models.length - 1})</summary>
+            {enemy.models.slice(1).map(model => (
+              <section aria-label={model.name}>
+                <h3>{model.name}</h3>
+                <ModelPreview lang={lang} model={model} />
+              </section>
+            ))}
+          </details>
+        )}
+      </article>
+    ))}
+  </div>
+</main>
+<style>
+  .enemy-page { max-width: 1120px; margin: 0 auto; padding: 40px 20px 64px; color: #d5e9eb; }
+  .page-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+  h1 { margin: 0; color: #e0ffff; font-size: 2rem; letter-spacing: 2px; }
+  a { color: #80f1fa; text-underline-offset: 4px; }
+  .page-heading a { padding: 10px 0; }
+  nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  nav a { padding: 7px 10px; border: 1px solid #29616b; background: rgba(5, 27, 31, .88); color: #c1e2e6; font-size: .85rem; text-decoration: none; }
+  nav a:hover { color: #00f0ff; border-color: #00c9d8; }
+  .enemy-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+  article { min-width: 0; padding: 24px; background: rgba(5, 27, 31, .93); border: 1px solid #285b63; border-top: 2px solid #00b5c3; scroll-margin-top: 120px; }
+  h2 { margin: 0; color: #80f1fa; font-size: 1.25rem; font-weight: 500; }
+  details { margin-top: 16px; }
+  summary { padding: 10px 0; color: #80f1fa; cursor: pointer; }
+  section { margin-top: 20px; }
+  h3 { margin: 0; color: #c1e2e6; font-size: 1rem; font-weight: 500; }
+  a:focus-visible, summary:focus-visible { outline: 2px solid #00f0ff; outline-offset: 4px; }
+  @media (max-width: 700px) {
+    .enemy-page { padding: 28px 16px 48px; }
+    .enemy-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+    article { padding: 20px; }
+    h1 { font-size: 1.7rem; }
+  }
+</style>
