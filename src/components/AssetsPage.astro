@@ -15,7 +15,7 @@ const copy = {
   <section aria-labelledby="music-heading">
     <header><h2 id="music-heading">{copy.music}</h2><a href="/resources/DGZZ_BGM.zip" download>{copy.all} ↓</a></header>
     <div class="music-grid">
-      {media.music.map(id => <article class="music-card">
+      {media.tracks.map(id => <article class="music-card">
         <div class="track-heading"><h3 id={`bgm-${id}`}>BGM {String(id).padStart(2, '0')}</h3><a href={`/audio/bgm_${id}.ogg`} download>{copy.download} ↓</a></div>
         <audio controls preload="none" src={`/audio/bgm_${id}.ogg`} aria-labelledby={`bgm-${id}`} data-resource-audio></audio>
       </article>)}
