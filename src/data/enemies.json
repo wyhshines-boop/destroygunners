@@ -165,5 +165,14 @@
         "name": "rd21"
       }
     ]
+  },
+  {
+    "resource": "XDA-01B",
+    "models": [
+      {
+        "id": "mecha-11",
+        "name": "XDA-01B"
+      }
+    ]
   }
 ]
