@@ -122,8 +122,18 @@
       "permanent": false
     },
     {
+      "source": "/downloads/DGZZ_3.0.0c_build143_order_recovery.apk",
+      "destination": "https://downloads.destroygunners.com/apk/8602e6533a36988ec0f28cf095478080ede90da374d7fc1ae2bb3ebe9f17dae0/DGZZ_3.0.0c_build143_order_recovery.apk",
+      "permanent": false
+    },
+    {
+      "source": "/downloads/DGZZ_3.0.0c_build144_gecko.apk",
+      "destination": "https://downloads.destroygunners.com/apk/251b7d2331266e5bb33bcdfb0b1ef7be22c71fc25e62f0cf85c74af28d59c871/DGZZ_3.0.0c_build144_gecko.apk",
+      "permanent": false
+    },
+    {
       "source": "/downloads/DGZZ_test_latest.apk",
-      "destination": "https://downloads.destroygunners.com/apk/1809cabdd1f6271935a22e15aa50914ca4e24bef1700871001337c2cfbfbb3a6/DGZZ_3.0.0c_build142_gecko.apk",
+      "destination": "https://downloads.destroygunners.com/apk/251b7d2331266e5bb33bcdfb0b1ef7be22c71fc25e62f0cf85c74af28d59c871/DGZZ_3.0.0c_build144_gecko.apk",
       "permanent": false
     }
   ]

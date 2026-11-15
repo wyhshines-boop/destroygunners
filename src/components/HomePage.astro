@@ -30,6 +30,8 @@ const { lang } = Astro.props;
 const tr = t(lang);
 const testDownloadLabel = 'variant' in testRelease && testRelease.variant === 'gecko_probe'
  ? {zh:'GeckoView 独立测试（不含游戏）',en:'GeckoView standalone test (no game)',ja:'GeckoView 単体テスト（ゲームなし）'}[lang]
+ : testRelease.variant === 'gecko'
+ ? {zh:'GeckoView 测试版下载',en:'GeckoView test download',ja:'GeckoView テスト版ダウンロード'}[lang]
  : {zh:'测试版下载',en:'Test download',ja:'テスト版ダウンロード'}[lang];
 const scareSoulHref = lang === 'en' ? '/scaresoul' : `/${lang}/scaresoul`;
 const pageHeading = {
@@ -171,7 +173,7 @@ const communityUpdateCopy = {
 					<summary>{faqCopy.panel}</summary>
 					<div class="faq-body">
 						<p>{faqCopy.panelBody}</p>
-						<p><a class="download-track" href="/downloads/DGZZ_3.0.0c_build142_gecko.apk" download data-method="faq_gecko_test">{faqCopy.panelDownload} · Build142</a></p>
+						<p><a class="download-track" href="/downloads/DGZZ_3.0.0c_build144_gecko.apk" download data-method="faq_gecko_test">{faqCopy.panelDownload} · Build144</a></p>
 					</div>
 				</details>
 				<details class="faq-item">

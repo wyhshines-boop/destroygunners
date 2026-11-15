@@ -1,8 +1,9 @@
 {
-  "build": 142,
+  "build": 144,
   "version": "3.0.0c",
-  "title": "GeckoView 游戏面板测试",
-  "date": "2026-11-04",
-  "apk_path": "/downloads/DGZZ_3.0.0c_build142_gecko.apk",
-  "notes": "游戏内面板改用内置32位GeckoView，测试OriginOS兼容性。"
+  "title": "GeckoView 兼容测试版",
+  "date": "2026-11-15",
+  "apk_path": "/downloads/DGZZ_3.0.0c_build144_gecko.apk",
+  "notes": "内置 GeckoView，已合入金币订单恢复修复。",
+  "variant": "gecko"
 }
