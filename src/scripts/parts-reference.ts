@@ -7,7 +7,7 @@ function setup(){
  const root=document.querySelector<HTMLElement>('[data-parts-reference]');if(!root||root.dataset.bound)return;
  cleanup?.();root.dataset.bound='true';
  const q=<T extends HTMLElement>(selector:string)=>root.querySelector<T>(selector)!;
- const copy=JSON.parse(root.dataset.copy!),parts=JSON.parse(root.dataset.parts!);
+ const copy=JSON.parse(root.dataset.copy!),parts=JSON.parse(root.dataset.parts!);const handcraft=root.dataset.handcraft==='true';const heightInput=root.querySelector<HTMLSelectElement>('[data-height]');let scale=handcraft?1.5:1,legOnly=false;
  const mount=q<HTMLDivElement>('[data-canvas]'),status=q('[data-status]'),editor=q<HTMLFieldSetElement>('[data-editor]');
  const select=q<HTMLSelectElement>('[data-part]'),explode=q<HTMLInputElement>('[data-explode]'),isolate=q<HTMLInputElement>('[data-isolate]'),wire=q<HTMLInputElement>('[data-wire]');
  const abort=new AbortController(),{signal}=abort;let disposed=false,model:THREE.Group|undefined;
@@ -32,21 +32,25 @@ function setup(){
   const amount=Number(explode.value)/100;q<HTMLOutputElement>('[data-distance]').value=`${explode.value}%`;
   for(const mesh of meshes){
    mesh.position.copy(original.get(mesh)!).addScaledVector(directions.get(mesh)!,amount*55);
-   const chosen=!selected||mesh.name===selected;mesh.visible=!isolate.checked||!selected||chosen;
+   const chosen=legOnly?['left-thigh','left-shin','left-foot'].includes(mesh.name):!selected||mesh.name===selected;mesh.visible=legOnly?chosen:!isolate.checked||!selected||chosen;
    const material=mesh.material as THREE.MeshStandardMaterial;material.color.set(selected&&chosen?0x7de7ed:0xc1cbd2);material.transparent=!!selected&&!chosen;material.opacity=selected&&!chosen ? .18 : 1;material.depthWrite=!material.transparent;material.wireframe=wire.checked;
   }
-  const row=parts.find((p:any)=>p.file===selected);q('[data-name]').textContent=row?select.selectedOptions[0].textContent:copy.all;
+  const row=parts.find((p:any)=>p.file===selected);q('[data-name]').textContent=legOnly?(document.documentElement.lang==='zh-CN'?'左腿':document.documentElement.lang==='ja-JP'?'左脚':'Left leg'):row?select.selectedOptions[0].textContent:copy.all;
   // Source X/Y/Z dimensions stay fixed when the display is exploded.
-  q('[data-size]').textContent=row?row.size_mm.join(' × '):fullDimensions;
+  q('[data-size]').textContent=row?row.size_mm.map((n:number)=>(n*scale).toFixed(1)).join(' × '):fullDimensions;
+  if(handcraft&&!row&&model){const saved=meshes.map(m=>m.position.clone());meshes.forEach(m=>m.position.copy(original.get(m)!));const box=new THREE.Box3();meshes.filter(m=>!legOnly||['left-thigh','left-shin','left-foot'].includes(m.name)).forEach(m=>box.expandByObject(m));const size=box.getSize(new THREE.Vector3());q('[data-size]').textContent=`${size.x.toFixed(1)} × ${size.z.toFixed(1)} × ${size.y.toFixed(1)}`;meshes.forEach((m,i)=>m.position.copy(saved[i]));}
   q('[data-mesh-note]').hidden=!row?.non_manifold_edges;
-  const link=q<HTMLAnchorElement>('[data-stl]');link.hidden=!row;if(row){link.href=`/reference/da01/stl/${row.file}.stl`;link.download=row.file+'.stl';}
+  const link=q<HTMLAnchorElement>('[data-stl]');link.hidden=handcraft||!row;if(row&&!handcraft){link.href=`/reference/da01/stl/${row.file}.stl`;link.download=row.file+'.stl';}
  }
- function pick(name:string){selected=name;select.value=name;refresh();if(isolate.checked)frame();}
+ function pick(name:string){legOnly=false;selected=name;select.value=name;refresh();if(isolate.checked)frame();root.dispatchEvent(new CustomEvent('reference:change',{detail:{selected,scale}}));}
  select.addEventListener('change',()=>pick(select.value),{signal});
  explode.addEventListener('input',()=>{refresh();frame();},{signal});
  isolate.addEventListener('change',()=>{refresh();frame();},{signal});wire.addEventListener('change',refresh,{signal});
  root.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(b=>b.addEventListener('click',()=>frame(b.dataset.view!),{signal}));
- q('[data-reset]').addEventListener('click',()=>{selected='';select.value='';isolate.checked=false;explode.value='0';wire.checked=false;refresh();frame('iso');},{signal});
+ q('[data-reset]').addEventListener('click',()=>{legOnly=false;selected='';select.value='';isolate.checked=false;explode.value='0';wire.checked=false;refresh();frame('iso');},{signal});
+ heightInput?.addEventListener('change',()=>{scale=Number(heightInput.value)/120;if(model){model.scale.setScalar(scale);model.updateMatrixWorld(true);grid.scale.setScalar(scale);grid.position.y=new THREE.Box3().setFromObject(model).min.y-.3;refresh();frame();}root.dispatchEvent(new CustomEvent('reference:change',{detail:{selected,scale}}));},{signal});
+ root.querySelector('[data-leg]')?.addEventListener('click',()=>{if(!model)return;legOnly=true;selected='';select.value='';explode.value='0';refresh();frame('iso');},{signal});
+ root.querySelector('[data-whole]')?.addEventListener('click',()=>{if(!model)return;legOnly=false;selected='';select.value='';isolate.checked=false;explode.value='0';refresh();frame('iso');},{signal});
  const ray=new THREE.Raycaster();let down:{x:number;y:number}|undefined;
  renderer.domElement.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};},{signal});
  renderer.domElement.addEventListener('pointercancel',()=>{down=undefined;},{signal});
@@ -62,11 +66,11 @@ function setup(){
   const box=new THREE.Box3().setFromObject(model),center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3());fullDimensions=`${size.x.toFixed(1)} × ${size.z.toFixed(1)} × ${size.y.toFixed(1)}`;
   model.traverse(node=>{const mesh=node as THREE.Mesh;if(!mesh.isMesh)return;
    // Blender's glTF exporter preserves each source part as one named node.
-   const match=parts.find((p:any)=>p.file===mesh.name);if(!match)throw new Error('Unknown part '+mesh.name);
+   const match=parts.find((p:any)=>p.file===mesh.name||p.files?.includes(mesh.name));if(!match)throw new Error('Unknown part '+mesh.name);if(handcraft)mesh.name=match.file;
    const previous=Array.isArray(mesh.material)?mesh.material:[mesh.material];previous.forEach(m=>m.dispose());mesh.material=new THREE.MeshStandardMaterial({color:0xc1cbd2,roughness:.85,side:THREE.DoubleSide});
    meshes.push(mesh);original.set(mesh,mesh.position.clone());const mid=new THREE.Box3().setFromObject(mesh).getCenter(new THREE.Vector3());let direction=mid.sub(center);if(direction.length()<1)direction.set(0,1,0);direction.normalize();mesh.parent!.updateWorldMatrix(true,false);direction.transformDirection(mesh.parent!.matrixWorld.clone().invert());directions.set(mesh,direction);
   });
-  if(meshes.length!==parts.length)throw new Error('Incomplete model');grid.position.y=box.min.y-.3;refresh();frame('iso');editor.disabled=false;root.querySelectorAll<HTMLButtonElement>('.view-tools button').forEach(b=>b.disabled=false);status.textContent=copy.ready;
+  if(meshes.length!==parts.reduce((n:number,p:any)=>n+(p.files?.length||1),0))throw new Error('Incomplete model');if(handcraft){model.scale.setScalar(scale);model.updateMatrixWorld(true);grid.scale.setScalar(scale);}grid.position.y=box.min.y*scale-.3;refresh();frame('iso');editor.disabled=false;root.querySelectorAll<HTMLButtonElement>('.view-tools button').forEach(b=>b.disabled=false);status.textContent=copy.ready;
  }).catch(error=>{if(!disposed){console.error(error);status.textContent=copy.error;}});
 }
 setup();document.addEventListener('astro:page-load',setup);document.addEventListener('astro:before-swap',()=>{cleanup?.();cleanup=undefined;});
